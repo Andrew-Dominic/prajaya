@@ -30,8 +30,8 @@
             --font-body: 'Inter', sans-serif;
             
             /* Spacing */
-            --space-section: 160px;
-            --space-container: 1536px;
+            --space-section: 100px;
+            --space-container: 1200px;
             
             /* Transitions */
             --transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
@@ -148,7 +148,7 @@
         .header {
             position: fixed;
             top: 0; left: 0; right: 0;
-            padding: 30px 0;
+            padding: 20px 0;
             z-index: 1000;
             transition: var(--transition);
             background-color: transparent;
@@ -291,8 +291,8 @@
         }
 
         .hero h1 {
-            font-size: clamp(3.5rem, 6vw, 5.5rem);
-            margin-bottom: 40px;
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            margin-bottom: 24px;
             line-height: 1.1;
             font-weight: 400;
             letter-spacing: -1px;
@@ -305,9 +305,9 @@
         }
 
         .hero p {
-            font-size: clamp(1.2rem, 2vw, 1.4rem);
+            font-size: clamp(1rem, 1.5vw, 1.25rem);
             max-width: 100%;
-            margin: 0 auto 60px;
+            margin: 0 auto 40px;
             color: rgba(255, 255, 255, 0.85);
             font-weight: 300;
             line-height: 1.7;
@@ -364,7 +364,7 @@
         }
 
         .section-title {
-            font-size: clamp(2.5rem, 4vw, 3.5rem);
+            font-size: clamp(2rem, 3.5vw, 2.75rem);
             font-weight: 400;
             letter-spacing: -0.5px;
         }
@@ -373,7 +373,7 @@
         .about-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 100px;
+            gap: 60px;
             align-items: center;
         }
 
@@ -409,7 +409,7 @@
         .vm-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 80px;
+            gap: 40px;
         }
         
         .vm-item {
@@ -495,7 +495,7 @@
         .approach-values-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 100px;
+            gap: 60px;
         }
 
         .list-container {
@@ -562,7 +562,7 @@
         }
 
         .founder-quote {
-            font-size: 1.6rem;
+            font-size: 1.35rem;
             font-family: var(--font-heading);
             color: var(--color-heading);
             line-height: 1.6;
@@ -575,7 +575,7 @@
         .footer {
             background-color: var(--color-heading);
             color: #fff;
-            padding: 100px 0 40px;
+            padding: 80px 0 40px;
         }
 
         .footer-grid {
