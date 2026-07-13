@@ -64,6 +64,15 @@
             pointer-events: none;
         }
 
+        /* Hide scrollbars */
+        ::-webkit-scrollbar {
+            display: none;
+        }
+        html {
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+        }
+
         body {
             font-family: var(--font-body);
             color: var(--color-text);
@@ -178,6 +187,8 @@
             width: 45px; height: 45px;
             border-radius: 50%;
             object-fit: cover;
+            overflow: hidden;
+            display: block;
         }
 
         .brand-text {
@@ -1095,7 +1106,7 @@
                 
                 <div class="footer-brand">
                     <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 20px;">
-                        <img src="assets/images/logo.jpeg" alt="Prajaya Foundation Logo" style="width: 50px; height: 50px; object-fit: cover; border-radius: 50%;">
+                        <img src="assets/images/logo.jpeg" alt="Prajaya Foundation Logo" style="width: 50px; height: 50px; object-fit: cover; border-radius: 50%; overflow: hidden; display: block;">
                         <h3 style="margin-bottom: 0;">PRAJAYA</h3>
                     </div>
                     <p>A non-profit charitable organization dedicated to empowering individuals and transforming communities.</p>
