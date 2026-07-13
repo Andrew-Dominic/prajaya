@@ -1,0 +1,1229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prajaya Foundation | Deserve to Deserve</title>
+    <meta name="description" content="PRAJAYA FOUNDATION - Empowering individuals and transforming communities through education, leadership, health, fitness, social responsibility, and sustainable development.">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            /* Minimal Color Palette */
+            --color-bg: #ffffff;
+            --color-surface: #fafafa;
+            --color-surface-alt: #f4f4f5;
+            --color-text: #475569;
+            --color-heading: #0f172a; /* Deep Navy */
+            --color-accent: #c59d5f; /* Trust Gold */
+            --color-primary: #1e293b; 
+            
+            /* Typography */
+            --font-heading: 'Inter', sans-serif;
+            --font-body: 'Inter', sans-serif;
+            
+            /* Spacing */
+            --space-section: 160px;
+            --space-container: 1536px;
+            
+            /* Transitions */
+            --transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html.lenis, html.lenis body {
+            height: auto;
+            width: 100%;
+        }
+        
+        .lenis.lenis-smooth {
+            scroll-behavior: auto !important;
+        }
+        
+        .lenis.lenis-smooth [data-lenis-prevent] {
+            overscroll-behavior: contain;
+        }
+        
+        .lenis.lenis-stopped {
+            overflow: hidden;
+        }
+        
+        .lenis.lenis-smooth iframe {
+            pointer-events: none;
+        }
+
+        body {
+            font-family: var(--font-body);
+            color: var(--color-text);
+            background-color: var(--color-bg);
+            line-height: 1.8;
+            font-size: 1.05rem;
+            -webkit-font-smoothing: antialiased;
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-family: var(--font-heading);
+            color: var(--color-heading);
+            font-weight: 500;
+            line-height: 1.2;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+            transition: var(--transition);
+        }
+
+        ul {
+            list-style: none;
+        }
+
+        .container {
+            max-width: var(--space-container);
+            margin: 0 auto;
+            padding: 0 5%;
+        }
+
+        /* --- Buttons --- */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            padding: 16px 40px;
+            font-family: var(--font-body);
+            font-size: 0.95rem;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+            cursor: pointer;
+            transition: var(--transition);
+            border: 1px solid transparent;
+        }
+
+        .btn-primary {
+            background-color: var(--color-heading);
+            color: var(--color-bg);
+        }
+        
+        .btn-primary:hover {
+            background-color: var(--color-accent);
+        }
+
+        .btn-outline {
+            border-color: var(--color-heading);
+            color: var(--color-heading);
+            background-color: transparent;
+        }
+
+        .btn-outline:hover {
+            background-color: var(--color-heading);
+            color: var(--color-bg);
+        }
+
+        .btn-text {
+            padding: 0;
+            border-bottom: 1px solid var(--color-accent);
+            color: var(--color-heading);
+            padding-bottom: 4px;
+        }
+
+        .btn-text:hover {
+            color: var(--color-accent);
+        }
+
+        /* --- Navigation --- */
+        .header {
+            position: fixed;
+            top: 0; left: 0; right: 0;
+            padding: 30px 0;
+            z-index: 1000;
+            transition: var(--transition);
+            background-color: transparent;
+            border-bottom: 1px solid transparent;
+        }
+
+        .header.scrolled {
+            padding: 15px 0;
+            background-color: var(--color-bg);
+            border-bottom-color: rgba(0,0,0,0.05);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.03);
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .brand-logo {
+            width: 45px; height: 45px;
+            background-color: var(--color-heading);
+            color: var(--color-accent);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: var(--font-heading);
+            font-size: 1.2rem;
+            border-radius: 4px;
+        }
+
+        .brand-text {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .brand-name {
+            font-family: var(--font-heading);
+            font-size: 1.4rem;
+            color: #ffffff;
+            line-height: 1;
+            transition: var(--transition);
+        }
+
+        .header.scrolled .brand-name {
+            color: var(--color-heading);
+        }
+
+        .brand-tagline {
+            font-size: 0.65rem;
+            color: var(--color-accent);
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-top: 6px;
+            font-weight: 500;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 40px;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 0.9rem;
+            font-weight: 400;
+            letter-spacing: 0.5px;
+            transition: var(--transition);
+        }
+
+        .header.scrolled .nav-links a {
+            color: var(--color-text);
+        }
+
+        .nav-links a:hover, .header.scrolled .nav-links a:hover {
+            color: var(--color-accent);
+        }
+        
+        .mobile-menu-btn {
+            display: none;
+            color: #ffffff;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .header.scrolled .mobile-menu-btn {
+            color: var(--color-heading);
+        }
+
+        /* --- Hero Section --- */
+        .hero {
+            padding-top: 220px;
+            padding-bottom: 160px;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            background-color: var(--color-heading);
+            position: relative;
+            background-image: url('file:///C:/Users/ADMIN/.gemini/antigravity/brain/f4881a9c-2eb3-4505-ad1c-77f19d508d17/hero_background_1783926206487.png');
+            background-size: cover;
+            background-position: center;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: rgba(15, 23, 42, 0.65);
+            z-index: 1;
+        }
+
+        .hero .container {
+            position: relative;
+            z-index: 2;
+            display: flex;
+            justify-content: center;
+        }
+
+        .hero-content {
+            max-width: 100%;
+            text-align: center;
+        }
+
+        .hero-label {
+            font-size: 0.85rem;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: var(--color-accent);
+            margin-bottom: 30px;
+            display: inline-block;
+            font-weight: 500;
+        }
+
+        .hero h1 {
+            font-size: clamp(3.5rem, 6vw, 5.5rem);
+            margin-bottom: 40px;
+            line-height: 1.1;
+            font-weight: 400;
+            letter-spacing: -1px;
+            color: #ffffff;
+        }
+        
+        .hero h1 span {
+            color: var(--color-accent);
+            font-weight: 500;
+        }
+
+        .hero p {
+            font-size: clamp(1.2rem, 2vw, 1.4rem);
+            max-width: 100%;
+            margin: 0 auto 60px;
+            color: rgba(255, 255, 255, 0.85);
+            font-weight: 300;
+            line-height: 1.7;
+        }
+
+        .hero-actions {
+            display: flex;
+            gap: 24px;
+            align-items: center;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .hero .btn-text {
+            color: #ffffff;
+            border-bottom-color: rgba(255, 255, 255, 0.4);
+        }
+
+        .hero .btn-text:hover {
+            color: var(--color-accent);
+            border-bottom-color: var(--color-accent);
+        }
+
+        /* --- Sections General --- */
+        .section {
+            padding: var(--space-section) 0;
+        }
+
+        .section-alt {
+            background-color: var(--color-surface);
+        }
+
+        .section-header {
+            margin-bottom: 80px;
+            max-width: 700px;
+        }
+
+        .section-label {
+            font-size: 0.8rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--color-accent);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .section-label::before {
+            content: '';
+            width: 40px;
+            height: 1px;
+            background-color: var(--color-accent);
+        }
+
+        .section-title {
+            font-size: clamp(2.5rem, 4vw, 3.5rem);
+            font-weight: 400;
+            letter-spacing: -0.5px;
+        }
+
+        /* --- About Section --- */
+        .about-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 100px;
+            align-items: center;
+        }
+
+        .about-text p {
+            margin-bottom: 30px;
+            font-size: 1.1rem;
+        }
+
+        .motto-block {
+            padding: 40px;
+            background-color: var(--color-surface-alt);
+            border-left: 2px solid var(--color-accent);
+            margin: 40px 0;
+        }
+
+        .motto-block h4 {
+            font-size: 1.4rem;
+            margin-bottom: 15px;
+        }
+
+        .about-image {
+            position: relative;
+        }
+
+        .about-image img {
+            width: 100%;
+            height: auto;
+            object-fit: cover;
+            aspect-ratio: 4/5;
+        }
+
+        /* --- Vision & Mission --- */
+        .vm-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 80px;
+        }
+        
+        .vm-item {
+            padding: 60px;
+            background-color: var(--color-bg);
+            border: 1px solid rgba(0,0,0,0.05);
+            transition: var(--transition);
+        }
+        
+        .vm-item:hover {
+            box-shadow: 0 20px 40px rgba(0,0,0,0.03);
+            transform: translateY(-5px);
+        }
+
+        .vm-item h3 {
+            font-size: 2rem;
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+        
+        .vm-item h3 i {
+            color: var(--color-accent);
+            font-size: 1.5rem;
+        }
+
+        .vm-item p {
+            font-size: 1.1rem;
+            line-height: 1.8;
+        }
+
+        /* --- Programs --- */
+        .programs-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 40px;
+        }
+
+        .program-card {
+            background-color: var(--color-bg);
+            padding: 50px 40px;
+            border: 1px solid rgba(0,0,0,0.06);
+            transition: var(--transition);
+        }
+
+        .program-card:hover {
+            border-color: var(--color-accent);
+            transform: translateY(-5px);
+        }
+
+        .program-icon {
+            font-size: 2rem;
+            color: var(--color-accent);
+            margin-bottom: 30px;
+        }
+
+        .program-card h4 {
+            font-size: 1.4rem;
+            margin-bottom: 20px;
+        }
+
+        .program-list {
+            margin-top: 20px;
+        }
+
+        .program-list li {
+            padding: 6px 0;
+            color: var(--color-text);
+            font-size: 0.95rem;
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+        }
+
+        .program-list li i {
+            color: var(--color-accent);
+            font-size: 0.6rem;
+            margin-top: 8px;
+        }
+
+        /* --- Approach & Values --- */
+        .approach-values-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 100px;
+        }
+
+        .list-container {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .list-item {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+        }
+
+        .list-item i {
+            color: var(--color-accent);
+            font-size: 1.2rem;
+            width: 30px;
+        }
+        
+        .list-item span {
+            font-size: 1.05rem;
+            color: var(--color-heading);
+            font-weight: 400;
+        }
+
+        /* --- Founder --- */
+        .founder-wrapper {
+            max-width: 900px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .founder-image {
+            width: 140px;
+            height: 140px;
+            margin: 0 auto 40px;
+            border-radius: 50%;
+            overflow: hidden;
+            border: 1px solid rgba(0,0,0,0.1);
+        }
+
+        .founder-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .founder-name {
+            font-size: 2.2rem;
+            margin-bottom: 10px;
+        }
+
+        .founder-role {
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--color-accent);
+            margin-bottom: 40px;
+            display: block;
+            font-weight: 500;
+        }
+
+        .founder-quote {
+            font-size: 1.6rem;
+            font-family: var(--font-heading);
+            color: var(--color-heading);
+            line-height: 1.6;
+            max-width: 700px;
+            margin: 0 auto 40px;
+            font-weight: 500;
+        }
+
+        /* --- Footer --- */
+        .footer {
+            background-color: var(--color-heading);
+            color: #fff;
+            padding: 100px 0 40px;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr;
+            gap: 80px;
+            margin-bottom: 80px;
+        }
+
+        .footer-brand h3 {
+            color: #fff;
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+        }
+
+        .footer-brand p {
+            color: rgba(255,255,255,0.6);
+            max-width: 400px;
+            margin-bottom: 30px;
+        }
+
+        .footer-heading {
+            color: #fff;
+            font-family: var(--font-body);
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 30px;
+            font-weight: 500;
+        }
+
+        .footer-links li {
+            margin-bottom: 15px;
+        }
+
+        .footer-links a {
+            color: rgba(255,255,255,0.6);
+            font-size: 0.95rem;
+        }
+
+        .footer-links a:hover {
+            color: var(--color-accent);
+        }
+
+        .footer-bottom {
+            border-top: 1px solid rgba(255,255,255,0.1);
+            padding-top: 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: rgba(255,255,255,0.4);
+            font-size: 0.85rem;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 20px;
+        }
+
+        .social-links a {
+            color: rgba(255,255,255,0.6);
+            font-size: 1.1rem;
+        }
+
+        .social-links a:hover {
+            color: var(--color-accent);
+        }
+
+        /* --- Animations --- */
+        .reveal {
+            visibility: hidden;
+        }
+
+        /* --- Responsive --- */
+        @media (max-width: 1024px) {
+            .about-grid, .vm-grid, .approach-values-grid {
+                grid-template-columns: 1fr;
+                gap: 60px;
+            }
+            .footer-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+            :root {
+                --space-section: 100px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                position: fixed;
+                top: 0; left: 0; right: 0; bottom: 0;
+                background-color: var(--color-bg);
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                gap: 40px;
+                transform: translateY(-100%);
+                transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+            }
+            
+            .nav-links.active {
+                transform: translateY(0);
+            }
+            
+            .mobile-menu-btn {
+                display: block;
+                z-index: 1001;
+                font-size: 1.1rem;
+            }
+
+            .header {
+                padding: 15px 0;
+            }
+
+            .header.scrolled {
+                padding: 12px 0;
+            }
+
+            .brand {
+                gap: 10px;
+            }
+
+            .brand-logo {
+                width: 36px;
+                height: 36px;
+                font-size: 1rem;
+            }
+
+            .brand-name {
+                font-size: 1.15rem;
+            }
+
+            .brand-tagline {
+                font-size: 0.55rem;
+                letter-spacing: 1.5px;
+                margin-top: 4px;
+            }
+
+            .nav-links a {
+                font-size: 1.4rem;
+                color: var(--color-heading);
+            }
+
+            .footer-grid {
+                grid-template-columns: 1fr;
+                gap: 50px;
+            }
+
+            .footer-bottom {
+                flex-direction: column;
+                gap: 20px;
+                text-align: center;
+            }
+
+            .hero {
+                padding-top: 140px;
+                padding-bottom: 100px;
+            }
+
+            .hero h1 {
+                font-size: clamp(2.5rem, 10vw, 3.5rem);
+                margin-bottom: 30px;
+            }
+
+            .hero-actions {
+                flex-direction: column;
+                width: 100%;
+            }
+
+            .hero-actions .btn {
+                width: 100%;
+                justify-content: center;
+            }
+
+            /* --- Enhanced Mobile About Section (Scaled -20%) --- */
+            .about-grid {
+                gap: 32px;
+            }
+            
+            .about-text .section-label {
+                font-size: 0.65rem;
+            }
+
+            .about-text .section-title {
+                font-size: clamp(2rem, 8vw, 2.8rem);
+                margin-bottom: 20px !important;
+            }
+            
+            .about-text p {
+                font-size: 0.85rem;
+                margin-bottom: 16px;
+            }
+            
+            .motto-block {
+                margin: 16px 0 0 0;
+                padding: 20px 16px;
+            }
+            
+            .motto-block h4 {
+                font-size: 1rem;
+                margin-bottom: 8px;
+            }
+
+            .motto-block p {
+                font-size: 0.8rem !important;
+            }
+            
+            .about-image img {
+                aspect-ratio: 4/3;
+            }
+            
+            /* Responsive Vision & Mission */
+            .section-header {
+                margin-bottom: 40px;
+            }
+            .vm-grid {
+                gap: 24px;
+            }
+            .vm-item {
+                padding: 24px 20px;
+            }
+            .vm-item h3 {
+                font-size: 1.4rem;
+                margin-bottom: 12px;
+            }
+            .vm-item p {
+                font-size: 0.95rem;
+                line-height: 1.6;
+            }
+
+            /* Responsive Programs / Focus Areas */
+            .programs-grid {
+                gap: 20px;
+            }
+            .program-card {
+                padding: 24px 20px;
+            }
+            .program-icon {
+                font-size: 1.5rem;
+                margin-bottom: 16px;
+            }
+            .program-card h4 {
+                font-size: 1.15rem;
+                margin-bottom: 12px;
+            }
+            .program-list {
+                margin-top: 12px;
+            }
+            .program-list li {
+                padding: 4px 0;
+                font-size: 0.9rem;
+            }
+
+            /* Responsive Methodology & Core Values */
+            .list-container {
+                gap: 12px;
+            }
+            .list-item {
+                gap: 12px;
+                padding-bottom: 12px;
+            }
+            .list-item i {
+                font-size: 1rem;
+                width: 24px;
+            }
+            .list-item span {
+                font-size: 0.95rem;
+            }
+
+            /* Responsive Founder Section */
+            .founder-image {
+                width: 100px;
+                height: 100px;
+                margin-bottom: 20px;
+            }
+            .founder-name {
+                font-size: 1.6rem;
+                margin-bottom: 8px;
+            }
+            .founder-role {
+                font-size: 0.7rem;
+                margin-bottom: 24px;
+            }
+            .founder-quote {
+                font-size: 1.15rem;
+                margin-bottom: 24px;
+            }
+
+            :root {
+                --space-section: 80px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header -->
+    <header class="header" id="header">
+        <div class="container nav-container">
+            <a href="#" class="brand">
+                <div class="brand-logo">PJ</div>
+                <div class="brand-text">
+                    <span class="brand-name">Prajaya</span>
+                    <span class="brand-tagline">Foundation</span>
+                </div>
+            </a>
+            
+            <nav class="nav-links" id="nav-links">
+                <a href="#about">About</a>
+                <a href="#vision">Vision</a>
+                <a href="#programs">Programs</a>
+                <a href="#methodology">Methodology</a>
+                <a href="#founder">Founder</a>
+            </nav>
+            
+            <div class="mobile-menu-btn" id="mobile-btn">
+                <i class="fas fa-bars"></i>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero -->
+    <section class="hero" id="home">
+        <div class="container">
+            <div class="hero-content reveal">
+                <span class="hero-label">A Charitable Trust</span>
+                <h1>Building Better People. Building a <span>Better Society.</span></h1>
+                <p>We are dedicated to empowering individuals and transforming communities through education, leadership, health, fitness, social responsibility, and sustainable development.</p>
+                <div class="hero-actions">
+                    <a href="#programs" class="btn btn-primary">Discover Our Work</a>
+                    <a href="#contact" class="btn btn-text">Get Involved</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About -->
+    <section class="section section-alt" id="about">
+        <div class="container">
+            <div class="about-grid">
+                <div class="about-text reveal">
+                    <div class="section-label">Who We Are</div>
+                    <h2 class="section-title" style="margin-bottom: 40px;">Empowering individuals to create lasting change.</h2>
+                    
+                    <p>At PRAJAYA FOUNDATION, we believe that lasting change begins with empowered individuals. By nurturing knowledge, character, discipline, and service, we strive to create responsible citizens who positively impact society.</p>
+                    
+                    <div class="motto-block">
+                        <h4>Deserve to Deserve</h4>
+                        <p style="margin: 0; font-size: 1rem;">Our motto embodies the belief that true empowerment comes through merit, effort, and an unwavering commitment to continuous self-improvement and service to others.</p>
+                    </div>
+                </div>
+                
+                <div class="about-image reveal delay-1">
+                    <img src="https://images.unsplash.com/photo-1582213782179-e0d53f98f2ca?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Community Support">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Vision & Mission -->
+    <section class="section" id="vision">
+        <div class="container">
+            <div class="section-header reveal">
+                <div class="section-label">Our Purpose</div>
+                <h2 class="section-title">Guiding Principles</h2>
+            </div>
+            
+            <div class="vm-grid">
+                <div class="vm-item reveal">
+                    <h3><i class="fas fa-eye"></i> Vision</h3>
+                    <p>To build a healthy, happy, responsible, educated, compassionate, self-reliant, and empowered society through education, fitness, leadership, service, and sustainable development.</p>
+                </div>
+                
+                <div class="vm-item reveal delay-1">
+                    <h3><i class="fas fa-compass"></i> Mission</h3>
+                    <p>To educate, empower, inspire, and serve individuals and communities by promoting education, health, fitness, leadership, ethical values, social responsibility, environmental stewardship, and humanitarian service.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Programs -->
+    <section class="section section-alt" id="programs">
+        <div class="container">
+            <div class="section-header reveal">
+                <div class="section-label">What We Do</div>
+                <h2 class="section-title">Our Focus Areas</h2>
+            </div>
+
+            <div class="programs-grid">
+                
+                <div class="program-card reveal">
+                    <div class="program-icon"><i class="fas fa-book-open"></i></div>
+                    <h4>Education & Learning</h4>
+                    <ul class="program-list">
+                        <li><i class="fas fa-circle"></i> Student mentoring</li>
+                        <li><i class="fas fa-circle"></i> Competitive exam guidance</li>
+                        <li><i class="fas fa-circle"></i> Scholarships & support</li>
+                        <li><i class="fas fa-circle"></i> Digital & financial literacy</li>
+                    </ul>
+                </div>
+
+                <div class="program-card reveal delay-1">
+                    <div class="program-icon"><i class="fas fa-heart"></i></div>
+                    <h4>Health & Fitness</h4>
+                    <ul class="program-list">
+                        <li><i class="fas fa-circle"></i> Health awareness programs</li>
+                        <li><i class="fas fa-circle"></i> Fitness initiatives</li>
+                        <li><i class="fas fa-circle"></i> Mental health awareness</li>
+                        <li><i class="fas fa-circle"></i> Community health campaigns</li>
+                    </ul>
+                </div>
+
+                <div class="program-card reveal delay-2">
+                    <div class="program-icon"><i class="fas fa-users"></i></div>
+                    <h4>Leadership Development</h4>
+                    <ul class="program-list">
+                        <li><i class="fas fa-circle"></i> Youth leadership programs</li>
+                        <li><i class="fas fa-circle"></i> Character building</li>
+                        <li><i class="fas fa-circle"></i> Life skills training</li>
+                        <li><i class="fas fa-circle"></i> Volunteer development</li>
+                    </ul>
+                </div>
+
+                <div class="program-card reveal">
+                    <div class="program-icon"><i class="fas fa-seedling"></i></div>
+                    <h4>Environment & Sustainability</h4>
+                    <ul class="program-list">
+                        <li><i class="fas fa-circle"></i> Tree plantation drives</li>
+                        <li><i class="fas fa-circle"></i> Environmental awareness</li>
+                        <li><i class="fas fa-circle"></i> Water conservation</li>
+                        <li><i class="fas fa-circle"></i> Sustainable initiatives</li>
+                    </ul>
+                </div>
+                
+                <div class="program-card reveal delay-1">
+                    <div class="program-icon"><i class="fas fa-hands-holding-child"></i></div>
+                    <h4>Social Welfare</h4>
+                    <ul class="program-list">
+                        <li><i class="fas fa-circle"></i> Community service</li>
+                        <li><i class="fas fa-circle"></i> Humanitarian relief</li>
+                        <li><i class="fas fa-circle"></i> Senior citizen welfare</li>
+                        <li><i class="fas fa-circle"></i> Child development</li>
+                    </ul>
+                </div>
+
+                <div class="program-card reveal delay-2">
+                    <div class="program-icon"><i class="fas fa-scale-balanced"></i></div>
+                    <h4>Legal & Civic Awareness</h4>
+                    <ul class="program-list">
+                        <li><i class="fas fa-circle"></i> Constitutional awareness</li>
+                        <li><i class="fas fa-circle"></i> Legal literacy</li>
+                        <li><i class="fas fa-circle"></i> Civic responsibility</li>
+                        <li><i class="fas fa-circle"></i> Public policy education</li>
+                    </ul>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Approach & Values -->
+    <section class="section" id="methodology">
+        <div class="container">
+            <div class="approach-values-grid">
+                
+                <div class="reveal">
+                    <div class="section-label">Methodology</div>
+                    <h2 class="section-title" style="margin-bottom: 40px;">How We Work</h2>
+                    
+                    <div class="list-container">
+                        <div class="list-item"><i class="fas fa-check"></i> <span>Awareness Campaigns & Outreach</span></div>
+                        <div class="list-item"><i class="fas fa-check"></i> <span>Workshops & Seminars</span></div>
+                        <div class="list-item"><i class="fas fa-check"></i> <span>Training Programs</span></div>
+                        <div class="list-item"><i class="fas fa-check"></i> <span>Sports & Fitness Activities</span></div>
+                        <div class="list-item"><i class="fas fa-check"></i> <span>Volunteer Networks & Partnerships</span></div>
+                    </div>
+                </div>
+
+                <div class="reveal delay-1">
+                    <div class="section-label">Guiding Principles</div>
+                    <h2 class="section-title" style="margin-bottom: 40px;">Core Values</h2>
+                    
+                    <div class="list-container">
+                        <div class="list-item"><i class="fas fa-star"></i> <span>Humanity & Compassion</span></div>
+                        <div class="list-item"><i class="fas fa-star"></i> <span>Integrity & Responsibility</span></div>
+                        <div class="list-item"><i class="fas fa-star"></i> <span>Leadership & Excellence</span></div>
+                        <div class="list-item"><i class="fas fa-star"></i> <span>Service & Inclusion</span></div>
+                        <div class="list-item"><i class="fas fa-star"></i> <span>Sustainability & Innovation</span></div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Founder -->
+    <section class="section section-alt" id="founder">
+        <div class="container">
+            <div class="founder-wrapper reveal">
+                <div class="section-label" style="justify-content: center; margin-bottom: 40px;">Leadership</div>
+                
+                <div class="founder-image">
+                    <img src="./founder.jpeg" alt="Mr. Pradeep Babu. M">
+                </div>
+                
+                <h3 class="founder-name">Mr. Pradeep Babu. M</h3>
+                <span class="founder-role">Founder & Managing Trustee</span>
+                
+                <p class="founder-quote">"Creating responsible individuals. Building stronger communities. Inspiring a better tomorrow."</p>
+                
+                <p style="max-width: 600px; margin: 0 auto;">Under his visionary leadership, PRAJAYA FOUNDATION was established with a singular mission: to create a generation of responsible, empowered individuals who drive positive societal change.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer" id="contact">
+        <div class="container">
+            <div class="footer-grid">
+                
+                <div class="footer-brand">
+                    <h3>PRAJAYA</h3>
+                    <p>A non-profit charitable organization dedicated to empowering individuals and transforming communities.</p>
+                    <a href="mailto:hello@prajayafoundation.org" class="btn-text" style="color: #fff; border-color: rgba(255,255,255,0.3);">hello@prajayafoundation.org</a>
+                </div>
+                
+                <div>
+                    <h4 class="footer-heading">Navigation</h4>
+                    <ul class="footer-links">
+                        <li><a href="#about">About Us</a></li>
+                        <li><a href="#vision">Vision & Mission</a></li>
+                        <li><a href="#programs">Our Programs</a></li>
+                        <li><a href="#founder">Founder</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="footer-heading">Connect</h4>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                </div>
+
+            </div>
+            
+            <div class="footer-bottom">
+                <span>&copy; 2026 Prajaya Foundation. All Rights Reserved.</span>
+                <span style="font-family: var(--font-heading); color: var(--color-accent); font-size: 1.1rem; font-weight: 600;">Deserve to Deserve</span>
+            </div>
+        </div>
+    </footer>
+
+    <!-- GSAP & Lenis -->
+    <script src="https://unpkg.com/@studio-freight/lenis@1.0.39/dist/lenis.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+
+    <!-- Scripts -->
+    <script>
+        // Header Scroll Effect
+        const header = document.getElementById('header');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 30) {
+                header.classList.add('scrolled');
+            } else {
+                header.classList.remove('scrolled');
+            }
+        });
+
+        // Mobile Menu
+        const mobileBtn = document.getElementById('mobile-btn');
+        const navLinks = document.getElementById('nav-links');
+        const navItems = document.querySelectorAll('.nav-links a');
+
+        mobileBtn.addEventListener('click', () => {
+            navLinks.classList.toggle('active');
+            const icon = mobileBtn.querySelector('i');
+            if (navLinks.classList.contains('active')) {
+                icon.classList.replace('fa-bars', 'fa-times');
+            } else {
+                icon.classList.replace('fa-times', 'fa-bars');
+            }
+        });
+
+        navItems.forEach(item => {
+            item.addEventListener('click', () => {
+                navLinks.classList.remove('active');
+                mobileBtn.querySelector('i').classList.replace('fa-times', 'fa-bars');
+            });
+        });
+
+        // Initialize Lenis
+        const lenis = new Lenis({
+            duration: 1.2,
+            easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+            direction: 'vertical',
+            gestureDirection: 'vertical',
+            smooth: true,
+            mouseMultiplier: 1,
+            smoothTouch: false,
+            touchMultiplier: 2,
+            infinite: false,
+        });
+
+        // Sync GSAP ScrollTrigger with Lenis
+        lenis.on('scroll', ScrollTrigger.update);
+        gsap.ticker.add((time) => {
+            lenis.raf(time * 1000);
+        });
+        gsap.ticker.lagSmoothing(0);
+
+        // GSAP Animations
+        gsap.registerPlugin(ScrollTrigger);
+
+        // Reveal Animations
+        const revealElements = document.querySelectorAll('.reveal');
+        revealElements.forEach((el) => {
+            gsap.fromTo(el, 
+                { autoAlpha: 0, y: 50 }, 
+                {
+                    duration: 1,
+                    autoAlpha: 1,
+                    y: 0,
+                    ease: "power3.out",
+                    scrollTrigger: {
+                        trigger: el,
+                        start: "top 85%",
+                        toggleActions: "play none none none"
+                    }
+                }
+            );
+        });
+
+        // Hero Background Parallax
+        gsap.to('.hero', {
+            backgroundPosition: "50% 100%",
+            ease: "none",
+            scrollTrigger: {
+                trigger: ".hero",
+                start: "top top",
+                end: "bottom top",
+                scrub: true
+            }
+        });
+    </script>
+</body>
+</html>
