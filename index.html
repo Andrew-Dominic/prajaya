@@ -184,10 +184,8 @@
         }
 
         .brand-logo {
-            width: 45px; height: 45px;
-            border-radius: 50%;
-            object-fit: cover;
-            overflow: hidden;
+            width: 45px; height: auto;
+            object-fit: contain;
             display: block;
         }
 
@@ -680,7 +678,7 @@
         .modal-container {
             background-color: var(--color-bg);
             width: 90%;
-            max-width: 550px;
+            max-width: 750px;
             padding: 50px;
             position: relative;
             transform: translateY(30px);
@@ -734,6 +732,15 @@
         .form-group {
             margin-bottom: 25px;
         }
+
+        .form-group-grid {
+            display: grid;
+            gap: 20px;
+            margin-bottom: 25px;
+        }
+
+        .grid-2 { grid-template-columns: 1fr 1fr; }
+        .grid-3 { grid-template-columns: 1fr 1fr 1fr; }
 
         .form-label {
             display: block;
@@ -802,9 +809,13 @@
         }
 
         .nav-volunteer-btn {
-            padding: 10px 24px;
-            font-size: 0.85rem;
+            padding: 12px 28px;
+            font-size: 0.95rem !important;
             margin-left: 10px;
+        }
+        
+        .header.scrolled .nav-links a.nav-volunteer-btn {
+            color: var(--color-bg) !important;
         }
         
         @media (max-width: 768px) {
@@ -813,6 +824,10 @@
             }
             .modal-title {
                 font-size: 1.6rem;
+            }
+            .grid-2, .grid-3 {
+                grid-template-columns: 1fr !important;
+                gap: 15px !important;
             }
         }
 
@@ -1044,15 +1059,49 @@
             }
         }
 
+        /* --- Preloader --- */
+        .preloader {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-color: var(--color-heading);
+            z-index: 9999;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: opacity 0.6s ease, visibility 0.6s ease;
+        }
+        
+        .preloader.fade-out {
+            opacity: 0;
+            visibility: hidden;
+        }
+        
+        .preloader-logo {
+            width: 100px;
+            height: auto;
+            object-fit: contain;
+            animation: pulse 1.5s ease-in-out infinite;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(0.9); opacity: 0.7; box-shadow: 0 0 0 0 rgba(197, 157, 95, 0.7); }
+            50% { transform: scale(1); opacity: 1; box-shadow: 0 0 0 15px rgba(197, 157, 95, 0); }
+            100% { transform: scale(0.9); opacity: 0.7; box-shadow: 0 0 0 0 rgba(197, 157, 95, 0); }
+        }
     </style>
 </head>
 <body>
+
+    <!-- Preloader -->
+    <div id="preloader" class="preloader">
+        <img src="assets/images/logo.png" alt="Prajaya Foundation Loading" class="preloader-logo">
+    </div>
 
     <!-- Header -->
     <header class="header" id="header">
         <div class="container nav-container">
             <a href="#" class="brand">
-                <img src="assets/images/logo.jpeg" alt="Prajaya Foundation Logo" class="brand-logo">
+                <img src="assets/images/logo.png" alt="Prajaya Foundation Logo" class="brand-logo">
                 <div class="brand-text">
                     <span class="brand-name">Prajaya</span>
                     <span class="brand-tagline">Foundation</span>
@@ -1061,10 +1110,10 @@
             
             <nav class="nav-links" id="nav-links">
                 <a href="#about">About</a>
-                <a href="#vision">Vision</a>
                 <a href="#programs">Programs</a>
-                <a href="#methodology">Methodology</a>
+                <a href="#events">Events</a>
                 <a href="#founder">Founder</a>
+                <a href="#suggestions">Contact</a>
                 <a href="#" class="btn btn-primary volunteer-trigger nav-volunteer-btn">Join as Volunteer</a>
             </nav>
             
@@ -1249,6 +1298,51 @@
         </div>
     </section>
 
+    <!-- Important Information -->
+    <section class="section" id="info">
+        <div class="container">
+            <div class="section-header reveal">
+                <div class="section-label">Stay Updated</div>
+                <h2 class="section-title">Important Information</h2>
+            </div>
+            <div class="reveal" style="background: var(--color-surface); padding: 40px; border-left: 3px solid var(--color-accent);">
+                <h4 style="font-size: 1.3rem; margin-bottom: 15px;">Latest Updates & Announcements</h4>
+                <p style="font-size: 1.05rem; margin-bottom: 20px;">Welcome to Prajaya Foundation. We are constantly expanding our initiatives to create a larger impact. Stay tuned for our upcoming programs in education, health, and community welfare. All volunteers are requested to complete their KYC and onboarding formalities.</p>
+                <a href="#contact" class="btn-text">Contact us for more details</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Upcoming Events -->
+    <section class="section section-alt" id="events">
+        <div class="container">
+            <div class="section-header reveal">
+                <div class="section-label">Join Us</div>
+                <h2 class="section-title">Upcoming Events</h2>
+            </div>
+            <div class="programs-grid">
+                <div class="program-card reveal">
+                    <div class="program-icon"><i class="fas fa-calendar-alt"></i></div>
+                    <h4>Community Health Camp</h4>
+                    <p>Free health checkups and awareness sessions in local communities.</p>
+                    <span style="font-size: 0.85rem; color: var(--color-accent); font-weight: 500; display: block; margin-top: 15px;">Coming Soon</span>
+                </div>
+                <div class="program-card reveal delay-1">
+                    <div class="program-icon"><i class="fas fa-tree"></i></div>
+                    <h4>Mega Tree Plantation</h4>
+                    <p>Join our volunteers in planting trees across the city.</p>
+                    <span style="font-size: 0.85rem; color: var(--color-accent); font-weight: 500; display: block; margin-top: 15px;">Coming Soon</span>
+                </div>
+                <div class="program-card reveal delay-2">
+                    <div class="program-icon"><i class="fas fa-book"></i></div>
+                    <h4>Education Drive</h4>
+                    <p>Distributing study materials to underprivileged students.</p>
+                    <span style="font-size: 0.85rem; color: var(--color-accent); font-weight: 500; display: block; margin-top: 15px;">Coming Soon</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <!-- Founder -->
     <section class="section section-alt" id="founder">
         <div class="container">
@@ -1269,6 +1363,47 @@
         </div>
     </section>
 
+    <!-- Suggestion Space & Donate -->
+    <section class="section" id="suggestions">
+        <div class="container">
+            <div class="approach-values-grid">
+                
+                <div class="reveal">
+                    <div class="section-label">Your Voice Matters</div>
+                    <h2 class="section-title" style="margin-bottom: 30px;">Suggestion Space</h2>
+                    <p style="margin-bottom: 30px;">Have an idea, query, or suggestion? We value your input. Share your thoughts directly with our founder.</p>
+                    
+                    <form action="mailto:founder@prajayafoundation.org" method="POST" enctype="text/plain">
+                        <div class="form-group">
+                            <input type="text" class="form-control" name="Name" placeholder="Your Name" required>
+                        </div>
+                        <div class="form-group">
+                            <input type="email" class="form-control" name="Email" placeholder="Your Email" required>
+                        </div>
+                        <div class="form-group">
+                            <textarea class="form-control" name="Suggestion" rows="4" placeholder="Your Idea, Query, or Suggestion" required></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-outline" style="width: 100%;">Send Message</button>
+                    </form>
+                </div>
+
+                <div class="reveal delay-1">
+                    <div class="section-label">Support Our Cause</div>
+                    <h2 class="section-title" style="margin-bottom: 30px;">Make a Donation</h2>
+                    <p style="margin-bottom: 30px;">Your contribution helps us continue our mission of empowering individuals and transforming communities. Every donation makes a meaningful difference.</p>
+                    
+                    <div style="background: var(--color-surface-alt); padding: 50px 40px; border-radius: 12px; text-align: center;">
+                        <img src="assets/images/logo.png" alt="Prajaya Foundation Logo" style="width: 80px; height: auto; object-fit: contain; display: block; margin: 0 auto 25px;">
+                        <h4 style="font-size: 1.6rem; margin-bottom: 15px; font-family: var(--font-heading); color: var(--color-heading);">Support Prajaya Foundation</h4>
+                        <p style="margin-bottom: 35px; font-size: 1.05rem;">Join hands with us to build a better society.</p>
+                        <a href="#contact" class="btn btn-primary" style="width: 100%;">Donate Now</a>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
     <!-- Footer -->
     <footer class="footer" id="contact">
         <div class="container">
@@ -1276,11 +1411,23 @@
                 
                 <div class="footer-brand">
                     <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 20px;">
-                        <img src="assets/images/logo.jpeg" alt="Prajaya Foundation Logo" style="width: 50px; height: 50px; object-fit: cover; border-radius: 50%; overflow: hidden; display: block;">
+                        <img src="assets/images/logo.png" alt="Prajaya Foundation Logo" style="width: 50px; height: auto; object-fit: contain; display: block;">
                         <h3 style="margin-bottom: 0;">PRAJAYA</h3>
                     </div>
-                    <p>A non-profit charitable organization dedicated to empowering individuals and transforming communities.</p>
-                    <a href="mailto:hello@prajayafoundation.org" class="btn-text" style="color: #fff; border-color: rgba(255,255,255,0.3);">hello@prajayafoundation.org</a>
+                    <p style="margin-bottom: 25px;">A non-profit charitable organization dedicated to empowering individuals and transforming communities.</p>
+                    
+                    <p style="color: rgba(255,255,255,0.8); margin-bottom: 15px; font-size: 0.95rem; display: flex; align-items: flex-start; gap: 12px;">
+                        <i class="fas fa-map-marker-alt" style="color: var(--color-accent); margin-top: 5px;"></i> 
+                        <span>No: 13, 2nd Cross Street, Pillaiyar Koil (Extn), Nesapakkam, West K.K Nagar, Chennai, Tamil Nadu, India - 600 078</span>
+                    </p>
+                    <p style="color: rgba(255,255,255,0.8); margin-bottom: 15px; font-size: 0.95rem; display: flex; align-items: center; gap: 12px;">
+                        <i class="fas fa-phone" style="color: var(--color-accent);"></i> 
+                        <span>+91 9176077710</span>
+                    </p>
+                    <p style="color: rgba(255,255,255,0.8); font-size: 0.95rem; display: flex; align-items: center; gap: 12px;">
+                        <i class="fas fa-envelope" style="color: var(--color-accent);"></i> 
+                        <span>founder@prajayafoundation.org</span>
+                    </p>
                 </div>
                 
                 <div>
@@ -1320,37 +1467,111 @@
             <p class="modal-subtitle">Become a part of Prajaya Foundation. Share your details below.</p>
             
             <form id="volunteerForm">
-                <div class="form-group">
-                    <label class="form-label">Full Name</label>
-                    <input type="text" class="form-control" placeholder="John Doe" required>
+                <div class="form-group-grid grid-2">
+                    <div>
+                        <label class="form-label">Volunteer Category</label>
+                        <select class="form-control" required style="appearance: none; background: transparent; cursor: pointer;">
+                            <option value="" disabled selected>Select Category</option>
+                            <option value="Little Changemakers">Little Changemakers (4 - 12 Years) *with parents consent</option>
+                            <option value="Junior Volunteers">Junior Volunteers (13 - 17) *with parents consent</option>
+                            <option value="Volunteers">Volunteers (18+)</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="form-label">Full Name</label>
+                        <input type="text" class="form-control" placeholder="John Doe" required>
+                    </div>
+                </div>
+
+                <div class="form-group-grid grid-3">
+                    <div>
+                        <label class="form-label">Age</label>
+                        <input type="number" class="form-control" placeholder="e.g. 21" required>
+                    </div>
+                    <div>
+                        <label class="form-label">Date of Birth</label>
+                        <input type="date" class="form-control" required style="color: var(--color-text);">
+                    </div>
+                    <div>
+                        <label class="form-label">Blood Group</label>
+                        <input type="text" class="form-control" placeholder="e.g. O+" required>
+                    </div>
+                </div>
+
+                <div class="form-group-grid grid-2">
+                    <div>
+                        <label class="form-label">Mobile Number</label>
+                        <input type="tel" class="form-control" placeholder="+91 98765 43210" required>
+                    </div>
+                    <div>
+                        <label class="form-label">Alternative Mobile</label>
+                        <input type="tel" class="form-control" placeholder="+91 98765 00000">
+                    </div>
+                </div>
+
+                <div class="form-group-grid grid-2">
+                    <div>
+                        <label class="form-label">Email Address</label>
+                        <input type="email" class="form-control" placeholder="john@example.com" required>
+                    </div>
+                    <div>
+                        <label class="form-label">Alternative Email</label>
+                        <input type="email" class="form-control" placeholder="alt@example.com">
+                    </div>
+                </div>
+
+                <div class="form-group-grid grid-2">
+                    <div>
+                        <label class="form-label">Temporary Address</label>
+                        <textarea class="form-control" rows="2" placeholder="Your current address" required></textarea>
+                    </div>
+                    <div>
+                        <label class="form-label">Permanent Address</label>
+                        <textarea class="form-control" rows="2" placeholder="Your permanent address" required></textarea>
+                    </div>
                 </div>
                 
-                <div class="form-group">
-                    <label class="form-label">Email Address</label>
-                    <input type="email" class="form-control" placeholder="john@example.com" required>
+                <div class="form-group-grid grid-2">
+                    <div>
+                        <label class="form-label">Educational Background</label>
+                        <input type="text" class="form-control" placeholder="e.g. B.Tech, High School" required>
+                    </div>
+                    <div>
+                        <label class="form-label">Current Status</label>
+                        <input type="text" class="form-control" placeholder="e.g. Student, Employed" required>
+                    </div>
                 </div>
 
                 <div class="form-group">
-                    <label class="form-label">Phone Number</label>
-                    <input type="tel" class="form-control" placeholder="+91 98765 43210" required>
-                </div>
-                
-                <div class="form-group">
-                    <label class="form-label">Why do you want to join?</label>
-                    <textarea class="form-control" rows="3" placeholder="Tell us briefly about your motivation..." required></textarea>
+                    <label class="form-label">Why do you want to become a Volunteer?</label>
+                    <textarea class="form-control" rows="2" placeholder="Tell us your motivation..." required></textarea>
                 </div>
 
                 <div class="form-group">
-                    <label class="form-label">Resume / CV</label>
+                    <label class="form-label">Resume / CV (Optional for Little Changemakers)</label>
                     <div class="file-upload-wrapper">
-                        <input type="file" class="file-upload-input" id="resumeUpload" accept=".pdf,.doc,.docx" required>
+                        <input type="file" class="file-upload-input" id="resumeUpload" accept=".pdf,.doc,.docx">
                         <div class="file-upload-button" id="uploadBtnText">
                             <i class="fas fa-cloud-upload-alt"></i> <span>Upload Resume (PDF, DOCX)</span>
                         </div>
                     </div>
                 </div>
 
-                <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 10px;">Submit Application</button>
+                <div class="form-group" style="margin-top: 35px;">
+                    <label class="form-label">Terms and Conditions</label>
+                    <div style="font-size: 0.85rem; background: var(--color-surface-alt); padding: 20px; border-radius: 8px; margin-bottom: 20px; max-height: 140px; overflow-y: auto; color: var(--color-text); line-height: 1.6; border: 1px solid rgba(0,0,0,0.05);">
+                        <strong>1. Commitment & Conduct:</strong> As a volunteer, I commit to dedicating my time to support the initiatives of Prajaya Foundation with honesty and integrity. I agree to maintain professional behavior and uphold the values of the foundation.<br><br>
+                        <strong>2. Parental Consent:</strong> For "Little Changemakers" and "Junior Volunteers" under the age of 18, parental or guardian consent is strictly mandatory to participate in any activities.<br><br>
+                        <strong>3. Code of Ethics:</strong> I will respect the privacy of beneficiaries, co-volunteers, and the organization. I will not misuse the foundation's name, logo, or resources for personal gain.<br><br>
+                        <strong>4. Liability:</strong> I understand that the foundation operates for charitable purposes and I voluntarily assume any risks associated with my participation in outdoor or community events.
+                    </div>
+                    <label style="display: flex; align-items: flex-start; gap: 12px; font-size: 0.9rem; cursor: pointer;">
+                        <input type="checkbox" required style="margin-top: 4px; transform: scale(1.1);">
+                        <span>I have read and agree to the Terms and Conditions. (Parents/Guardians must check this for minors).</span>
+                    </label>
+                </div>
+
+                <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 15px;">Submit Application</button>
             </form>
         </div>
     </div>
@@ -1513,6 +1734,14 @@
                     submitBtn.disabled = false;
                 }, 2000);
             }, 1500);
+        });
+
+        // Preloader Logic
+        window.addEventListener('load', () => {
+            const preloader = document.getElementById('preloader');
+            setTimeout(() => {
+                preloader.classList.add('fade-out');
+            }, 600);
         });
     </script>
 
