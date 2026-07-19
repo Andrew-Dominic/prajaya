@@ -656,6 +656,166 @@
             visibility: hidden;
         }
 
+        /* --- Modal --- */
+        .modal-overlay {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-color: rgba(15, 23, 42, 0.8);
+            z-index: 2000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: var(--transition);
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal-container {
+            background-color: var(--color-bg);
+            width: 90%;
+            max-width: 550px;
+            padding: 50px;
+            position: relative;
+            transform: translateY(30px);
+            opacity: 0;
+            transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+        
+        .modal-container::-webkit-scrollbar {
+            display: none;
+        }
+        .modal-container {
+            scrollbar-width: none;
+        }
+
+        .modal-overlay.active .modal-container {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 20px;
+            right: 25px;
+            font-size: 2rem;
+            color: var(--color-text);
+            cursor: pointer;
+            transition: var(--transition);
+            background: none;
+            border: none;
+            line-height: 1;
+        }
+
+        .modal-close:hover {
+            color: var(--color-accent);
+            transform: rotate(90deg);
+        }
+
+        .modal-title {
+            font-size: 2rem;
+            margin-bottom: 10px;
+            color: var(--color-heading);
+        }
+
+        .modal-subtitle {
+            font-size: 0.95rem;
+            margin-bottom: 30px;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 0.8rem;
+            font-weight: 500;
+            color: var(--color-heading);
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 10px 0;
+            border: none;
+            border-bottom: 1px solid rgba(0,0,0,0.1);
+            background: transparent;
+            font-family: var(--font-body);
+            font-size: 1.05rem;
+            color: var(--color-heading);
+            transition: var(--transition);
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-bottom-color: var(--color-accent);
+        }
+
+        .form-control::placeholder {
+            color: rgba(0,0,0,0.3);
+        }
+
+        .file-upload-wrapper {
+            position: relative;
+            margin-top: 10px;
+        }
+
+        .file-upload-input {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            cursor: pointer;
+            z-index: 2;
+        }
+
+        .file-upload-button {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 15px 20px;
+            border: 1px dashed rgba(0,0,0,0.2);
+            color: var(--color-text);
+            font-size: 0.95rem;
+            transition: var(--transition);
+            background-color: var(--color-surface);
+            position: relative;
+            z-index: 1;
+        }
+
+        .file-upload-wrapper:hover .file-upload-button {
+            border-color: var(--color-accent);
+            color: var(--color-heading);
+        }
+
+        .nav-volunteer-btn {
+            padding: 10px 24px;
+            font-size: 0.85rem;
+            margin-left: 10px;
+        }
+        
+        @media (max-width: 768px) {
+            .modal-container {
+                padding: 40px 30px;
+            }
+            .modal-title {
+                font-size: 1.6rem;
+            }
+        }
+
         /* --- Responsive --- */
         @media (max-width: 1024px) {
             .about-grid, .vm-grid, .approach-values-grid {
@@ -724,6 +884,14 @@
             .nav-links a {
                 font-size: 1.4rem;
                 color: var(--color-heading);
+            }
+
+            .nav-volunteer-btn {
+                font-size: 1.1rem !important;
+                padding: 14px 32px;
+                margin-left: 0;
+                margin-top: 20px;
+                width: auto;
             }
 
             .footer-grid {
@@ -875,6 +1043,7 @@
                 --space-section: 80px;
             }
         }
+
     </style>
 </head>
 <body>
@@ -896,6 +1065,7 @@
                 <a href="#programs">Programs</a>
                 <a href="#methodology">Methodology</a>
                 <a href="#founder">Founder</a>
+                <a href="#" class="btn btn-primary volunteer-trigger nav-volunteer-btn">Join as Volunteer</a>
             </nav>
             
             <div class="mobile-menu-btn" id="mobile-btn">
@@ -913,7 +1083,7 @@
                 <p>We are dedicated to empowering individuals and transforming communities through education, leadership, health, fitness, social responsibility, and sustainable development.</p>
                 <div class="hero-actions">
                     <a href="#programs" class="btn btn-primary">Discover Our Work</a>
-                    <a href="#contact" class="btn btn-text">Get Involved</a>
+                    <a href="#" class="btn btn-text volunteer-trigger">Join as Volunteer</a>
                 </div>
             </div>
         </div>
@@ -1142,6 +1312,49 @@
         </div>
     </footer>
 
+    <!-- Volunteer Modal -->
+    <div class="modal-overlay" id="volunteerModal">
+        <div class="modal-container">
+            <button class="modal-close" id="closeModal">&times;</button>
+            <h2 class="modal-title">Join as Volunteer</h2>
+            <p class="modal-subtitle">Become a part of Prajaya Foundation. Share your details below.</p>
+            
+            <form id="volunteerForm">
+                <div class="form-group">
+                    <label class="form-label">Full Name</label>
+                    <input type="text" class="form-control" placeholder="John Doe" required>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Email Address</label>
+                    <input type="email" class="form-control" placeholder="john@example.com" required>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Phone Number</label>
+                    <input type="tel" class="form-control" placeholder="+91 98765 43210" required>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Why do you want to join?</label>
+                    <textarea class="form-control" rows="3" placeholder="Tell us briefly about your motivation..." required></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Resume / CV</label>
+                    <div class="file-upload-wrapper">
+                        <input type="file" class="file-upload-input" id="resumeUpload" accept=".pdf,.doc,.docx" required>
+                        <div class="file-upload-button" id="uploadBtnText">
+                            <i class="fas fa-cloud-upload-alt"></i> <span>Upload Resume (PDF, DOCX)</span>
+                        </div>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 10px;">Submit Application</button>
+            </form>
+        </div>
+    </div>
+
     <!-- GSAP & Lenis -->
     <script src="https://unpkg.com/@studio-freight/lenis@1.0.39/dist/lenis.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
@@ -1234,6 +1447,75 @@
                 scrub: true
             }
         });
+
+        // Modal Logic
+        const modal = document.getElementById('volunteerModal');
+        const volunteerTriggers = document.querySelectorAll('.volunteer-trigger');
+        const closeModal = document.getElementById('closeModal');
+        const fileInput = document.getElementById('resumeUpload');
+        const uploadBtnText = document.getElementById('uploadBtnText').querySelector('span');
+
+        volunteerTriggers.forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.preventDefault();
+                modal.classList.add('active');
+                if(typeof lenis !== 'undefined') lenis.stop(); // pause smooth scrolling
+            });
+        });
+
+        const closeFormModal = () => {
+            modal.classList.remove('active');
+            if(typeof lenis !== 'undefined') lenis.start();
+        };
+
+        closeModal.addEventListener('click', closeFormModal);
+        
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                closeFormModal();
+            }
+        });
+
+        // Update file name on selection
+        fileInput.addEventListener('change', function(e) {
+            if(this.files && this.files.length > 0) {
+                uploadBtnText.textContent = this.files[0].name;
+                uploadBtnText.style.color = "var(--color-heading)";
+            } else {
+                uploadBtnText.textContent = "Upload Resume (PDF, DOCX)";
+                uploadBtnText.style.color = "";
+            }
+        });
+
+        // Form Submission
+        document.getElementById('volunteerForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const submitBtn = e.target.querySelector('button[type="submit"]');
+            const originalText = submitBtn.innerHTML;
+            submitBtn.innerHTML = '<i class="fas fa-circle-notch fa-spin"></i> Submitting...';
+            submitBtn.style.opacity = '0.8';
+            submitBtn.disabled = true;
+            
+            // Simulate network request
+            setTimeout(() => {
+                submitBtn.innerHTML = '<i class="fas fa-check"></i> Application Sent';
+                submitBtn.style.backgroundColor = '#10b981';
+                submitBtn.style.color = '#fff';
+                submitBtn.style.opacity = '1';
+                
+                setTimeout(() => {
+                    closeFormModal();
+                    e.target.reset();
+                    uploadBtnText.textContent = "Upload Resume (PDF, DOCX)";
+                    uploadBtnText.style.color = "";
+                    submitBtn.innerHTML = originalText;
+                    submitBtn.style = 'width: 100%; margin-top: 10px;';
+                    submitBtn.disabled = false;
+                }, 2000);
+            }, 1500);
+        });
     </script>
+
+
 </body>
 </html>
