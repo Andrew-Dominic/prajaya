@@ -18,12 +18,12 @@
         :root {
             /* Minimal Color Palette */
             --color-bg: #ffffff;
-            --color-surface: #fafafa;
-            --color-surface-alt: #f4f4f5;
-            --color-text: #475569;
-            --color-heading: #0f172a; /* Deep Navy */
-            --color-accent: #c59d5f; /* Trust Gold */
-            --color-primary: #1e293b; 
+            --color-surface: #f8f8fa;
+            --color-surface-alt: #f0f0f4;
+            --color-text: #4a4a59;
+            --color-heading: #171D35; /* Deep navy */
+            --color-accent: #d4a65a; /* Warm gold */
+            --color-primary: #0a0f21; 
             
             /* Typography */
             --font-heading: 'Inter', sans-serif;
@@ -162,6 +162,11 @@
             transition: var(--transition);
             background-color: transparent;
             border-bottom: 1px solid transparent;
+            transform: translateY(0);
+        }
+
+        .header.hidden {
+            transform: translateY(-100%);
         }
 
         .header.scrolled {
@@ -169,6 +174,7 @@
             background-color: var(--color-bg);
             border-bottom-color: rgba(0,0,0,0.05);
             box-shadow: 0 4px 20px rgba(0,0,0,0.03);
+            transform: translateY(0);
         }
 
         .nav-container {
@@ -236,6 +242,10 @@
         .nav-links a:hover, .header.scrolled .nav-links a:hover {
             color: var(--color-accent);
         }
+
+        .nav-links a.btn-primary:hover, .header.scrolled .nav-links a.btn-primary:hover {
+            color: var(--color-bg);
+        }
         
         .mobile-menu-btn {
             display: none;
@@ -251,36 +261,40 @@
 
         /* --- Hero Section --- */
         .hero {
-            padding-top: 220px;
-            padding-bottom: 160px;
             min-height: 100vh;
             display: flex;
             align-items: center;
+            justify-content: center;
+            padding-top: 80px; /* Account for navbar */
+            padding-bottom: 80px;
             background-color: var(--color-heading);
+            background-image: 
+                url('data:image/svg+xml,%3Csvg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"%3E%3Cfilter id="noiseFilter"%3E%3CfeTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="3" stitchTiles="stitch"/%3E%3C/filter%3E%3Crect width="100%25" height="100%25" filter="url(%23noiseFilter)" opacity="0.03"/%3E%3C/svg%3E'),
+                radial-gradient(circle at 50% 0%, rgba(212, 166, 90, 0.1) 0%, transparent 70%);
             position: relative;
-            background-image: url('assets/images/hero_background.png');
-            background-size: cover;
-            background-position: center;
-        }
-
-        .hero::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(to bottom, rgba(15, 23, 42, 0.75), rgba(15, 23, 42, 0.95));
-            z-index: 1;
         }
 
         .hero .container {
             position: relative;
             z-index: 2;
+            width: 100%;
+        }
+
+        .hero-wrapper {
+            max-width: 1200px;
+            margin: 0 auto;
             display: flex;
-            justify-content: center;
+            flex-wrap: wrap; /* Changed from wrap-reverse to keep logo at the bottom on mobile */
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+            gap: 60px;
         }
 
         .hero-content {
-            max-width: 100%;
-            text-align: center;
+            flex: 1;
+            min-width: 320px;
+            text-align: left;
         }
 
         .hero-label {
@@ -295,35 +309,51 @@
 
         .hero h1 {
             font-size: clamp(2.5rem, 5vw, 4rem);
-            margin-bottom: 24px;
-            line-height: 1.1;
-            font-weight: 400;
+            margin-bottom: 30px;
+            line-height: 0.92;
+            font-weight: 300;
             letter-spacing: -1px;
             color: #ffffff;
             text-shadow: 0 4px 24px rgba(0, 0, 0, 0.5);
         }
         
         .hero h1 span {
+            font-style: italic;
             color: var(--color-accent);
-            font-weight: 500;
+            font-weight: 400;
         }
 
         .hero p {
             font-size: clamp(1rem, 1.5vw, 1.25rem);
-            max-width: 100%;
-            margin: 0 auto 40px;
-            color: rgba(255, 255, 255, 0.95);
+            max-width: 430px;
+            margin: 0 0 40px;
+            color: rgba(255, 255, 255, 0.85);
             font-weight: 300;
-            line-height: 1.7;
+            line-height: 1.8;
             text-shadow: 0 2px 12px rgba(0, 0, 0, 0.5);
         }
 
         .hero-actions {
             display: flex;
-            gap: 24px;
-            align-items: center;
-            justify-content: center;
+            gap: 20px;
+            justify-content: flex-start;
             flex-wrap: wrap;
+        }
+
+        .hero-actions .btn {
+            padding: 16px 40px;
+            font-weight: 500;
+        }
+        
+        .hero-actions .btn-primary {
+            padding: 16px 54px;
+            letter-spacing: 1px;
+        }
+        
+        .hero-actions .btn-outline {
+            color: #ffffff;
+            border-color: rgba(255,255,255,0.2);
+            font-weight: 400;
         }
 
         .hero .btn-text {
@@ -334,6 +364,106 @@
         .hero .btn-text:hover {
             color: var(--color-accent);
             border-bottom-color: var(--color-accent);
+        }
+
+        .hero-emblem {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            flex: 0 0 auto;
+            margin: 0 auto;
+            min-width: 240px;
+        }
+
+        .hero-glow {
+            position: absolute;
+            width: 450px;
+            height: 450px;
+            background: radial-gradient(circle, rgba(212, 166, 90, 0.12) 0%, transparent 70%);
+            top: 45%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            filter: blur(40px);
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .hero-logo-container {
+            width: 320px;
+            height: auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-logo-img {
+            width: 100%;
+            height: auto;
+            object-fit: contain;
+            transition: all 0.3s ease;
+            filter: drop-shadow(0 20px 40px rgba(0,0,0,0.3));
+        }
+
+        .hero-logo-img:hover {
+            transform: scale(1.02) rotate(2deg);
+            filter: drop-shadow(0 25px 45px rgba(212, 166, 90, 0.25));
+        }
+
+        .mission-card {
+            padding: 36px 24px;
+            background: transparent;
+            text-align: center;
+            border: 1px solid transparent;
+            transition: all 0.3s ease;
+            border-radius: 8px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .mission-card i {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 30px;
+            margin-bottom: 24px;
+            transition: all 0.3s ease;
+        }
+
+        .mission-card:hover {
+            transform: translateY(-6px);
+            border-color: var(--color-accent);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            background: rgba(255,255,255,0.02);
+        }
+
+        .mission-card:hover i {
+            color: var(--color-accent);
+        }
+
+        .hero-pillars-grid {
+            display: grid;
+            gap: 30px;
+            width: 100%;
+            margin-bottom: 40px;
+            padding: 40px 0;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            grid-template-columns: 1fr;
+        }
+
+        @media (min-width: 768px) {
+            .hero-pillars-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (min-width: 992px) {
+            .hero-pillars-grid {
+                grid-template-columns: repeat(4, 1fr);
+            }
         }
 
         /* --- Sections General --- */
@@ -686,13 +816,7 @@
             transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
             max-height: 90vh;
             overflow-y: auto;
-        }
-        
-        .modal-container::-webkit-scrollbar {
-            display: none;
-        }
-        .modal-container {
-            scrollbar-width: none;
+            overscroll-behavior: contain;
         }
 
         .modal-overlay.active .modal-container {
@@ -848,18 +972,23 @@
         @media (max-width: 768px) {
             .nav-links {
                 position: fixed;
-                top: 0; left: 0; right: 0; bottom: 0;
+                top: 0; left: 0; right: 0;
+                height: 100vh;
                 background-color: var(--color-bg);
                 flex-direction: column;
                 justify-content: center;
                 align-items: center;
                 gap: 40px;
-                transform: translateY(-100%);
-                transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+                opacity: 0;
+                visibility: hidden;
+                pointer-events: none;
+                transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
             }
             
             .nav-links.active {
-                transform: translateY(0);
+                opacity: 1;
+                visibility: visible;
+                pointer-events: auto;
             }
             
             .mobile-menu-btn {
@@ -903,6 +1032,7 @@
 
             .nav-volunteer-btn {
                 font-size: 1.1rem !important;
+                color: var(--color-bg) !important;
                 padding: 14px 32px;
                 margin-left: 0;
                 margin-top: 20px;
@@ -921,23 +1051,55 @@
             }
 
             .hero {
-                padding-top: 140px;
-                padding-bottom: 100px;
+                padding-top: 110px;
+                padding-bottom: 80px;
+            }
+
+            .hero-wrapper {
+                flex-direction: column;
+                gap: 56px;
             }
 
             .hero h1 {
-                font-size: clamp(2.5rem, 10vw, 3.5rem);
-                margin-bottom: 30px;
+                font-size: 54px;
+                line-height: 0.95;
+                margin-bottom: 28px;
+                font-weight: 500;
+            }
+
+            .hero p {
+                font-size: 18px;
+                line-height: 1.6;
+                margin-bottom: 36px;
+                max-width: 330px;
             }
 
             .hero-actions {
                 flex-direction: column;
                 width: 100%;
+                gap: 16px;
             }
 
-            .hero-actions .btn {
+            .hero-actions .btn, .hero-actions .btn-primary, .hero-actions .btn-outline {
                 width: 100%;
+                height: 56px;
+                display: flex;
+                align-items: center;
                 justify-content: center;
+                padding: 0;
+            }
+
+            .hero-emblem {
+                min-width: auto;
+            }
+
+            .hero-logo-container {
+                width: 130px;
+            }
+
+            .hero-glow {
+                width: 250px;
+                height: 250px;
             }
 
             /* --- Enhanced Mobile About Section (Scaled -20%) --- */
@@ -1110,11 +1272,11 @@
             
             <nav class="nav-links" id="nav-links">
                 <a href="#about">About</a>
-                <a href="#programs">Programs</a>
+                <a href="#programs">Our Work</a>
                 <a href="#events">Events</a>
                 <a href="#founder">Founder</a>
                 <a href="#suggestions">Contact</a>
-                <a href="#" class="btn btn-primary volunteer-trigger nav-volunteer-btn">Join as Volunteer</a>
+                <a href="#" class="btn btn-primary volunteer-trigger nav-volunteer-btn">Volunteer</a>
             </nav>
             
             <div class="mobile-menu-btn" id="mobile-btn">
@@ -1126,24 +1288,51 @@
     <!-- Hero -->
     <section class="hero" id="home">
         <div class="container">
-            <div class="hero-content reveal">
-                <span class="hero-label">A Charitable Trust</span>
-                <h1>Building Better People. Building a <span>Better Society.</span></h1>
-                <p>We are dedicated to empowering individuals and transforming communities through education, leadership, health, fitness, social responsibility, and sustainable development.</p>
-                <div class="hero-actions">
-                    <a href="#programs" class="btn btn-primary">Discover Our Work</a>
-                    <a href="#" class="btn btn-text volunteer-trigger">Join as Volunteer</a>
+            <div class="hero-wrapper">
+                
+                <!-- Content (Left Side) -->
+                <div class="hero-content reveal delay-1">
+                    
+                    <h1>
+                        Building Better People.<br>
+                        Building a <span>Better</span> Society.
+                    </h1>
+                    
+                    <p>
+                        We empower children, youth, and communities through education, healthcare, leadership development, and social welfare programs across India.
+                    </p>
+                    
+                    <div class="hero-actions">
+                        <a href="#" class="btn btn-primary volunteer-trigger">Become a Volunteer</a>
+                        <a href="#programs" class="btn btn-outline">Explore Programs &rarr;</a>
+                    </div>
                 </div>
-            </div>
+
+                <!-- Hero Logo Emblem (Right Side) -->
+                <div class="hero-emblem reveal">
+                    <div class="hero-glow"></div>
+                    <div class="hero-logo-container">
+                        <img src="assets/images/logo.png" alt="Prajaya Foundation Logo" class="hero-logo-img">
+                    </div>
+                </div>
+            
+            </div> <!-- End layout wrapper -->
+
         </div>
     </section>
 
     <!-- About -->
-    <section class="section section-alt" id="about">
+    <section class="section section-alt" id="about" style="position: relative; z-index: 10;">
         <div class="container">
             <div class="about-grid">
                 <div class="about-text reveal">
-                    <div class="section-label">Who We Are</div>
+                    <div class="section-label" style="margin-bottom: 24px;">Who We Are</div>
+                    
+                    <div style="margin-bottom: 40px; border-left: 2px solid var(--color-accent); padding-left: 20px;">
+                        <div style="color: var(--color-heading); font-size: 0.9rem; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase;">Registered Charitable Trust</div>
+                        <div style="color: var(--color-text); font-size: 0.85rem; letter-spacing: 1px; text-transform: uppercase; margin-top: 8px;">Founded 2025</div>
+                    </div>
+                    
                     <h2 class="section-title" style="margin-bottom: 40px;">Empowering individuals to create lasting change.</h2>
                     
                     <p>At PRAJAYA FOUNDATION, we believe that lasting change begins with empowered individuals. By nurturing knowledge, character, discipline, and service, we strive to create responsible citizens who positively impact society.</p>
@@ -1298,20 +1487,6 @@
         </div>
     </section>
 
-    <!-- Important Information -->
-    <section class="section" id="info">
-        <div class="container">
-            <div class="section-header reveal">
-                <div class="section-label">Stay Updated</div>
-                <h2 class="section-title">Important Information</h2>
-            </div>
-            <div class="reveal" style="background: var(--color-surface); padding: 40px; border-left: 3px solid var(--color-accent);">
-                <h4 style="font-size: 1.3rem; margin-bottom: 15px;">Latest Updates & Announcements</h4>
-                <p style="font-size: 1.05rem; margin-bottom: 20px;">Welcome to Prajaya Foundation. We are constantly expanding our initiatives to create a larger impact. Stay tuned for our upcoming programs in education, health, and community welfare. All volunteers are requested to complete their KYC and onboarding formalities.</p>
-                <a href="#contact" class="btn-text">Contact us for more details</a>
-            </div>
-        </div>
-    </section>
 
     <!-- Upcoming Events -->
     <section class="section section-alt" id="events">
@@ -1373,7 +1548,7 @@
                     <h2 class="section-title" style="margin-bottom: 30px;">Suggestion Space</h2>
                     <p style="margin-bottom: 30px;">Have an idea, query, or suggestion? We value your input. Share your thoughts directly with our founder.</p>
                     
-                    <form action="mailto:founder@prajayafoundation.org" method="POST" enctype="text/plain">
+                    <form action="mailto:prajayafoundation@gmail.com" method="POST" enctype="text/plain">
                         <div class="form-group">
                             <input type="text" class="form-control" name="Name" placeholder="Your Name" required>
                         </div>
@@ -1426,7 +1601,7 @@
                     </p>
                     <p style="color: rgba(255,255,255,0.8); font-size: 0.95rem; display: flex; align-items: center; gap: 12px;">
                         <i class="fas fa-envelope" style="color: var(--color-accent);"></i> 
-                        <span>founder@prajayafoundation.org</span>
+                        <span>prajayafoundation@gmail.com</span>
                     </p>
                 </div>
                 
@@ -1443,10 +1618,9 @@
                 <div>
                     <h4 class="footer-heading">Connect</h4>
                     <div class="social-links">
-                        <a href="#"><i class="fab fa-facebook-f"></i></a>
-                        <a href="#"><i class="fab fa-twitter"></i></a>
-                        <a href="#"><i class="fab fa-instagram"></i></a>
-                        <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                        <a href="https://www.facebook.com/share/1BzsAep6Fs/?mibextid=wwXIfr" target="_blank"><i class="fab fa-facebook-f"></i></a>
+                        <a href="https://youtube.com/@prajayafoundation?si=XGDLbeNWjzkmBlZx" target="_blank"><i class="fab fa-youtube"></i></a>
+                        <a href="https://www.instagram.com/prajaya_foundation?igsh=a3pydThkeDhyand5&utm_source=qr" target="_blank"><i class="fab fa-instagram"></i></a>
                     </div>
                 </div>
 
@@ -1461,7 +1635,7 @@
 
     <!-- Volunteer Modal -->
     <div class="modal-overlay" id="volunteerModal">
-        <div class="modal-container">
+        <div class="modal-container" data-lenis-prevent>
             <button class="modal-close" id="closeModal">&times;</button>
             <h2 class="modal-title">Join as Volunteer</h2>
             <p class="modal-subtitle">Become a part of Prajaya Foundation. Share your details below.</p>
@@ -1585,11 +1759,19 @@
     <script>
         // Header Scroll Effect
         const header = document.getElementById('header');
+        const heroSection = document.querySelector('.hero');
         window.addEventListener('scroll', () => {
-            if (window.scrollY > 30) {
+            const heroHeight = heroSection ? heroSection.offsetHeight : 100;
+            // Subtract approx header height (80px) to trigger just as the next section comes up
+            if (window.scrollY > heroHeight - 80) {
                 header.classList.add('scrolled');
+                header.classList.remove('hidden');
+            } else if (window.scrollY > 50) {
+                header.classList.remove('scrolled');
+                header.classList.add('hidden');
             } else {
                 header.classList.remove('scrolled');
+                header.classList.remove('hidden');
             }
         });
 
@@ -1657,17 +1839,6 @@
             );
         });
 
-        // Hero Background Parallax
-        gsap.to('.hero', {
-            backgroundPosition: "50% 100%",
-            ease: "none",
-            scrollTrigger: {
-                trigger: ".hero",
-                start: "top top",
-                end: "bottom top",
-                scrub: true
-            }
-        });
 
         // Modal Logic
         const modal = document.getElementById('volunteerModal');
