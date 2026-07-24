@@ -1059,32 +1059,19 @@
                 flex-direction: column;
                 gap: 56px;
             }
-            .hero-content {
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-                text-align: center;
-            }
-
 
             .hero h1 {
-                font-size: 44px;
-                line-height: 1.1;
-                margin-bottom: 24px;
+                font-size: 54px;
+                line-height: 0.95;
+                margin-bottom: 28px;
                 font-weight: 500;
-                text-align: center;
-            }
-
-            .hero h1 br {
-                display: none;
             }
 
             .hero p {
-                font-size: 16px;
+                font-size: 18px;
                 line-height: 1.6;
                 margin-bottom: 36px;
-                max-width: 100%;
-                text-align: center;
+                max-width: 330px;
             }
 
             .hero-actions {
@@ -1284,12 +1271,12 @@
             </a>
             
             <nav class="nav-links" id="nav-links">
-                <a href="#about">About</a>
-                <a href="#programs">Our Work</a>
-                <a href="#events">Events</a>
-                <a href="#founder">Founder</a>
-                <a href="#suggestions">Contact</a>
-                <a href="volunteer.html" class="btn btn-primary volunteer-trigger nav-volunteer-btn">Volunteer</a>
+                <a href="index.html#about">About</a>
+                <a href="index.html#programs">Our Work</a>
+                <a href="index.html#events">Events</a>
+                <a href="index.html#founder">Founder</a>
+                <a href="index.html#suggestions">Contact</a>
+                <a href="#" class="btn btn-primary nav-volunteer-btn">Volunteer</a>
             </nav>
             
             <div class="mobile-menu-btn" id="mobile-btn">
@@ -1298,303 +1285,127 @@
         </div>
     </header>
 
-    <!-- Hero -->
-    <section class="hero" id="home">
-        <div class="container">
-            <div class="hero-wrapper">
-                
-                <!-- Content (Left Side) -->
-                <div class="hero-content reveal delay-1">
-                    
-                    <div class="hero-label" style="margin-bottom: 20px;">A CHARITABLE TRUST</div>
-                    
-                    <h1>
-                        Building Better People.<br>
-                        Building a <span>Better</span> Society.
-                    </h1>
-                    
-                    <p>
-                        We are dedicated to empowering individuals and transforming communities through education, leadership, health, fitness, social responsibility, and sustainable development.
-                    </p>
-                    
-                    <div class="hero-actions">
-                        <a href="#programs" class="btn btn-primary">Discover Our Work</a>
-                        <a href="volunteer.html" class="btn btn-outline volunteer-trigger">Join as Volunteer</a>
-                    </div>
-                </div>
-
-                <!-- Hero Logo Emblem (Right Side) -->
-                <div class="hero-emblem reveal">
-                    <div class="hero-glow"></div>
-                    <div class="hero-logo-container">
-                        <img src="assets/images/logo.png" alt="Prajaya Foundation Logo" class="hero-logo-img">
-                    </div>
-                </div>
+    
+    <!-- Volunteer Page Content -->
+    <section class="section" id="volunteer-page" style="padding-top: 150px; padding-bottom: 100px;">
+        <div class="container" style="max-width: 800px; margin: 0 auto;">
+            <div class="section-label" style="justify-content: center; margin-bottom: 20px;">Join Us</div>
+            <h2 class="section-title" style="text-align: center; margin-bottom: 15px;">Become a Volunteer</h2>
+            <p style="text-align: center; margin-bottom: 50px; color: var(--color-text);">Become a part of Prajaya Foundation. Share your details below.</p>
             
-            </div> <!-- End layout wrapper -->
-
-        </div>
-    </section>
-
-    <!-- About -->
-    <section class="section section-alt" id="about" style="position: relative; z-index: 10;">
-        <div class="container">
-            <div class="about-grid">
-                <div class="about-text reveal">
-                    <div class="section-label" style="margin-bottom: 24px;">Who We Are</div>
-                    
-                    <div style="margin-bottom: 40px; border-left: 2px solid var(--color-accent); padding-left: 20px;">
-                        <div style="color: var(--color-heading); font-size: 0.9rem; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase;">Registered Charitable Trust</div>
-                        <div style="color: var(--color-text); font-size: 0.85rem; letter-spacing: 1px; text-transform: uppercase; margin-top: 8px;">Founded 2025</div>
+            <div style="background: var(--color-surface); padding: 40px; border-radius: 12px; border-left: 3px solid var(--color-accent); box-shadow: 0 10px 30px rgba(0,0,0,0.02);">
+                <form id="volunteerForm">
+                <div class="form-group-grid grid-2">
+                    <div>
+                        <label class="form-label">Volunteer Category</label>
+                        <select class="form-control" required style="appearance: none; background: transparent; cursor: pointer;">
+                            <option value="" disabled selected>Select Category</option>
+                            <option value="Little Changemakers">Little Changemakers (4 - 12 Years) *with parents consent</option>
+                            <option value="Junior Volunteers">Junior Volunteers (13 - 17) *with parents consent</option>
+                            <option value="Volunteers">Volunteers (18+)</option>
+                        </select>
                     </div>
-                    
-                    <h2 class="section-title" style="margin-bottom: 40px;">Empowering individuals to create lasting change.</h2>
-                    
-                    <p>At PRAJAYA FOUNDATION, we believe that lasting change begins with empowered individuals. By nurturing knowledge, character, discipline, and service, we strive to create responsible citizens who positively impact society.</p>
-                    
-                    <div class="motto-block">
-                        <h4>Deserve to Deserve</h4>
-                        <p style="margin: 0; font-size: 1rem;">Our motto embodies the belief that true empowerment comes through merit, effort, and an unwavering commitment to continuous self-improvement and service to others.</p>
-                    </div>
-                </div>
-                
-                <div class="about-image reveal delay-1">
-                    <img src="https://images.unsplash.com/photo-1582213782179-e0d53f98f2ca?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Community Support">
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Vision & Mission -->
-    <section class="section" id="vision">
-        <div class="container">
-            <div class="section-header reveal">
-                <div class="section-label">Our Purpose</div>
-                <h2 class="section-title">Guiding Principles</h2>
-            </div>
-            
-            <div class="vm-grid">
-                <div class="vm-item reveal">
-                    <h3><i class="fas fa-eye"></i> Vision</h3>
-                    <p>To build a healthy, happy, responsible, educated, compassionate, self-reliant, and empowered society through education, fitness, leadership, service, and sustainable development.</p>
-                </div>
-                
-                <div class="vm-item reveal delay-1">
-                    <h3><i class="fas fa-compass"></i> Mission</h3>
-                    <p>To educate, empower, inspire, and serve individuals and communities by promoting education, health, fitness, leadership, ethical values, social responsibility, environmental stewardship, and humanitarian service.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Programs -->
-    <section class="section section-alt" id="programs">
-        <div class="container">
-            <div class="section-header reveal">
-                <div class="section-label">What We Do</div>
-                <h2 class="section-title">Our Focus Areas</h2>
-            </div>
-
-            <div class="programs-grid">
-                
-                <div class="program-card reveal">
-                    <div class="program-icon"><i class="fas fa-book-open"></i></div>
-                    <h4>Education & Learning</h4>
-                    <ul class="program-list">
-                        <li><i class="fas fa-circle"></i> Student mentoring</li>
-                        <li><i class="fas fa-circle"></i> Competitive exam guidance</li>
-                        <li><i class="fas fa-circle"></i> Scholarships & support</li>
-                        <li><i class="fas fa-circle"></i> Digital & financial literacy</li>
-                    </ul>
-                </div>
-
-                <div class="program-card reveal delay-1">
-                    <div class="program-icon"><i class="fas fa-heart"></i></div>
-                    <h4>Health & Fitness</h4>
-                    <ul class="program-list">
-                        <li><i class="fas fa-circle"></i> Health awareness programs</li>
-                        <li><i class="fas fa-circle"></i> Fitness initiatives</li>
-                        <li><i class="fas fa-circle"></i> Mental health awareness</li>
-                        <li><i class="fas fa-circle"></i> Community health campaigns</li>
-                    </ul>
-                </div>
-
-                <div class="program-card reveal delay-2">
-                    <div class="program-icon"><i class="fas fa-users"></i></div>
-                    <h4>Leadership Development</h4>
-                    <ul class="program-list">
-                        <li><i class="fas fa-circle"></i> Youth leadership programs</li>
-                        <li><i class="fas fa-circle"></i> Character building</li>
-                        <li><i class="fas fa-circle"></i> Life skills training</li>
-                        <li><i class="fas fa-circle"></i> Volunteer development</li>
-                    </ul>
-                </div>
-
-                <div class="program-card reveal">
-                    <div class="program-icon"><i class="fas fa-seedling"></i></div>
-                    <h4>Environment & Sustainability</h4>
-                    <ul class="program-list">
-                        <li><i class="fas fa-circle"></i> Tree plantation drives</li>
-                        <li><i class="fas fa-circle"></i> Environmental awareness</li>
-                        <li><i class="fas fa-circle"></i> Water conservation</li>
-                        <li><i class="fas fa-circle"></i> Sustainable initiatives</li>
-                    </ul>
-                </div>
-                
-                <div class="program-card reveal delay-1">
-                    <div class="program-icon"><i class="fas fa-hands-holding-child"></i></div>
-                    <h4>Social Welfare</h4>
-                    <ul class="program-list">
-                        <li><i class="fas fa-circle"></i> Community service</li>
-                        <li><i class="fas fa-circle"></i> Humanitarian relief</li>
-                        <li><i class="fas fa-circle"></i> Senior citizen welfare</li>
-                        <li><i class="fas fa-circle"></i> Child development</li>
-                    </ul>
-                </div>
-
-                <div class="program-card reveal delay-2">
-                    <div class="program-icon"><i class="fas fa-scale-balanced"></i></div>
-                    <h4>Legal & Civic Awareness</h4>
-                    <ul class="program-list">
-                        <li><i class="fas fa-circle"></i> Constitutional awareness</li>
-                        <li><i class="fas fa-circle"></i> Legal literacy</li>
-                        <li><i class="fas fa-circle"></i> Civic responsibility</li>
-                        <li><i class="fas fa-circle"></i> Public policy education</li>
-                    </ul>
-                </div>
-
-            </div>
-        </div>
-    </section>
-
-    <!-- Approach & Values -->
-    <section class="section" id="methodology">
-        <div class="container">
-            <div class="approach-values-grid">
-                
-                <div class="reveal">
-                    <div class="section-label">Methodology</div>
-                    <h2 class="section-title" style="margin-bottom: 40px;">How We Work</h2>
-                    
-                    <div class="list-container">
-                        <div class="list-item"><i class="fas fa-check"></i> <span>Awareness Campaigns & Outreach</span></div>
-                        <div class="list-item"><i class="fas fa-check"></i> <span>Workshops & Seminars</span></div>
-                        <div class="list-item"><i class="fas fa-check"></i> <span>Training Programs</span></div>
-                        <div class="list-item"><i class="fas fa-check"></i> <span>Sports & Fitness Activities</span></div>
-                        <div class="list-item"><i class="fas fa-check"></i> <span>Volunteer Networks & Partnerships</span></div>
+                    <div>
+                        <label class="form-label">Full Name</label>
+                        <input type="text" class="form-control" placeholder="John Doe" required>
                     </div>
                 </div>
 
-                <div class="reveal delay-1">
-                    <div class="section-label">Guiding Principles</div>
-                    <h2 class="section-title" style="margin-bottom: 40px;">Core Values</h2>
-                    
-                    <div class="list-container">
-                        <div class="list-item"><i class="fas fa-star"></i> <span>Humanity & Compassion</span></div>
-                        <div class="list-item"><i class="fas fa-star"></i> <span>Integrity & Responsibility</span></div>
-                        <div class="list-item"><i class="fas fa-star"></i> <span>Leadership & Excellence</span></div>
-                        <div class="list-item"><i class="fas fa-star"></i> <span>Service & Inclusion</span></div>
-                        <div class="list-item"><i class="fas fa-star"></i> <span>Sustainability & Innovation</span></div>
+                <div class="form-group-grid grid-3">
+                    <div>
+                        <label class="form-label">Age</label>
+                        <input type="number" class="form-control" placeholder="e.g. 21" required>
+                    </div>
+                    <div>
+                        <label class="form-label">Date of Birth</label>
+                        <input type="date" class="form-control" required style="color: var(--color-text);">
+                    </div>
+                    <div>
+                        <label class="form-label">Blood Group</label>
+                        <input type="text" class="form-control" placeholder="e.g. O+" required>
                     </div>
                 </div>
 
-            </div>
-        </div>
-    </section>
-
-
-    <!-- Upcoming Events -->
-    <section class="section section-alt" id="events">
-        <div class="container">
-            <div class="section-header reveal">
-                <div class="section-label">Join Us</div>
-                <h2 class="section-title">Upcoming Events</h2>
-            </div>
-            <div class="programs-grid">
-                <div class="program-card reveal">
-                    <div class="program-icon"><i class="fas fa-calendar-alt"></i></div>
-                    <h4>Community Health Camp</h4>
-                    <p>Free health checkups and awareness sessions in local communities.</p>
-                    <span style="font-size: 0.85rem; color: var(--color-accent); font-weight: 500; display: block; margin-top: 15px;">Coming Soon</span>
+                <div class="form-group-grid grid-2">
+                    <div>
+                        <label class="form-label">Mobile Number</label>
+                        <input type="tel" class="form-control" placeholder="+91 98765 43210" required>
+                    </div>
+                    <div>
+                        <label class="form-label">Alternative Mobile</label>
+                        <input type="tel" class="form-control" placeholder="+91 98765 00000">
+                    </div>
                 </div>
-                <div class="program-card reveal delay-1">
-                    <div class="program-icon"><i class="fas fa-tree"></i></div>
-                    <h4>Mega Tree Plantation</h4>
-                    <p>Join our volunteers in planting trees across the city.</p>
-                    <span style="font-size: 0.85rem; color: var(--color-accent); font-weight: 500; display: block; margin-top: 15px;">Coming Soon</span>
-                </div>
-                <div class="program-card reveal delay-2">
-                    <div class="program-icon"><i class="fas fa-book"></i></div>
-                    <h4>Education Drive</h4>
-                    <p>Distributing study materials to underprivileged students.</p>
-                    <span style="font-size: 0.85rem; color: var(--color-accent); font-weight: 500; display: block; margin-top: 15px;">Coming Soon</span>
-                </div>
-            </div>
-        </div>
-    </section>
 
-    <!-- Founder -->
-    <section class="section section-alt" id="founder">
-        <div class="container">
-            <div class="founder-wrapper reveal">
-                <div class="section-label" style="justify-content: center; margin-bottom: 40px;">Leadership</div>
-                
-                <div class="founder-image">
-                    <img src="./founder.jpeg" alt="Mr. Pradeep Babu. M">
+                <div class="form-group-grid grid-2">
+                    <div>
+                        <label class="form-label">Email Address</label>
+                        <input type="email" class="form-control" placeholder="john@example.com" required>
+                    </div>
+                    <div>
+                        <label class="form-label">Alternative Email</label>
+                        <input type="email" class="form-control" placeholder="alt@example.com">
+                    </div>
+                </div>
+
+                <div class="form-group-grid grid-2">
+                    <div>
+                        <label class="form-label">Temporary Address</label>
+                        <textarea class="form-control" rows="2" placeholder="Your current address" required></textarea>
+                    </div>
+                    <div>
+                        <label class="form-label">Permanent Address</label>
+                        <textarea class="form-control" rows="2" placeholder="Your permanent address" required></textarea>
+                    </div>
                 </div>
                 
-                <h3 class="founder-name">Mr. Pradeep Babu. M</h3>
-                <span class="founder-role">Founder & Managing Trustee</span>
-                
-                <p class="founder-quote">"Creating responsible individuals. Building stronger communities. Inspiring a better tomorrow."</p>
-                
-                <p style="max-width: 600px; margin: 0 auto;">Under his visionary leadership, PRAJAYA FOUNDATION was established with a singular mission: to create a generation of responsible, empowered individuals who drive positive societal change.</p>
-            </div>
-        </div>
-    </section>
+                <div class="form-group-grid grid-2">
+                    <div>
+                        <label class="form-label">Educational Background</label>
+                        <input type="text" class="form-control" placeholder="e.g. B.Tech, High School" required>
+                    </div>
+                    <div>
+                        <label class="form-label">Current Status</label>
+                        <input type="text" class="form-control" placeholder="e.g. Student, Employed" required>
+                    </div>
+                </div>
 
-    <!-- Suggestion Space & Donate -->
-    <section class="section" id="suggestions">
-        <div class="container">
-            <div class="approach-values-grid">
-                
-                <div class="reveal">
-                    <div class="section-label">Your Voice Matters</div>
-                    <h2 class="section-title" style="margin-bottom: 30px;">Suggestion Space</h2>
-                    <p style="margin-bottom: 30px;">Have an idea, query, or suggestion? We value your input. Share your thoughts directly with our founder.</p>
-                    
-                    <form action="mailto:prajayafoundation@gmail.com" method="POST" enctype="text/plain">
-                        <div class="form-group">
-                            <input type="text" class="form-control" name="Name" placeholder="Your Name" required>
+                <div class="form-group">
+                    <label class="form-label">Why do you want to become a Volunteer?</label>
+                    <textarea class="form-control" rows="2" placeholder="Tell us your motivation..." required></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Resume / CV (Optional for Little Changemakers)</label>
+                    <div class="file-upload-wrapper">
+                        <input type="file" class="file-upload-input" id="resumeUpload" accept=".pdf,.doc,.docx">
+                        <div class="file-upload-button" id="uploadBtnText">
+                            <i class="fas fa-cloud-upload-alt"></i> <span>Upload Resume (PDF, DOCX)</span>
                         </div>
-                        <div class="form-group">
-                            <input type="email" class="form-control" name="Email" placeholder="Your Email" required>
-                        </div>
-                        <div class="form-group">
-                            <textarea class="form-control" name="Suggestion" rows="4" placeholder="Your Idea, Query, or Suggestion" required></textarea>
-                        </div>
-                        <button type="submit" class="btn btn-outline" style="width: 100%;">Send Message</button>
-                    </form>
-                </div>
-
-                <div class="reveal delay-1">
-                    <div class="section-label">Support Our Cause</div>
-                    <h2 class="section-title" style="margin-bottom: 30px;">Make a Donation</h2>
-                    <p style="margin-bottom: 30px;">Your contribution helps us continue our mission of empowering individuals and transforming communities. Every donation makes a meaningful difference.</p>
-                    
-                    <div style="background: var(--color-surface-alt); padding: 50px 40px; border-radius: 12px; text-align: center;">
-                        <img src="assets/images/logo.png" alt="Prajaya Foundation Logo" style="width: 80px; height: auto; object-fit: contain; display: block; margin: 0 auto 25px;">
-                        <h4 style="font-size: 1.6rem; margin-bottom: 15px; font-family: var(--font-heading); color: var(--color-heading);">Support Prajaya Foundation</h4>
-                        <p style="margin-bottom: 35px; font-size: 1.05rem;">Join hands with us to build a better society.</p>
-                        <a href="#contact" class="btn btn-primary" style="width: 100%;">Donate Now</a>
                     </div>
                 </div>
 
+                <div class="form-group" style="margin-top: 35px;">
+                    <label class="form-label">Terms and Conditions</label>
+                    <div style="font-size: 0.85rem; background: var(--color-surface-alt); padding: 20px; border-radius: 8px; margin-bottom: 20px; max-height: 140px; overflow-y: auto; color: var(--color-text); line-height: 1.6; border: 1px solid rgba(0,0,0,0.05);">
+                        <strong>1. Commitment & Conduct:</strong> As a volunteer, I commit to dedicating my time to support the initiatives of Prajaya Foundation with honesty and integrity. I agree to maintain professional behavior and uphold the values of the foundation.<br><br>
+                        <strong>2. Parental Consent:</strong> For "Little Changemakers" and "Junior Volunteers" under the age of 18, parental or guardian consent is strictly mandatory to participate in any activities.<br><br>
+                        <strong>3. Code of Ethics:</strong> I will respect the privacy of beneficiaries, co-volunteers, and the organization. I will not misuse the foundation's name, logo, or resources for personal gain.<br><br>
+                        <strong>4. Liability:</strong> I understand that the foundation operates for charitable purposes and I voluntarily assume any risks associated with my participation in outdoor or community events.
+                    </div>
+                    <label style="display: flex; align-items: flex-start; gap: 12px; font-size: 0.9rem; cursor: pointer;">
+                        <input type="checkbox" required style="margin-top: 4px; transform: scale(1.1);">
+                        <span>I have read and agree to the Terms and Conditions. (Parents/Guardians must check this for minors).</span>
+                    </label>
+                </div>
+
+                <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 15px;">Submit Application</button>
+            </form>
             </div>
         </div>
     </section>
 
-    <!-- Footer -->
+<!-- Footer -->
     <footer class="footer" id="contact">
         <div class="container">
             <div class="footer-grid">
@@ -1623,10 +1434,10 @@
                 <div>
                     <h4 class="footer-heading">Navigation</h4>
                     <ul class="footer-links">
-                        <li><a href="#about">About Us</a></li>
-                        <li><a href="#vision">Vision & Mission</a></li>
-                        <li><a href="#programs">Our Programs</a></li>
-                        <li><a href="#founder">Founder</a></li>
+                        <li><a href="index.html#about">About Us</a></li>
+                        <li><a href="index.html#vision">Vision & Mission</a></li>
+                        <li><a href="index.html#programs">Our Programs</a></li>
+                        <li><a href="index.html#founder">Founder</a></li>
                     </ul>
                 </div>
                 
@@ -1647,8 +1458,6 @@
             </div>
         </div>
     </footer>
-
-
 
     <!-- GSAP & Lenis -->
     <script src="https://unpkg.com/@studio-freight/lenis@1.0.39/dist/lenis.min.js"></script>
@@ -1740,8 +1549,56 @@
         });
 
 
+        // Form Submission
+        document.getElementById('volunteerForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const submitBtn = e.target.querySelector('button[type="submit"]');
+            const originalText = submitBtn.innerHTML;
+            submitBtn.innerHTML = '<i class="fas fa-circle-notch fa-spin"></i> Submitting...';
+            submitBtn.style.opacity = '0.8';
+            submitBtn.disabled = true;
+            
+            // Simulate network request
+            setTimeout(() => {
+                submitBtn.innerHTML = '<i class="fas fa-check"></i> Application Sent';
+                submitBtn.style.backgroundColor = '#10b981';
+                submitBtn.style.color = '#fff';
+                submitBtn.style.opacity = '1';
+                
+                setTimeout(() => {
+                    e.target.reset();
+                    const uploadBtnText = document.getElementById('uploadBtnText').querySelector('span');
+                    if(uploadBtnText) {
+                        uploadBtnText.textContent = "Upload Resume (PDF, DOCX)";
+                        uploadBtnText.style.color = "";
+                    }
+                    submitBtn.innerHTML = originalText;
+                    submitBtn.style = 'width: 100%; margin-top: 15px;';
+                    submitBtn.disabled = false;
+                }, 3000);
+            }, 1500);
+        });
 
-
+        // Update file name on selection
+        const fileInput = document.getElementById('resumeUpload');
+        const uploadBtnText = document.getElementById('uploadBtnText');
+        if (fileInput && uploadBtnText) {
+            const spanText = uploadBtnText.querySelector('span');
+            fileInput.addEventListener('change', function(e) {
+                if(this.files && this.files.length > 0) {
+                    if (spanText) {
+                        spanText.textContent = this.files[0].name;
+                        spanText.style.color = "var(--color-heading)";
+                    }
+                } else {
+                    if (spanText) {
+                        spanText.textContent = "Upload Resume (PDF, DOCX)";
+                        spanText.style.color = "";
+                    }
+                }
+            });
+        }
+        
         // Preloader Logic
         window.addEventListener('load', () => {
             const preloader = document.getElementById('preloader');
