@@ -31,7 +31,7 @@
             
             /* Spacing */
             --space-section: 100px;
-            --space-container: 1200px;
+            --space-container: 1600px;
             
             /* Transitions */
             --transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
@@ -103,7 +103,7 @@
         .container {
             max-width: var(--space-container);
             margin: 0 auto;
-            padding: 0 5%;
+            padding: 0 6%;
         }
 
         /* --- Buttons --- */
@@ -181,6 +181,8 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+            max-width: 100%;
+            padding: 0 6%;
         }
 
         .brand {
@@ -265,8 +267,8 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            padding-top: 80px; /* Account for navbar */
-            padding-bottom: 80px;
+            padding-top: 100px; /* Account for navbar */
+            padding-bottom: 100px;
             background-color: var(--color-heading);
             background-image: 
                 url('data:image/svg+xml,%3Csvg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"%3E%3Cfilter id="noiseFilter"%3E%3CfeTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="3" stitchTiles="stitch"/%3E%3C/filter%3E%3Crect width="100%25" height="100%25" filter="url(%23noiseFilter)" opacity="0.03"/%3E%3C/svg%3E'),
@@ -278,22 +280,24 @@
             position: relative;
             z-index: 2;
             width: 100%;
+            max-width: 100%;
+            padding: 0 6%;
         }
 
         .hero-wrapper {
-            max-width: 1200px;
+            max-width: 1600px;
             margin: 0 auto;
             display: flex;
-            flex-wrap: wrap; /* Changed from wrap-reverse to keep logo at the bottom on mobile */
+            flex-wrap: wrap;
             align-items: center;
             justify-content: space-between;
             width: 100%;
-            gap: 60px;
+            gap: 80px;
         }
 
         .hero-content {
-            flex: 1;
-            min-width: 320px;
+            flex: 1 1 55%;
+            min-width: 400px;
             text-align: left;
         }
 
@@ -308,11 +312,11 @@
         }
 
         .hero h1 {
-            font-size: clamp(2.5rem, 5vw, 4rem);
-            margin-bottom: 30px;
-            line-height: 0.92;
+            font-size: clamp(2.8rem, 4.5vw, 4.8rem);
+            margin-bottom: 36px;
+            line-height: 1.05;
             font-weight: 300;
-            letter-spacing: -1px;
+            letter-spacing: -1.5px;
             color: #ffffff;
             text-shadow: 0 4px 24px rgba(0, 0, 0, 0.5);
         }
@@ -324,12 +328,12 @@
         }
 
         .hero p {
-            font-size: clamp(1rem, 1.5vw, 1.25rem);
-            max-width: 430px;
-            margin: 0 0 40px;
-            color: rgba(255, 255, 255, 0.85);
+            font-size: clamp(1.05rem, 1.3vw, 1.3rem);
+            max-width: 580px;
+            margin: 0 0 48px;
+            color: rgba(255, 255, 255, 0.8);
             font-weight: 300;
-            line-height: 1.8;
+            line-height: 1.85;
             text-shadow: 0 2px 12px rgba(0, 0, 0, 0.5);
         }
 
@@ -373,14 +377,14 @@
             justify-content: center;
             position: relative;
             flex: 0 0 auto;
-            margin: 0 auto;
-            min-width: 240px;
+            margin: 0;
+            min-width: 300px;
         }
 
         .hero-glow {
             position: absolute;
-            width: 450px;
-            height: 450px;
+            width: 520px;
+            height: 520px;
             background: radial-gradient(circle, rgba(212, 166, 90, 0.12) 0%, transparent 70%);
             top: 45%;
             left: 50%;
@@ -391,7 +395,7 @@
         }
 
         .hero-logo-container {
-            width: 320px;
+            width: 380px;
             height: auto;
             display: flex;
             align-items: center;
@@ -466,6 +470,29 @@
             }
         }
 
+        /* Large desktop enhancements */
+        @media (min-width: 1440px) {
+            .container {
+                padding: 0 8%;
+            }
+            .nav-container {
+                padding: 0 8%;
+            }
+            .hero .container {
+                padding: 0 8%;
+            }
+            .hero h1 {
+                font-size: 4.8rem;
+            }
+            .hero-logo-container {
+                width: 420px;
+            }
+            .hero-glow {
+                width: 580px;
+                height: 580px;
+            }
+        }
+
         /* --- Sections General --- */
         .section {
             padding: var(--space-section) 0;
@@ -486,16 +513,7 @@
             text-transform: uppercase;
             color: var(--color-accent);
             margin-bottom: 20px;
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-
-        .section-label::before {
-            content: '';
-            width: 40px;
-            height: 1px;
-            background-color: var(--color-accent);
+            display: block;
         }
 
         .section-title {
@@ -661,7 +679,7 @@
 
         /* --- Founder --- */
         .founder-wrapper {
-            max-width: 900px;
+            max-width: 1100px;
             margin: 0 auto;
             text-align: center;
         }
@@ -701,7 +719,7 @@
             font-family: var(--font-heading);
             color: var(--color-heading);
             line-height: 1.6;
-            max-width: 700px;
+            max-width: 900px;
             margin: 0 auto 40px;
             font-weight: 500;
         }
@@ -728,7 +746,7 @@
 
         .footer-brand p {
             color: rgba(255,255,255,0.6);
-            max-width: 400px;
+            max-width: 500px;
             margin-bottom: 30px;
         }
 
@@ -1057,20 +1075,22 @@
 
             .hero-wrapper {
                 flex-direction: column;
-                gap: 56px;
+                gap: 32px;
             }
             .hero-content {
                 display: flex;
                 flex-direction: column;
                 align-items: center;
                 text-align: center;
+                min-width: 0;
+                width: 100%;
             }
 
 
             .hero h1 {
                 font-size: 44px;
                 line-height: 1.1;
-                margin-bottom: 24px;
+                margin-bottom: 16px;
                 font-weight: 500;
                 text-align: center;
             }
@@ -1079,10 +1099,14 @@
                 display: none;
             }
 
+            .hero h1 span {
+                font-style: normal;
+            }
+
             .hero p {
                 font-size: 16px;
                 line-height: 1.6;
-                margin-bottom: 36px;
+                margin-bottom: 24px;
                 max-width: 100%;
                 text-align: center;
             }
@@ -1359,7 +1383,7 @@
                 </div>
                 
                 <div class="about-image reveal delay-1">
-                    <img src="https://images.unsplash.com/photo-1582213782179-e0d53f98f2ca?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Community Support">
+                    <img src="assets/images/community_support.png" alt="Community Support">
                 </div>
             </div>
         </div>
@@ -1555,41 +1579,24 @@
 
     <!-- Suggestion Space & Donate -->
     <section class="section" id="suggestions">
-        <div class="container">
-            <div class="approach-values-grid">
+        <div class="container" style="max-width: 700px; margin: 0 auto;">
+            <div class="reveal">
+                <div class="section-label" style="justify-content: center;">Your Voice Matters</div>
+                <h2 class="section-title" style="margin-bottom: 30px; text-align: center;">Suggestion Space</h2>
+                <p style="margin-bottom: 30px; text-align: center;">Have an idea, query, or suggestion? We value your input. Share your thoughts directly with our founder.</p>
                 
-                <div class="reveal">
-                    <div class="section-label">Your Voice Matters</div>
-                    <h2 class="section-title" style="margin-bottom: 30px;">Suggestion Space</h2>
-                    <p style="margin-bottom: 30px;">Have an idea, query, or suggestion? We value your input. Share your thoughts directly with our founder.</p>
-                    
-                    <form action="mailto:prajayafoundation@gmail.com" method="POST" enctype="text/plain">
-                        <div class="form-group">
-                            <input type="text" class="form-control" name="Name" placeholder="Your Name" required>
-                        </div>
-                        <div class="form-group">
-                            <input type="email" class="form-control" name="Email" placeholder="Your Email" required>
-                        </div>
-                        <div class="form-group">
-                            <textarea class="form-control" name="Suggestion" rows="4" placeholder="Your Idea, Query, or Suggestion" required></textarea>
-                        </div>
-                        <button type="submit" class="btn btn-outline" style="width: 100%;">Send Message</button>
-                    </form>
-                </div>
-
-                <div class="reveal delay-1">
-                    <div class="section-label">Support Our Cause</div>
-                    <h2 class="section-title" style="margin-bottom: 30px;">Make a Donation</h2>
-                    <p style="margin-bottom: 30px;">Your contribution helps us continue our mission of empowering individuals and transforming communities. Every donation makes a meaningful difference.</p>
-                    
-                    <div style="background: var(--color-surface-alt); padding: 50px 40px; border-radius: 12px; text-align: center;">
-                        <img src="assets/images/logo.png" alt="Prajaya Foundation Logo" style="width: 80px; height: auto; object-fit: contain; display: block; margin: 0 auto 25px;">
-                        <h4 style="font-size: 1.6rem; margin-bottom: 15px; font-family: var(--font-heading); color: var(--color-heading);">Support Prajaya Foundation</h4>
-                        <p style="margin-bottom: 35px; font-size: 1.05rem;">Join hands with us to build a better society.</p>
-                        <a href="#contact" class="btn btn-primary" style="width: 100%;">Donate Now</a>
+                <form action="mailto:prajayafoundation@gmail.com" method="POST" enctype="text/plain">
+                    <div class="form-group">
+                        <input type="text" class="form-control" name="Name" placeholder="Your Name" required>
                     </div>
-                </div>
-
+                    <div class="form-group">
+                        <input type="email" class="form-control" name="Email" placeholder="Your Email" required>
+                    </div>
+                    <div class="form-group">
+                        <textarea class="form-control" name="Suggestion" rows="4" placeholder="Your Idea, Query, or Suggestion" required></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-outline" style="width: 100%;">Send Message</button>
+                </form>
             </div>
         </div>
     </section>

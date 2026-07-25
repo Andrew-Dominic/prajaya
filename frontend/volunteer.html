@@ -31,7 +31,7 @@
             
             /* Spacing */
             --space-section: 100px;
-            --space-container: 1200px;
+            --space-container: 1600px;
             
             /* Transitions */
             --transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
@@ -103,7 +103,7 @@
         .container {
             max-width: var(--space-container);
             margin: 0 auto;
-            padding: 0 5%;
+            padding: 0 6%;
         }
 
         /* --- Buttons --- */
@@ -181,6 +181,8 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+            max-width: 100%;
+            padding: 0 6%;
         }
 
         .brand {
@@ -466,6 +468,16 @@
             }
         }
 
+        /* Large desktop enhancements */
+        @media (min-width: 1440px) {
+            .container {
+                padding: 0 8%;
+            }
+            .nav-container {
+                padding: 0 8%;
+            }
+        }
+
         /* --- Sections General --- */
         .section {
             padding: var(--space-section) 0;
@@ -661,7 +673,7 @@
 
         /* --- Founder --- */
         .founder-wrapper {
-            max-width: 900px;
+            max-width: 1100px;
             margin: 0 auto;
             text-align: center;
         }
@@ -728,7 +740,7 @@
 
         .footer-brand p {
             color: rgba(255,255,255,0.6);
-            max-width: 400px;
+            max-width: 500px;
             margin-bottom: 30px;
         }
 
@@ -868,29 +880,35 @@
 
         .form-label {
             display: block;
-            font-size: 0.8rem;
+            font-size: 0.85rem;
             font-weight: 500;
-            color: var(--color-heading);
+            color: var(--color-text);
             margin-bottom: 8px;
             text-transform: uppercase;
             letter-spacing: 1px;
         }
 
+        .required-asterisk {
+            color: #ef4444;
+            margin-left: 3px;
+        }
+
         .form-control {
             width: 100%;
-            padding: 10px 0;
-            border: none;
-            border-bottom: 1px solid rgba(0,0,0,0.1);
-            background: transparent;
+            padding: 14px 18px;
+            border: 1px solid rgba(0,0,0,0.1);
+            border-radius: 8px;
+            background: var(--color-bg);
             font-family: var(--font-body);
-            font-size: 1.05rem;
+            font-size: 1rem;
             color: var(--color-heading);
-            transition: var(--transition);
+            transition: all 0.3s ease;
         }
 
         .form-control:focus {
             outline: none;
-            border-bottom-color: var(--color-accent);
+            border-color: var(--color-accent);
+            box-shadow: 0 0 0 4px rgba(212, 166, 90, 0.15);
         }
 
         .form-control::placeholder {
@@ -916,13 +934,16 @@
         .file-upload-button {
             display: flex;
             align-items: center;
-            gap: 10px;
-            padding: 15px 20px;
-            border: 1px dashed rgba(0,0,0,0.2);
+            justify-content: center;
+            gap: 12px;
+            padding: 24px 20px;
+            border: 2px dashed rgba(0,0,0,0.15);
+            border-radius: 8px;
             color: var(--color-text);
-            font-size: 0.95rem;
-            transition: var(--transition);
-            background-color: var(--color-surface);
+            font-size: 1rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            background-color: var(--color-bg);
             position: relative;
             z-index: 1;
         }
@@ -930,6 +951,7 @@
         .file-upload-wrapper:hover .file-upload-button {
             border-color: var(--color-accent);
             color: var(--color-heading);
+            background-color: rgba(212, 166, 90, 0.05);
         }
 
         .nav-volunteer-btn {
@@ -1057,20 +1079,33 @@
 
             .hero-wrapper {
                 flex-direction: column;
-                gap: 56px;
+                gap: 32px;
+            }
+
+            .hero-content {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
+                min-width: 0;
+                width: 100%;
             }
 
             .hero h1 {
                 font-size: 54px;
                 line-height: 0.95;
-                margin-bottom: 28px;
+                margin-bottom: 16px;
                 font-weight: 500;
+            }
+
+            .hero h1 span {
+                font-style: normal;
             }
 
             .hero p {
                 font-size: 18px;
                 line-height: 1.6;
-                margin-bottom: 36px;
+                margin-bottom: 24px;
                 max-width: 330px;
             }
 
@@ -1276,7 +1311,7 @@
                 <a href="index.html#events">Events</a>
                 <a href="index.html#founder">Founder</a>
                 <a href="index.html#suggestions">Contact</a>
-                <a href="#" class="btn btn-primary nav-volunteer-btn">Volunteer</a>
+                <a href="index.html" class="btn btn-primary nav-volunteer-btn">Back to Home</a>
             </nav>
             
             <div class="mobile-menu-btn" id="mobile-btn">
@@ -1293,12 +1328,12 @@
             <h2 class="section-title" style="text-align: center; margin-bottom: 15px;">Become a Volunteer</h2>
             <p style="text-align: center; margin-bottom: 50px; color: var(--color-text);">Become a part of Prajaya Foundation. Share your details below.</p>
             
-            <div style="background: var(--color-surface); padding: 40px; border-radius: 12px; border-left: 3px solid var(--color-accent); box-shadow: 0 10px 30px rgba(0,0,0,0.02);">
+            <div style="background: var(--color-surface); padding: 50px; border-radius: 16px; border: 1px solid rgba(0,0,0,0.06); box-shadow: 0 20px 40px rgba(0,0,0,0.03);">
                 <form id="volunteerForm">
                 <div class="form-group-grid grid-2">
                     <div>
-                        <label class="form-label">Volunteer Category</label>
-                        <select class="form-control" required style="appearance: none; background: transparent; cursor: pointer;">
+                        <label class="form-label">Volunteer Category<span class="required-asterisk">*</span></label>
+                        <select class="form-control" id="category" required style="appearance: none; cursor: pointer;">
                             <option value="" disabled selected>Select Category</option>
                             <option value="Little Changemakers">Little Changemakers (4 - 12 Years) *with parents consent</option>
                             <option value="Junior Volunteers">Junior Volunteers (13 - 17) *with parents consent</option>
@@ -1306,88 +1341,98 @@
                         </select>
                     </div>
                     <div>
-                        <label class="form-label">Full Name</label>
-                        <input type="text" class="form-control" placeholder="John Doe" required>
+                        <label class="form-label">Full Name<span class="required-asterisk">*</span></label>
+                        <input type="text" class="form-control" id="name" placeholder="John Doe" autocomplete="name" required>
                     </div>
                 </div>
 
                 <div class="form-group-grid grid-3">
                     <div>
-                        <label class="form-label">Age</label>
-                        <input type="number" class="form-control" placeholder="e.g. 21" required>
+                        <label class="form-label">Age<span class="required-asterisk">*</span></label>
+                        <input type="number" class="form-control" id="age" placeholder="e.g. 21" required>
                     </div>
                     <div>
-                        <label class="form-label">Date of Birth</label>
-                        <input type="date" class="form-control" required style="color: var(--color-text);">
+                        <label class="form-label">Date of Birth<span class="required-asterisk">*</span></label>
+                        <input type="date" class="form-control" id="dob" autocomplete="bday" required style="color: var(--color-text);">
                     </div>
                     <div>
-                        <label class="form-label">Blood Group</label>
-                        <input type="text" class="form-control" placeholder="e.g. O+" required>
+                        <label class="form-label">Blood Group<span class="required-asterisk">*</span></label>
+                        <input type="text" class="form-control" id="blood_group" placeholder="e.g. O+" required>
                     </div>
                 </div>
 
                 <div class="form-group-grid grid-2">
                     <div>
-                        <label class="form-label">Mobile Number</label>
-                        <input type="tel" class="form-control" placeholder="+91 98765 43210" required>
+                        <label class="form-label">Mobile Number<span class="required-asterisk">*</span></label>
+                        <input type="tel" class="form-control" id="phone" placeholder="+91 98765 43210" autocomplete="tel" required>
                     </div>
                     <div>
                         <label class="form-label">Alternative Mobile</label>
-                        <input type="tel" class="form-control" placeholder="+91 98765 00000">
+                        <input type="tel" class="form-control" id="alt_phone" placeholder="+91 98765 00000" autocomplete="tel">
                     </div>
                 </div>
 
                 <div class="form-group-grid grid-2">
                     <div>
-                        <label class="form-label">Email Address</label>
-                        <input type="email" class="form-control" placeholder="john@example.com" required>
+                        <label class="form-label">Email Address<span class="required-asterisk">*</span></label>
+                        <input type="email" class="form-control" id="email" placeholder="john@example.com" autocomplete="email" required>
                     </div>
                     <div>
                         <label class="form-label">Alternative Email</label>
-                        <input type="email" class="form-control" placeholder="alt@example.com">
+                        <input type="email" class="form-control" id="alt_email" placeholder="alt@example.com" autocomplete="email">
                     </div>
                 </div>
 
                 <div class="form-group-grid grid-2">
                     <div>
-                        <label class="form-label">Temporary Address</label>
-                        <textarea class="form-control" rows="2" placeholder="Your current address" required></textarea>
+                        <label class="form-label">Temporary Address<span class="required-asterisk">*</span></label>
+                        <textarea class="form-control" id="temp_address" rows="2" placeholder="Your current address" autocomplete="street-address" required></textarea>
                     </div>
                     <div>
-                        <label class="form-label">Permanent Address</label>
-                        <textarea class="form-control" rows="2" placeholder="Your permanent address" required></textarea>
+                        <label class="form-label">Permanent Address<span class="required-asterisk">*</span></label>
+                        <textarea class="form-control" id="perm_address" rows="2" placeholder="Your permanent address" required></textarea>
                     </div>
                 </div>
                 
                 <div class="form-group-grid grid-2">
                     <div>
-                        <label class="form-label">Educational Background</label>
-                        <input type="text" class="form-control" placeholder="e.g. B.Tech, High School" required>
+                        <label class="form-label">Educational Background<span class="required-asterisk">*</span></label>
+                        <input type="text" class="form-control" id="education" placeholder="e.g. B.Tech, High School" required>
                     </div>
                     <div>
-                        <label class="form-label">Current Status</label>
-                        <input type="text" class="form-control" placeholder="e.g. Student, Employed" required>
+                        <label class="form-label">Current Status<span class="required-asterisk">*</span></label>
+                        <input type="text" class="form-control" id="current_status" placeholder="e.g. Student, Employed" required>
                     </div>
                 </div>
 
                 <div class="form-group">
-                    <label class="form-label">Why do you want to become a Volunteer?</label>
-                    <textarea class="form-control" rows="2" placeholder="Tell us your motivation..." required></textarea>
+                    <label class="form-label">Why do you want to become a Volunteer?<span class="required-asterisk">*</span></label>
+                    <textarea class="form-control" id="motivation" rows="2" placeholder="Tell us your motivation..." required></textarea>
                 </div>
 
                 <div class="form-group">
                     <label class="form-label">Resume / CV (Optional for Little Changemakers)</label>
                     <div class="file-upload-wrapper">
-                        <input type="file" class="file-upload-input" id="resumeUpload" accept=".pdf,.doc,.docx">
+                        <input type="file" class="file-upload-input" id="resumeUpload" name="resume" accept=".pdf">
                         <div class="file-upload-button" id="uploadBtnText">
-                            <i class="fas fa-cloud-upload-alt"></i> <span>Upload Resume (PDF, DOCX)</span>
+                            <i class="fas fa-cloud-upload-alt"></i> <span>Upload Resume (PDF)</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group" style="margin-top: 25px;">
+                    <label class="form-label">Passport Size Photo (Max 300KB)<span class="required-asterisk">*</span></label>
+                    <div class="file-upload-wrapper">
+                        <input type="file" class="file-upload-input" id="photoUpload" name="photo" accept="image/jpeg, image/webp" required>
+                        <div class="file-upload-button" id="photoUploadBtnText">
+                            <i class="fas fa-camera"></i> <span>Upload Photo (JPEG, WebP)</span>
                         </div>
                     </div>
                 </div>
 
                 <div class="form-group" style="margin-top: 35px;">
                     <label class="form-label">Terms and Conditions</label>
-                    <div style="font-size: 0.85rem; background: var(--color-surface-alt); padding: 20px; border-radius: 8px; margin-bottom: 20px; max-height: 140px; overflow-y: auto; color: var(--color-text); line-height: 1.6; border: 1px solid rgba(0,0,0,0.05);">
+                    <div style="font-size: 0.85rem; background: var(--color-bg); padding: 24px; border-radius: 8px; margin-bottom: 20px; color: var(--color-text); line-height: 1.6; border: 1px solid rgba(0,0,0,0.08);">
                         <strong>1. Commitment & Conduct:</strong> As a volunteer, I commit to dedicating my time to support the initiatives of Prajaya Foundation with honesty and integrity. I agree to maintain professional behavior and uphold the values of the foundation.<br><br>
                         <strong>2. Parental Consent:</strong> For "Little Changemakers" and "Junior Volunteers" under the age of 18, parental or guardian consent is strictly mandatory to participate in any activities.<br><br>
                         <strong>3. Code of Ethics:</strong> I will respect the privacy of beneficiaries, co-volunteers, and the organization. I will not misuse the foundation's name, logo, or resources for personal gain.<br><br>
@@ -1399,7 +1444,7 @@
                     </label>
                 </div>
 
-                <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 15px;">Submit Application</button>
+                <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 20px; padding: 18px; font-size: 1.1rem; border-radius: 8px;">Submit Application</button>
             </form>
             </div>
         </div>
@@ -1466,23 +1511,9 @@
 
     <!-- Scripts -->
     <script>
-        // Header Scroll Effect
+        // Header always solid on volunteer page
         const header = document.getElementById('header');
-        const heroSection = document.querySelector('.hero');
-        window.addEventListener('scroll', () => {
-            const heroHeight = heroSection ? heroSection.offsetHeight : 100;
-            // Subtract approx header height (80px) to trigger just as the next section comes up
-            if (window.scrollY > heroHeight - 80) {
-                header.classList.add('scrolled');
-                header.classList.remove('hidden');
-            } else if (window.scrollY > 50) {
-                header.classList.remove('scrolled');
-                header.classList.add('hidden');
-            } else {
-                header.classList.remove('scrolled');
-                header.classList.remove('hidden');
-            }
-        });
+        header.classList.add('scrolled');
 
         // Mobile Menu
         const mobileBtn = document.getElementById('mobile-btn');
@@ -1558,8 +1589,36 @@
             submitBtn.style.opacity = '0.8';
             submitBtn.disabled = true;
             
-            // Simulate network request
-            setTimeout(() => {
+            // Create FormData payload
+            const formData = new FormData();
+            formData.append('category', document.getElementById('category').value);
+            formData.append('name', document.getElementById('name').value);
+            formData.append('age', document.getElementById('age').value);
+            formData.append('dob', document.getElementById('dob').value);
+            formData.append('blood_group', document.getElementById('blood_group').value);
+            formData.append('phone', document.getElementById('phone').value);
+            formData.append('alt_phone', document.getElementById('alt_phone').value || '');
+            formData.append('email', document.getElementById('email').value);
+            formData.append('alt_email', document.getElementById('alt_email').value || '');
+            formData.append('temp_address', document.getElementById('temp_address').value);
+            formData.append('perm_address', document.getElementById('perm_address').value);
+            formData.append('education', document.getElementById('education').value);
+            formData.append('current_status', document.getElementById('current_status').value);
+            formData.append('motivation', document.getElementById('motivation').value);
+            
+            const resumeFile = document.getElementById('resumeUpload').files[0];
+            if(resumeFile) formData.append('resume', resumeFile);
+            
+            const photoFile = document.getElementById('photoUpload').files[0];
+            if(photoFile) formData.append('photo', photoFile);
+
+            // Send actual network request to backend
+            fetch('/api/v1/applications', {
+                method: 'POST',
+                body: formData
+            })
+            .then(res => res.json())
+            .then(data => {
                 submitBtn.innerHTML = '<i class="fas fa-check"></i> Application Sent';
                 submitBtn.style.backgroundColor = '#10b981';
                 submitBtn.style.color = '#fff';
@@ -1567,32 +1626,95 @@
                 
                 setTimeout(() => {
                     e.target.reset();
-                    const uploadBtnText = document.getElementById('uploadBtnText').querySelector('span');
-                    if(uploadBtnText) {
-                        uploadBtnText.textContent = "Upload Resume (PDF, DOCX)";
-                        uploadBtnText.style.color = "";
+                    const uploadBtn = document.getElementById('uploadBtnText');
+                    if(uploadBtn) {
+                        const uploadBtnText = uploadBtn.querySelector('span');
+                        if(uploadBtnText) {
+                            uploadBtnText.textContent = "Upload Resume (PDF)";
+                            uploadBtnText.style.color = "";
+                        }
+                    }
+                    const photoBtn = document.getElementById('photoUploadBtnText');
+                    if(photoBtn) {
+                        const photoUploadBtnText = photoBtn.querySelector('span');
+                        if(photoUploadBtnText) {
+                            photoUploadBtnText.textContent = "Upload Photo (JPEG, WebP)";
+                            photoUploadBtnText.style.color = "";
+                        }
                     }
                     submitBtn.innerHTML = originalText;
-                    submitBtn.style = 'width: 100%; margin-top: 15px;';
+                    submitBtn.style = 'width: 100%; margin-top: 20px; padding: 18px; font-size: 1.1rem; border-radius: 8px;';
                     submitBtn.disabled = false;
                 }, 3000);
-            }, 1500);
+            })
+            .catch(err => {
+                console.error("Error submitting application:", err);
+                submitBtn.innerHTML = '<i class="fas fa-exclamation-circle"></i> Error Submitting';
+                submitBtn.style.backgroundColor = '#ef4444';
+                submitBtn.style.color = '#fff';
+                
+                setTimeout(() => {
+                    submitBtn.innerHTML = originalText;
+                    submitBtn.style = 'width: 100%; margin-top: 20px; padding: 18px; font-size: 1.1rem; border-radius: 8px;';
+                    submitBtn.disabled = false;
+                }, 3000);
+            });
         });
 
-        // Update file name on selection
+        // Update file name on selection for resume
         const fileInput = document.getElementById('resumeUpload');
         const uploadBtnText = document.getElementById('uploadBtnText');
         if (fileInput && uploadBtnText) {
             const spanText = uploadBtnText.querySelector('span');
             fileInput.addEventListener('change', function(e) {
                 if(this.files && this.files.length > 0) {
+                    const file = this.files[0];
+                    if (file.size > 2 * 1024 * 1024) { // 2MB limit
+                        alert("Please upload a resume smaller than 2MB.");
+                        this.value = ""; // Clear the input
+                        if (spanText) {
+                            spanText.textContent = "Upload Resume (PDF)";
+                            spanText.style.color = "red";
+                        }
+                        return;
+                    }
                     if (spanText) {
-                        spanText.textContent = this.files[0].name;
+                        spanText.textContent = file.name;
                         spanText.style.color = "var(--color-heading)";
                     }
                 } else {
                     if (spanText) {
-                        spanText.textContent = "Upload Resume (PDF, DOCX)";
+                        spanText.textContent = "Upload Resume (PDF)";
+                        spanText.style.color = "";
+                    }
+                }
+            });
+        }
+
+        // Update file name on selection and validate size for photo
+        const photoInput = document.getElementById('photoUpload');
+        const photoUploadBtnText = document.getElementById('photoUploadBtnText');
+        if (photoInput && photoUploadBtnText) {
+            const spanText = photoUploadBtnText.querySelector('span');
+            photoInput.addEventListener('change', function(e) {
+                if(this.files && this.files.length > 0) {
+                    const file = this.files[0];
+                    if (file.size > 300 * 1024) { // 300KB limit
+                        alert("Please upload an image smaller than 300KB.");
+                        this.value = ""; // Clear the input
+                        if (spanText) {
+                            spanText.textContent = "Upload Photo (JPEG, WebP)";
+                            spanText.style.color = "red";
+                        }
+                        return;
+                    }
+                    if (spanText) {
+                        spanText.textContent = file.name;
+                        spanText.style.color = "var(--color-heading)";
+                    }
+                } else {
+                    if (spanText) {
+                        spanText.textContent = "Upload Photo (JPEG, WebP)";
                         spanText.style.color = "";
                     }
                 }
