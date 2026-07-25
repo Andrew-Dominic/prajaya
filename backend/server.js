@@ -150,7 +150,7 @@ app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 // ──────────────────────────────────────────────
 
 // Serve static frontend files
-app.use(express.static(path.join(__dirname, '..', config.frontendPath)));
+app.use(express.static(config.frontendPath));
 
 // Serve uploaded files statically so admin can view them
 app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
@@ -275,16 +275,21 @@ app.use(errorHandler);
 // START SERVER
 // ──────────────────────────────────────────────
 
-app.listen(config.port, () => {
-  console.log(`
-  ╔══════════════════════════════════════════╗
-  ║   PRAJAYA FOUNDATION SERVER             ║
-  ║                                         ║
-  ║   Environment : ${config.nodeEnv.padEnd(22)}║
-  ║   Port        : ${String(config.port).padEnd(22)}║
-  ║   Frontend    : http://localhost:${config.port}${' '.repeat(Math.max(0, 6 - String(config.port).length))}║
-  ║   Admin       : http://localhost:${config.port}/admin${' '.repeat(Math.max(0, 0))}║
-  ║   Health      : http://localhost:${config.port}/api/health║
-  ╚══════════════════════════════════════════╝
-  `);
-});
+if (process.env.NODE_ENV !== 'production' && !process.env.VERCEL) {
+  app.listen(config.port, () => {
+    console.log(`
+    ╔══════════════════════════════════════════╗
+    ║   PRAJAYA FOUNDATION SERVER             ║
+    ║                                         ║
+    ║   Environment : ${config.nodeEnv.padEnd(22)}║
+    ║   Port        : ${String(config.port).padEnd(22)}║
+    ║   Frontend    : http://localhost:${config.port}${' '.repeat(Math.max(0, 6 - String(config.port).length))}║
+    ║   Admin       : http://localhost:${config.port}/admin${' '.repeat(Math.max(0, 0))}║
+    ║   Health      : http://localhost:${config.port}/api/health║
+    ╚══════════════════════════════════════════╝
+    `);
+  });
+}
+
+// Export for Vercel Serverless Function
+module.exports = app;
