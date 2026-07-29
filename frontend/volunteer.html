@@ -1727,11 +1727,19 @@
             formData.append('alt_phone', document.getElementById('alt_phone').value || '');
             formData.append('email', document.getElementById('email').value);
             formData.append('alt_email', document.getElementById('alt_email').value || '');
+            formData.append('hometown', document.getElementById('hometown').value);
+            formData.append('current_city', document.getElementById('current_city').value);
+            formData.append('state', document.getElementById('state').value);
             formData.append('temp_address', document.getElementById('temp_address').value);
             formData.append('perm_address', document.getElementById('perm_address').value);
-            formData.append('education', document.getElementById('education').value);
+            formData.append('education_level', document.getElementById('education_level').value);
+            formData.append('degree', document.getElementById('degree').value);
             formData.append('current_status', document.getElementById('current_status').value);
+            formData.append('interest', document.getElementById('interest').value);
+            formData.append('hobbies', document.getElementById('hobbies').value);
+            formData.append('languages', document.getElementById('languages').value);
             formData.append('motivation', document.getElementById('motivation').value);
+            formData.append('experience', document.getElementById('experience').value || '');
             
             const resumeFile = document.getElementById('resumeUpload').files[0];
             if(resumeFile) formData.append('resume', resumeFile);

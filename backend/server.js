@@ -68,11 +68,20 @@ pool.query(`
     ALTER TABLE applications ADD COLUMN IF NOT EXISTS blood_group TEXT;
     ALTER TABLE applications ADD COLUMN IF NOT EXISTS alt_phone TEXT;
     ALTER TABLE applications ADD COLUMN IF NOT EXISTS alt_email TEXT;
+    ALTER TABLE applications ADD COLUMN IF NOT EXISTS hometown TEXT;
+    ALTER TABLE applications ADD COLUMN IF NOT EXISTS current_city TEXT;
+    ALTER TABLE applications ADD COLUMN IF NOT EXISTS state TEXT;
     ALTER TABLE applications ADD COLUMN IF NOT EXISTS temp_address TEXT;
     ALTER TABLE applications ADD COLUMN IF NOT EXISTS perm_address TEXT;
     ALTER TABLE applications ADD COLUMN IF NOT EXISTS education TEXT;
+    ALTER TABLE applications ADD COLUMN IF NOT EXISTS education_level TEXT;
+    ALTER TABLE applications ADD COLUMN IF NOT EXISTS degree TEXT;
     ALTER TABLE applications ADD COLUMN IF NOT EXISTS current_status TEXT;
+    ALTER TABLE applications ADD COLUMN IF NOT EXISTS interest TEXT;
+    ALTER TABLE applications ADD COLUMN IF NOT EXISTS hobbies TEXT;
+    ALTER TABLE applications ADD COLUMN IF NOT EXISTS languages TEXT;
     ALTER TABLE applications ADD COLUMN IF NOT EXISTS motivation TEXT;
+    ALTER TABLE applications ADD COLUMN IF NOT EXISTS experience TEXT;
     ALTER TABLE applications ADD COLUMN IF NOT EXISTS resume_path TEXT;
     ALTER TABLE applications ADD COLUMN IF NOT EXISTS photo_path TEXT;
   `;
@@ -189,8 +198,8 @@ app.post('/api/v1/applications', upload.fields([{ name: 'resume', maxCount: 1 },
   try {
     const { 
       category, name, age, dob, blood_group, phone, alt_phone, 
-      email, alt_email, temp_address, perm_address, 
-      education, current_status, motivation 
+      email, alt_email, hometown, current_city, state, temp_address, perm_address, 
+      current_status, education_level, degree, interest, hobbies, languages, motivation, experience
     } = req.body;
     
     let resume_path = null;
@@ -206,15 +215,15 @@ app.post('/api/v1/applications', upload.fields([{ name: 'resume', maxCount: 1 },
     const query = `
       INSERT INTO applications (
         category, name, age, dob, blood_group, phone, alt_phone, 
-        email, alt_email, temp_address, perm_address, 
-        education, current_status, motivation, resume_path, photo_path
-      ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16) 
+        email, alt_email, hometown, current_city, state, temp_address, perm_address, 
+        current_status, education_level, degree, interest, hobbies, languages, motivation, experience, resume_path, photo_path
+      ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20, $21, $22, $23, $24) 
       RETURNING *
     `;
     const values = [
       category, name, age, dob, blood_group, phone, alt_phone, 
-      email, alt_email, temp_address, perm_address, 
-      education, current_status, motivation, resume_path, photo_path
+      email, alt_email, hometown, current_city, state, temp_address, perm_address, 
+      current_status, education_level, degree, interest, hobbies, languages, motivation, experience, resume_path, photo_path
     ];
     
     const result = await pool.query(query, values);
