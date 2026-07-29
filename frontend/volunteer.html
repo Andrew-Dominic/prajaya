@@ -1340,6 +1340,10 @@
                 <form id="volunteerForm">
                 <div class="form-group-grid grid-2">
                     <div>
+                        <label class="form-label">Full Name<span class="required-asterisk">*</span></label>
+                        <input type="text" class="form-control" id="name" placeholder="John Doe" autocomplete="name" required>
+                    </div>
+                    <div>
                         <label class="form-label">Volunteer Category<span class="required-asterisk">*</span></label>
                         <select class="form-control" id="category" required style="appearance: none; cursor: pointer;">
                             <option value="" disabled selected>Select Category</option>
@@ -1348,20 +1352,16 @@
                             <option value="Volunteers">Volunteers (18+)</option>
                         </select>
                     </div>
-                    <div>
-                        <label class="form-label">Full Name<span class="required-asterisk">*</span></label>
-                        <input type="text" class="form-control" id="name" placeholder="John Doe" autocomplete="name" required>
-                    </div>
                 </div>
 
                 <div class="form-group-grid grid-3">
                     <div>
-                        <label class="form-label">Age<span class="required-asterisk">*</span></label>
-                        <input type="number" class="form-control" id="age" placeholder="e.g. 21" required>
-                    </div>
-                    <div>
                         <label class="form-label">Date of Birth<span class="required-asterisk">*</span></label>
                         <input type="date" class="form-control" id="dob" autocomplete="bday" required style="color: var(--color-text);">
+                    </div>
+                    <div>
+                        <label class="form-label">Age<span class="required-asterisk">*</span></label>
+                        <input type="number" class="form-control" id="age" placeholder="e.g. 21" required>
                     </div>
                     <div>
                         <label class="form-label">Blood Group<span class="required-asterisk">*</span></label>
@@ -1390,6 +1390,21 @@
                         <input type="email" class="form-control" id="alt_email" placeholder="alt@example.com" autocomplete="email">
                     </div>
                 </div>
+                
+                <div class="form-group-grid grid-3">
+                    <div>
+                        <label class="form-label">Hometown<span class="required-asterisk">*</span></label>
+                        <input type="text" class="form-control" id="hometown" placeholder="e.g. Madurai" required>
+                    </div>
+                    <div>
+                        <label class="form-label">Current City<span class="required-asterisk">*</span></label>
+                        <input type="text" class="form-control" id="current_city" placeholder="e.g. Chennai" required>
+                    </div>
+                    <div>
+                        <label class="form-label">State<span class="required-asterisk">*</span></label>
+                        <input type="text" class="form-control" id="state" placeholder="e.g. Tamil Nadu" required>
+                    </div>
+                </div>
 
                 <div class="form-group-grid grid-2">
                     <div>
@@ -1407,17 +1422,6 @@
                     </div>
                 </div>
 
-                <div class="form-group-grid grid-2">
-                    <div>
-                        <label class="form-label">City<span class="required-asterisk">*</span></label>
-                        <input type="text" class="form-control" id="city" placeholder="e.g. Chennai" required>
-                    </div>
-                    <div>
-                        <label class="form-label">State<span class="required-asterisk">*</span></label>
-                        <input type="text" class="form-control" id="state" placeholder="e.g. Tamil Nadu" required>
-                    </div>
-                </div>
-                
                 <div class="form-group-grid grid-3">
                     <div>
                         <label class="form-label">Current Status<span class="required-asterisk">*</span></label>
@@ -1461,7 +1465,7 @@
                     </div>
                 </div>
 
-                <div class="form-group-grid grid-2">
+                <div class="form-group-grid grid-3">
                     <div>
                         <label class="form-label">Area of Interest<span class="required-asterisk">*</span></label>
                         <select class="form-control" id="interest" required style="appearance: none; cursor: pointer;">
@@ -1477,7 +1481,11 @@
                     </div>
                     <div>
                         <label class="form-label">Hobbies / Skills<span class="required-asterisk">*</span></label>
-                        <input type="text" class="form-control" id="hobbies" placeholder="e.g. Photography, Writing, Design" required>
+                        <input type="text" class="form-control" id="hobbies" placeholder="e.g. Photography, Writing" required>
+                    </div>
+                    <div>
+                        <label class="form-label">Languages Known<span class="required-asterisk">*</span></label>
+                        <input type="text" class="form-control" id="languages" placeholder="e.g. English, Tamil" required>
                     </div>
                 </div>
 
