@@ -404,15 +404,23 @@
             z-index: 1;
         }
 
+        @keyframes floatLogo {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+            100% { transform: translateY(0px); }
+        }
+
         .hero-logo-img {
             width: 100%;
             height: auto;
             object-fit: contain;
             transition: all 0.3s ease;
             filter: drop-shadow(0 20px 40px rgba(0,0,0,0.3));
+            animation: floatLogo 6s ease-in-out infinite;
         }
 
         .hero-logo-img:hover {
+            animation-play-state: paused;
             transform: scale(1.02) rotate(2deg);
             filter: drop-shadow(0 25px 45px rgba(212, 166, 90, 0.25));
         }
@@ -1313,7 +1321,7 @@
                 <a href="#events">Events</a>
                 <a href="#founder">Founder</a>
                 <a href="#suggestions">Contact</a>
-                <a href="volunteer.html" class="btn btn-primary volunteer-trigger nav-volunteer-btn">Volunteer</a>
+                <a href="volunteer.html" class="btn btn-primary volunteer-trigger nav-volunteer-btn">Become a Volunteer</a>
             </nav>
             
             <div class="mobile-menu-btn" id="mobile-btn">
@@ -1343,7 +1351,7 @@
                     
                     <div class="hero-actions">
                         <a href="#programs" class="btn btn-primary">Discover Our Work</a>
-                        <a href="volunteer.html" class="btn btn-outline volunteer-trigger">Join as Volunteer</a>
+                        <a href="volunteer.html" class="btn btn-outline volunteer-trigger">Become a Volunteer</a>
                     </div>
                 </div>
 
@@ -1634,6 +1642,26 @@
                         <li><a href="#vision">Vision & Mission</a></li>
                         <li><a href="#programs">Our Programs</a></li>
                         <li><a href="#founder">Founder</a></li>
+                    </ul>
+                </div>
+                <div>
+
+                    <h4 class="footer-heading">Policies</h4>
+                    <ul class="footer-links" style="margin-bottom: 20px;">
+                        <li><a href="privacy-policy.html">Privacy Policy</a></li>
+                        <li><a href="safeguarding-policy.html">Child & Vulnerable Persons Safeguarding</a></li>
+                        <li><a href="anti-sexual-harassment-policy.html">Anti-Sexual Harassment Policy</a></li>
+                        <li><a href="donation-refund-policy.html">Donation & Refund Policy</a></li>
+                        <li><a href="terms-of-use.html">Terms of Website Use</a></li>
+                    </ul>
+                    <h4 class="footer-heading">Resources</h4>
+                    <ul class="footer-links">
+                        <li><a href="volunteer-opportunities.html">Volunteer Opportunities</a></li>
+                        <li><a href="volunteer-terms.html">Volunteer Terms</a></li>
+                        <li><a href="grievance.html">Grievance and Complaints</a></li>
+                        <li><a href="report-concern.html">Report a Concern</a></li>
+                        <li><a href="parent-consent.html">Parent/Guardian Consent</a></li>
+                        <li><a href="media-consent.html">Media Consent Form</a></li>
                     </ul>
                 </div>
                 

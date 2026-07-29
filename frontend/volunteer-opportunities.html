@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Volunteer Opportunities | Prajaya Foundation</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --color-bg: #ffffff;
+            --color-surface: #f8f8fa;
+            --color-text: #4a4a59;
+            --color-heading: #171D35;
+            --color-accent: #d4a65a;
+            --font-heading: 'Inter', sans-serif;
+            --font-body: 'Inter', sans-serif;
+            --space-container: 1000px;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: var(--font-body); color: var(--color-text); background-color: var(--color-bg); line-height: 1.8; overflow-x: hidden; }
+        .container { max-width: var(--space-container); margin: 0 auto; padding: 0 6%; }
+        h1, h2, h3, h4 { font-family: var(--font-heading); color: var(--color-heading); font-weight: 500; }
+        a { text-decoration: none; color: inherit; }
+        .header { position: fixed; top: 0; left: 0; right: 0; padding: 15px 0; background-color: var(--color-bg); border-bottom: 1px solid rgba(0,0,0,0.05); z-index: 1000; }
+        .nav-container { display: flex; justify-content: space-between; align-items: center; }
+        .brand { display: flex; align-items: center; gap: 15px; }
+        .brand-logo { width: 45px; height: auto; }
+        .brand-text { display: flex; flex-direction: column; }
+        .brand-name { font-family: var(--font-heading); font-size: 1.4rem; color: var(--color-heading); line-height: 1; }
+        .brand-tagline { font-size: 0.65rem; color: var(--color-accent); letter-spacing: 2px; text-transform: uppercase; margin-top: 6px; font-weight: 500; }
+        .nav-links { display: flex; gap: 40px; align-items: center; }
+        .nav-links a { color: var(--color-text); font-size: 0.9rem; transition: 0.3s; }
+        .nav-links a:hover { color: var(--color-accent); }
+        .nav-volunteer-btn { background-color: var(--color-heading); color: var(--color-bg) !important; padding: 12px 28px; display: inline-flex; align-items: center; justify-content: center; font-size: 0.95rem; border-radius: 4px; }
+        .page-content { padding: 150px 0 100px; min-height: 70vh; }
+        .page-title { font-size: 3rem; margin-bottom: 15px; text-align: center; }
+        .page-subtitle { font-size: 1.2rem; margin-bottom: 50px; text-align: center; color: var(--color-accent); font-weight: 500; }
+        .content-box { background: var(--color-surface); padding: 50px; border-radius: 16px; border: 1px solid rgba(0,0,0,0.06); margin-bottom: 40px; }
+        .content-box h3 { font-size: 1.8rem; margin-bottom: 20px; color: var(--color-heading); }
+        .content-box p { margin-bottom: 20px; font-size: 1.05rem; }
+        .content-box ul { margin-bottom: 25px; padding-left: 20px; }
+        .content-box ul li { margin-bottom: 10px; font-size: 1.05rem; }
+        
+        .footer { background-color: var(--color-heading); color: #fff; padding: 80px 0 40px; }
+        .footer-bottom { border-top: 1px solid rgba(255,255,255,0.1); padding-top: 40px; margin-top: 40px; display: flex; justify-content: space-between; align-items: center; color: rgba(255,255,255,0.4); font-size: 0.85rem; }
+        
+        .btn-primary { background-color: var(--color-heading); color: var(--color-bg); padding: 16px 40px; font-family: var(--font-body); font-size: 1.05rem; font-weight: 500; cursor: pointer; transition: 0.3s; border-radius: 8px; display: inline-block; text-align: center; }
+        .btn-primary:hover { background-color: var(--color-accent); }
+        .btn-outline { background-color: transparent; border: 2px solid var(--color-heading); color: var(--color-heading); padding: 14px 40px; font-family: var(--font-body); font-size: 1.05rem; font-weight: 500; cursor: pointer; transition: 0.3s; border-radius: 8px; display: inline-block; text-align: center; }
+        .btn-outline:hover { background-color: var(--color-heading); color: var(--color-bg); }
+        .actions-row { display: flex; gap: 20px; justify-content: center; flex-wrap: wrap; margin-top: 40px; }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="container nav-container">
+            <a href="index.html" class="brand">
+                <img src="assets/images/logo.png" alt="Prajaya Foundation Logo" class="brand-logo">
+                <div class="brand-text">
+                    <span class="brand-name">Prajaya</span>
+                    <span class="brand-tagline">Foundation</span>
+                </div>
+            </a>
+            <nav class="nav-links">
+                <a href="index.html">Back to Home</a>
+                <a href="volunteer.html" class="nav-volunteer-btn">Become a Volunteer</a>
+            </nav>
+        </div>
+    </header>
+
+    <div class="page-content">
+        <div class="container">
+            <h1 class="page-title">Become a Volunteer</h1>
+            <p class="page-subtitle">Serve. Learn. Lead. Create Impact.</p>
+            
+            <div class="content-box">
+                <p>PRAJAYA Foundation welcomes responsible and committed individuals who wish to contribute their time, knowledge, skills, and energy towards community development.</p>
+                <p>Our volunteers support programmes relating to education, health, legal awareness, youth development, women empowerment, environmental protection, sports, social welfare, skill development, research, awareness campaigns, and community service.</p>
+                <p>Volunteering with PRAJAYA Foundation is an opportunity to serve society, develop leadership skills, gain meaningful experience, and work with people who believe in creating positive and sustainable change.</p>
+            </div>
+
+            <div class="content-box">
+                <h3>Who Can Volunteer?</h3>
+                <p>Students, professionals, teachers, trainers, lawyers, healthcare workers, social workers, artists, sportspersons, retired persons, homemakers, and other socially responsible individuals may apply.</p>
+                <p>Applicants below 18 years of age must submit the consent of their parent or legal guardian.</p>
+                <p>Registration does not automatically guarantee selection or assignment. Volunteer opportunities are provided based on organisational requirements, suitability, availability, conduct, skills, and programme needs.</p>
+            </div>
+
+            <div class="content-box">
+                <h3>Ways to Volunteer</h3>
+                <p>You may volunteer in the following areas:</p>
+                <ul style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 10px;">
+                    <li>Education and tutoring</li>
+                    <li>Computer and digital literacy</li>
+                    <li>Skill development</li>
+                    <li>Legal literacy and awareness</li>
+                    <li>Health and wellness programmes</li>
+                    <li>Youth leadership</li>
+                    <li>Women empowerment</li>
+                    <li>Child development</li>
+                    <li>Senior citizen support</li>
+                    <li>Disability inclusion</li>
+                    <li>Environmental activities</li>
+                    <li>Disaster relief and community support</li>
+                    <li>Sports, fitness, and karate</li>
+                    <li>Event management</li>
+                    <li>Research and documentation</li>
+                    <li>Photography and videography</li>
+                    <li>Graphic design</li>
+                    <li>Content writing</li>
+                    <li>Social media support</li>
+                    <li>Fundraising support</li>
+                    <li>Administration and coordination</li>
+                    <li>Professional and technical services</li>
+                </ul>
+            </div>
+
+            <div class="content-box">
+                <h3>Volunteer Process</h3>
+                <ol style="padding-left: 20px; margin-bottom: 25px;">
+                    <li style="margin-bottom: 10px; font-size: 1.05rem;">Complete the online volunteer registration form.</li>
+                    <li style="margin-bottom: 10px; font-size: 1.05rem;">Accept the Volunteer Terms & Conditions.</li>
+                    <li style="margin-bottom: 10px; font-size: 1.05rem;">Agree to the Volunteer Code of Conduct.</li>
+                    <li style="margin-bottom: 10px; font-size: 1.05rem;">Submit the required information and documents.</li>
+                    <li style="margin-bottom: 10px; font-size: 1.05rem;">Attend an interaction, verification, or orientation session where required.</li>
+                    <li style="margin-bottom: 10px; font-size: 1.05rem;">Receive an assignment based on suitability and programme availability.</li>
+                    <li style="margin-bottom: 10px; font-size: 1.05rem;">Complete the assigned service responsibly.</li>
+                    <li style="margin-bottom: 10px; font-size: 1.05rem;">Submit reports, attendance, photographs, or feedback where required.</li>
+                </ol>
+            </div>
+
+            <div class="content-box">
+                <h3>Important Information</h3>
+                <p>Volunteering is voluntary and does not create an employer-employee relationship with PRAJAYA Foundation.</p>
+                <p>Volunteers are not authorised to collect money, receive donations, issue receipts, sign documents, make commitments, speak to the media, or represent PRAJAYA Foundation unless expressly authorised in writing.</p>
+                <p>Certificates, appreciation letters, experience letters, and recommendations may be issued based on actual contribution, attendance, conduct, completion of responsibilities, and organisational policy.</p>
+            </div>
+            
+            <div style="text-align: center; margin-top: 60px;">
+                <h2 style="font-size: 2.5rem; margin-bottom: 20px;">Join PRAJAYA Foundation</h2>
+                <p style="font-size: 1.2rem; color: var(--color-accent); font-weight: 500; margin-bottom: 30px;">Use your skills. Share your knowledge. Strengthen communities.</p>
+                <p style="font-size: 1.1rem; max-width: 600px; margin: 0 auto 40px;">Together, we can empower people, educate communities, develop leadership, promote service, and build sustainable social change.</p>
+                
+                <div class="actions-row">
+                    <a href="volunteer.html" class="btn-primary">Become a Volunteer</a>
+                    <a href="volunteer-terms.html" class="btn-outline">Read Terms & Conditions</a>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-bottom">
+                <span>&copy; 2026 Prajaya Foundation. All Rights Reserved.</span>
+                <span style="font-family: var(--font-heading); color: var(--color-accent); font-size: 1.1rem; font-weight: 600;">Deserve to Deserve</span>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

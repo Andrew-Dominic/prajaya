@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Volunteer Terms & Conditions | Prajaya Foundation</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --color-bg: #ffffff;
+            --color-surface: #f8f8fa;
+            --color-text: #4a4a59;
+            --color-heading: #171D35;
+            --color-accent: #d4a65a;
+            --font-heading: 'Inter', sans-serif;
+            --font-body: 'Inter', sans-serif;
+            --space-container: 1000px;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: var(--font-body); color: var(--color-text); background-color: var(--color-bg); line-height: 1.8; overflow-x: hidden; }
+        .container { max-width: var(--space-container); margin: 0 auto; padding: 0 6%; }
+        h1, h2, h3, h4 { font-family: var(--font-heading); color: var(--color-heading); font-weight: 500; }
+        a { text-decoration: none; color: inherit; }
+        .header { position: fixed; top: 0; left: 0; right: 0; padding: 15px 0; background-color: var(--color-bg); border-bottom: 1px solid rgba(0,0,0,0.05); z-index: 1000; }
+        .nav-container { display: flex; justify-content: space-between; align-items: center; }
+        .brand { display: flex; align-items: center; gap: 15px; }
+        .brand-logo { width: 45px; height: auto; }
+        .brand-text { display: flex; flex-direction: column; }
+        .brand-name { font-family: var(--font-heading); font-size: 1.4rem; color: var(--color-heading); line-height: 1; }
+        .brand-tagline { font-size: 0.65rem; color: var(--color-accent); letter-spacing: 2px; text-transform: uppercase; margin-top: 6px; font-weight: 500; }
+        .nav-links { display: flex; gap: 40px; align-items: center; }
+        .nav-links a { color: var(--color-text); font-size: 0.9rem; transition: 0.3s; }
+        .nav-links a:hover { color: var(--color-accent); }
+        .nav-volunteer-btn { background-color: var(--color-heading); color: var(--color-bg) !important; padding: 12px 28px; display: inline-flex; align-items: center; justify-content: center; font-size: 0.95rem; border-radius: 4px; }
+        .page-content { padding: 150px 0 100px; min-height: 70vh; }
+        .page-title { font-size: 2.5rem; margin-bottom: 40px; text-align: center; }
+        .content-box { background: var(--color-surface); padding: 50px; border-radius: 16px; border: 1px solid rgba(0,0,0,0.06); margin-bottom: 40px; }
+        
+        .terms-list { counter-reset: term-counter; list-style-type: none; }
+        .terms-list > li { position: relative; padding-left: 40px; margin-bottom: 30px; }
+        .terms-list > li::before { 
+            counter-increment: term-counter; 
+            content: counter(term-counter) "."; 
+            position: absolute; 
+            left: 0; 
+            top: 0; 
+            font-weight: 600; 
+            color: var(--color-accent); 
+            font-size: 1.1rem; 
+        }
+        .term-title { font-weight: 600; color: var(--color-heading); font-size: 1.1rem; margin-bottom: 8px; display: block; }
+        .term-content { font-size: 1rem; color: var(--color-text); }
+        .term-content ul { padding-left: 20px; margin-top: 10px; list-style-type: disc; }
+        .term-content ul li { margin-bottom: 5px; }
+
+        .footer { background-color: var(--color-heading); color: #fff; padding: 80px 0 40px; }
+        .footer-bottom { border-top: 1px solid rgba(255,255,255,0.1); padding-top: 40px; margin-top: 40px; display: flex; justify-content: space-between; align-items: center; color: rgba(255,255,255,0.4); font-size: 0.85rem; }
+        
+        .section-divider { height: 1px; background: rgba(0,0,0,0.1); margin: 60px 0; }
+        .pledge-box { background: var(--color-heading); color: white; padding: 40px; border-radius: 12px; text-align: center; font-style: italic; font-size: 1.2rem; line-height: 1.8; margin-top: 40px; border-bottom: 4px solid var(--color-accent); }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="container nav-container">
+            <a href="index.html" class="brand">
+                <img src="assets/images/logo.png" alt="Prajaya Foundation Logo" class="brand-logo">
+                <div class="brand-text">
+                    <span class="brand-name">Prajaya</span>
+                    <span class="brand-tagline">Foundation</span>
+                </div>
+            </a>
+            <nav class="nav-links">
+                <a href="index.html">Back to Home</a>
+                <a href="volunteer.html" class="nav-volunteer-btn">Become a Volunteer</a>
+            </nav>
+        </div>
+    </header>
+
+    <div class="page-content">
+        <div class="container">
+            <h1 class="page-title">Volunteer Terms & Conditions</h1>
+            
+            <div class="content-box">
+                <p style="margin-bottom: 40px; font-size: 1.1rem;">A volunteer agreement helps clarify that volunteers are contributing their time voluntarily, sets expectations, and protects the organisation’s reputation and confidential information. It also makes clear that volunteering is not an employment relationship.</p>
+                
+                <ol class="terms-list">
+                    <li>
+                        <span class="term-title">Voluntary Service</span>
+                        <div class="term-content">
+                            <ul>
+                                <li>Volunteering with PRAJAYA Foundation is entirely voluntary.</li>
+                                <li>Volunteers are not employees and are not entitled to salary, wages, or employment benefits.</li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li>
+                        <span class="term-title">Eligibility</span>
+                        <div class="term-content">
+                            <ul>
+                                <li>Volunteers must provide accurate personal information.</li>
+                                <li>Those below 18 years of age must obtain parent/guardian consent.</li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li>
+                        <span class="term-title">Code of Conduct</span>
+                        <div class="term-content">
+                            <ul>
+                                <li>Treat everyone with dignity, respect, and professionalism.</li>
+                                <li>Maintain discipline and uphold the values of PRAJAYA Foundation.</li>
+                                <li>Do not engage in discrimination, harassment, violence, or abusive behaviour.</li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li>
+                        <span class="term-title">Compliance</span>
+                        <div class="term-content">
+                            <ul>
+                                <li>Volunteers shall follow the Foundation’s policies, instructions, and safety guidelines during all activities.</li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li>
+                        <span class="term-title">Confidentiality</span>
+                        <div class="term-content">
+                            <ul>
+                                <li>Any information relating to beneficiaries, donors, volunteers, trustees, or the Foundation shall remain confidential unless authorised.</li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li>
+                        <span class="term-title">Use of Name and Logo</span>
+                        <div class="term-content">
+                            <ul>
+                                <li>Volunteers shall not use the Foundation’s name, logo, identity, or social media accounts without written approval.</li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li>
+                        <span class="term-title">Social Media</span>
+                        <div class="term-content">
+                            <ul>
+                                <li>Posts related to PRAJAYA Foundation should be truthful, respectful, and consistent with the Foundation’s values.</li>
+                                <li>Confidential information or misleading content shall not be published.</li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li>
+                        <span class="term-title">Identity Card</span>
+                        <div class="term-content">
+                            <ul>
+                                <li>Volunteer identity cards remain the property of PRAJAYA Foundation and must be returned upon request or when volunteering ends.</li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li>
+                        <span class="term-title">Attendance</span>
+                        <div class="term-content">
+                            <ul>
+                                <li>Volunteers should inform their coordinator if they are unable to attend any assigned activity.</li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li>
+                        <span class="term-title">No Financial Authority</span>
+                        <div class="term-content">
+                            <ul>
+                                <li>Volunteers shall not collect donations, receive money, sign agreements, or make commitments on behalf of the Foundation without written authorisation.</li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li>
+                        <span class="term-title">Safety</span>
+                        <div class="term-content">
+                            <ul>
+                                <li>Volunteers must follow all safety instructions and immediately report accidents, injuries, or unsafe situations.</li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li>
+                        <span class="term-title">Photography & Media</span>
+                        <div class="term-content">
+                            <ul>
+                                <li>The Foundation may photograph or record volunteers during programmes for educational, promotional, or reporting purposes unless the volunteer has requested otherwise.</li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li>
+                        <span class="term-title">Intellectual Property</span>
+                        <div class="term-content">
+                            <ul>
+                                <li>Any reports, designs, photographs, videos, educational materials, or other work created for PRAJAYA Foundation during volunteering belong to the Foundation unless otherwise agreed.</li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li>
+                        <span class="term-title">Conflict of Interest</span>
+                        <div class="term-content">
+                            <ul>
+                                <li>Volunteers shall disclose any situation that may affect impartiality or conflict with the Foundation’s interests.</li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li>
+                        <span class="term-title">Termination</span>
+                        <div class="term-content">
+                            <ul>
+                                <li>A volunteer may resign at any time by informing the Foundation.</li>
+                                <li>PRAJAYA Foundation may suspend or terminate a volunteer’s registration for misconduct, policy violations, misuse of resources, or actions that harm the organisation’s reputation.</li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li>
+                        <span class="term-title">Liability</span>
+                        <div class="term-content">
+                            <ul>
+                                <li>Volunteers participate at their own risk. The Foundation is not responsible for personal belongings lost or damaged during volunteer activities, except where required by law.</li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li>
+                        <span class="term-title">Data Privacy</span>
+                        <div class="term-content">
+                            <ul>
+                                <li>Personal information collected during registration will be used only for volunteer management and organisational purposes and handled responsibly.</li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li>
+                        <span class="term-title">Certificate of Volunteering</span>
+                        <div class="term-content">
+                            <ul>
+                                <li>Certificates or recommendation letters may be issued based on attendance, contribution, conduct, and completion of assigned responsibilities.</li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li>
+                        <span class="term-title">Amendments</span>
+                        <div class="term-content">
+                            <ul>
+                                <li>PRAJAYA Foundation reserves the right to amend these Terms & Conditions at any time. Updated terms will apply from the date of publication.</li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li>
+                        <span class="term-title">Declaration</span>
+                        <div class="term-content">
+                            <ul>
+                                <li>By registering as a volunteer, I confirm that I have read, understood, and agree to abide by these Terms & Conditions and the values of PRAJAYA Foundation.</li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li>
+                        <span class="term-title">Volunteer Screening</span>
+                        <div class="term-content">
+                            <ul>
+                                <li>PRAJAYA Foundation reserves the right to verify the identity, qualifications, references, and background of volunteers wherever necessary.</li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li>
+                        <span class="term-title">Probation Period</span>
+                        <div class="term-content">
+                            <ul>
+                                <li>Every new volunteer may undergo an orientation and probation period before being assigned regular responsibilities.</li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li>
+                        <span class="term-title">Assignment of Duties</span>
+                        <div class="term-content">
+                            <ul>
+                                <li>The Foundation may assign, modify, or withdraw volunteer duties based on organisational requirements, skills, performance, or conduct.</li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li>
+                        <span class="term-title">Working Hours</span>
+                        <div class="term-content">
+                            <ul>
+                                <li>Volunteers are expected to adhere to agreed schedules and maintain punctuality. Repeated unexplained absence may lead to suspension of volunteer status.</li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li>
+                        <span class="term-title">Dress Code</span>
+                        <div class="term-content">
+                            <ul>
+                                <li>Volunteers shall wear the prescribed dress code or identity card during official programmes whenever instructed.</li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li>
+                        <span class="term-title">Child & Vulnerable Adult Protection</span>
+                        <div class="term-content">
+                            <ul>
+                                <li>Volunteers working with children, women, senior citizens, or vulnerable persons shall follow safeguarding guidelines and shall never engage in inappropriate physical, verbal, or online conduct.</li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li>
+                        <span class="term-title">Anti-Bribery & Gifts</span>
+                        <div class="term-content">
+                            <ul>
+                                <li>Volunteers shall not solicit, accept, or offer gifts, commissions, or any personal benefit while representing PRAJAYA Foundation.</li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li>
+                        <span class="term-title">Political & Religious Neutrality</span>
+                        <div class="term-content">
+                            <ul>
+                                <li>Volunteers shall not use PRAJAYA Foundation activities to promote any political party, electoral campaign, or religious conversion.</li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li>
+                        <span class="term-title">Anti-Discrimination</span>
+                        <div class="term-content">
+                            <ul>
+                                <li>The Foundation provides equal opportunities regardless of gender, caste, religion, language, disability, age, or economic background.</li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li>
+                        <span class="term-title">Substance-Free Environment</span>
+                        <div class="term-content">
+                            <ul>
+                                <li>Possession or consumption of alcohol, tobacco, narcotic drugs, or intoxicating substances during Foundation activities is strictly prohibited.</li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li>
+                        <span class="term-title">Digital Communication</span>
+                        <div class="term-content">
+                            <ul>
+                                <li>Official communication with beneficiaries or partners shall only be through authorised channels where applicable.</li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li>
+                        <span class="term-title">Equipment & Property</span>
+                        <div class="term-content">
+                            <ul>
+                                <li>Volunteers shall use Foundation equipment responsibly and return all materials issued to them upon completion of service.</li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li>
+                        <span class="term-title">Reimbursement Policy</span>
+                        <div class="term-content">
+                            <ul>
+                                <li>Volunteers are not entitled to reimbursement unless expressly approved in writing before the expenditure is incurred.</li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li>
+                        <span class="term-title">Emergency Medical Consent</span>
+                        <div class="term-content">
+                            <ul>
+                                <li>In case of an emergency, the Foundation may arrange immediate medical assistance. Any medical expenses remain the responsibility of the volunteer unless otherwise approved.</li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li>
+                        <span class="term-title">Insurance</span>
+                        <div class="term-content">
+                            <ul>
+                                <li>Registration as a volunteer does not automatically provide insurance coverage unless specifically notified for a programme.</li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li>
+                        <span class="term-title">Non-Representation</span>
+                        <div class="term-content">
+                            <ul>
+                                <li>Volunteers shall not speak to the media or make public statements on behalf of PRAJAYA Foundation without written authorisation.</li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li>
+                        <span class="term-title">Grievance Redressal</span>
+                        <div class="term-content">
+                            <ul>
+                                <li>Volunteers may report concerns, misconduct, harassment, or grievances to the designated Volunteer Coordinator or Trustee without fear of retaliation.</li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li>
+                        <span class="term-title">Volunteer Categories</span>
+                        <div class="term-content">
+                            <ul>
+                                <li>The Foundation may classify volunteers (Event Volunteer, Programme Volunteer, Skilled Volunteer, Professional Volunteer, Student Volunteer, Digital Volunteer, etc.), with additional responsibilities applicable to each category.</li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li>
+                        <span class="term-title">Performance & Recognition</span>
+                        <div class="term-content">
+                            <ul>
+                                <li>Volunteer continuation, leadership roles, recommendation letters, awards, and certificates are based on attendance, discipline, contribution, and adherence to Foundation values.</li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li>
+                        <span class="term-title">Governing Law & Jurisdiction</span>
+                        <div class="term-content">
+                            <ul>
+                                <li>These Terms & Conditions shall be governed by the laws of India. Any disputes shall be subject to the jurisdiction of the competent courts in Chennai, Tamil Nadu.</li>
+                            </ul>
+                        </div>
+                    </li>
+                </ol>
+            </div>
+
+            <div class="section-divider"></div>
+
+            <h1 class="page-title" style="margin-top: 60px;">Volunteer Code of Conduct & Ethics</h1>
+
+            <div class="content-box">
+                <h3 style="font-size: 1.5rem; margin-bottom: 20px; color: var(--color-accent);">Core Values</h3>
+                <p>Every volunteer shall uphold the values of:</p>
+                <ul style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px; margin-bottom: 30px; list-style-type: none;">
+                    <li><i class="fas fa-check" style="color: var(--color-accent); margin-right: 8px;"></i> Integrity</li>
+                    <li><i class="fas fa-check" style="color: var(--color-accent); margin-right: 8px;"></i> Respect</li>
+                    <li><i class="fas fa-check" style="color: var(--color-accent); margin-right: 8px;"></i> Service</li>
+                    <li><i class="fas fa-check" style="color: var(--color-accent); margin-right: 8px;"></i> Compassion</li>
+                    <li><i class="fas fa-check" style="color: var(--color-accent); margin-right: 8px;"></i> Discipline</li>
+                    <li><i class="fas fa-check" style="color: var(--color-accent); margin-right: 8px;"></i> Accountability</li>
+                    <li><i class="fas fa-check" style="color: var(--color-accent); margin-right: 8px;"></i> Inclusiveness</li>
+                    <li><i class="fas fa-check" style="color: var(--color-accent); margin-right: 8px;"></i> Transparency</li>
+                    <li><i class="fas fa-check" style="color: var(--color-accent); margin-right: 8px;"></i> Professionalism</li>
+                    <li><i class="fas fa-check" style="color: var(--color-accent); margin-right: 8px;"></i> Social Responsibility</li>
+                </ul>
+
+                <h3 style="font-size: 1.5rem; margin-bottom: 20px; color: var(--color-accent); margin-top: 40px;">Code of Conduct</h3>
+                <ol style="padding-left: 20px; line-height: 1.8;">
+                    <li>Act honestly, ethically, and responsibly.</li>
+                    <li>Respect the dignity and rights of every individual.</li>
+                    <li>Serve without discrimination.</li>
+                    <li>Protect children and vulnerable persons from any form of abuse.</li>
+                    <li>Maintain confidentiality.</li>
+                    <li>Be punctual and committed to assigned responsibilities.</li>
+                    <li>Follow instructions issued by authorised Foundation representatives.</li>
+                    <li>Use Foundation resources responsibly.</li>
+                    <li>Dress appropriately and maintain professional behaviour.</li>
+                    <li>Communicate politely with beneficiaries, volunteers, donors, partners, and the public.</li>
+                    <li>Never engage in harassment, bullying, discrimination, intimidation, or abusive behaviour.</li>
+                    <li>Do not misuse your volunteer position for personal gain.</li>
+                    <li>Do not accept bribes, commissions, or unauthorised gifts.</li>
+                    <li>Protect the Foundation’s name, logo, reputation, and goodwill.</li>
+                    <li>Avoid conflicts of interest and disclose them immediately if they arise.</li>
+                    <li>Do not make unauthorised statements to the media or on behalf of the Foundation.</li>
+                    <li>Use social media responsibly and avoid posting confidential or misleading information.</li>
+                    <li>Follow all safety procedures during Foundation programmes.</li>
+                    <li>Report unethical conduct, policy violations, accidents, or safeguarding concerns immediately.</li>
+                    <li>Continuously learn, improve, and contribute positively to the mission of PRAJAYA Foundation.</li>
+                </ol>
+            </div>
+
+            <div class="pledge-box">
+                <i class="fas fa-quote-left" style="font-size: 2rem; color: var(--color-accent); margin-bottom: 20px; display: block;"></i>
+                “I pledge to serve PRAJAYA Foundation with honesty, integrity, discipline, compassion, and respect. I will uphold the Foundation’s vision, mission, and values, protect its reputation, serve the community selflessly, respect every individual equally, maintain confidentiality, and strive to create a positive and lasting impact on society through my actions.”
+            </div>
+            
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-bottom">
+                <span>&copy; 2026 Prajaya Foundation. All Rights Reserved.</span>
+                <span style="font-family: var(--font-heading); color: var(--color-accent); font-size: 1.1rem; font-weight: 600;">Deserve to Deserve</span>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

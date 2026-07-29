@@ -402,15 +402,23 @@
             z-index: 1;
         }
 
+        @keyframes floatLogo {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+            100% { transform: translateY(0px); }
+        }
+
         .hero-logo-img {
             width: 100%;
             height: auto;
             object-fit: contain;
             transition: all 0.3s ease;
             filter: drop-shadow(0 20px 40px rgba(0,0,0,0.3));
+            animation: floatLogo 6s ease-in-out infinite;
         }
 
         .hero-logo-img:hover {
+            animation-play-state: paused;
             transform: scale(1.02) rotate(2deg);
             filter: drop-shadow(0 25px 45px rgba(212, 166, 90, 0.25));
         }
@@ -1432,19 +1440,16 @@
 
                 <div class="form-group" style="margin-top: 35px;">
                     <label class="form-label">Terms and Conditions</label>
-                    <div style="font-size: 0.85rem; background: var(--color-bg); padding: 24px; border-radius: 8px; margin-bottom: 20px; color: var(--color-text); line-height: 1.6; border: 1px solid rgba(0,0,0,0.08);">
-                        <strong>1. Commitment & Conduct:</strong> As a volunteer, I commit to dedicating my time to support the initiatives of Prajaya Foundation with honesty and integrity. I agree to maintain professional behavior and uphold the values of the foundation.<br><br>
-                        <strong>2. Parental Consent:</strong> For "Little Changemakers" and "Junior Volunteers" under the age of 18, parental or guardian consent is strictly mandatory to participate in any activities.<br><br>
-                        <strong>3. Code of Ethics:</strong> I will respect the privacy of beneficiaries, co-volunteers, and the organization. I will not misuse the foundation's name, logo, or resources for personal gain.<br><br>
-                        <strong>4. Liability:</strong> I understand that the foundation operates for charitable purposes and I voluntarily assume any risks associated with my participation in outdoor or community events.
-                    </div>
-                    <label style="display: flex; align-items: flex-start; gap: 12px; font-size: 0.9rem; cursor: pointer;">
+                    <div style="font-size: 0.95rem; background: var(--color-bg); padding: 24px; border-radius: 8px; margin-bottom: 20px; color: var(--color-text); line-height: 1.6; border: 1px solid rgba(0,0,0,0.08);">
+    Please review our <a href="volunteer-terms.html" target="_blank" style="color: var(--color-accent); text-decoration: underline; font-weight: 500;">Volunteer Terms & Conditions</a> and Code of Conduct before applying.
+</div>
+<label style="display: flex; align-items: flex-start; gap: 12px; font-size: 0.9rem; cursor: pointer;">
                         <input type="checkbox" required style="margin-top: 4px; transform: scale(1.1);">
-                        <span>I have read and agree to the Terms and Conditions. (Parents/Guardians must check this for minors).</span>
+                        <span>By registering as a volunteer, I confirm that I have read, understood, and agree to abide by these Terms &amp; Conditions and the values of PRAJAYA Foundation. (Parents/Guardians must check this for minors).</span>
                     </label>
                 </div>
 
-                <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 20px; padding: 18px; font-size: 1.1rem; border-radius: 8px;">Submit Application</button>
+                <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 20px; padding: 18px; font-size: 1.1rem; border-radius: 8px;">Submit Volunteer Application</button>
             </form>
             </div>
         </div>
@@ -1483,6 +1488,26 @@
                         <li><a href="index.html#vision">Vision & Mission</a></li>
                         <li><a href="index.html#programs">Our Programs</a></li>
                         <li><a href="index.html#founder">Founder</a></li>
+                    </ul>
+                </div>
+                <div>
+
+                    <h4 class="footer-heading">Policies</h4>
+                    <ul class="footer-links" style="margin-bottom: 20px;">
+                        <li><a href="privacy-policy.html">Privacy Policy</a></li>
+                        <li><a href="safeguarding-policy.html">Child & Vulnerable Persons Safeguarding</a></li>
+                        <li><a href="anti-sexual-harassment-policy.html">Anti-Sexual Harassment Policy</a></li>
+                        <li><a href="donation-refund-policy.html">Donation & Refund Policy</a></li>
+                        <li><a href="terms-of-use.html">Terms of Website Use</a></li>
+                    </ul>
+                    <h4 class="footer-heading">Resources</h4>
+                    <ul class="footer-links">
+                        <li><a href="volunteer-opportunities.html">Volunteer Opportunities</a></li>
+                        <li><a href="volunteer-terms.html">Volunteer Terms</a></li>
+                        <li><a href="grievance.html">Grievance and Complaints</a></li>
+                        <li><a href="report-concern.html">Report a Concern</a></li>
+                        <li><a href="parent-consent.html">Parent/Guardian Consent</a></li>
+                        <li><a href="media-consent.html">Media Consent Form</a></li>
                     </ul>
                 </div>
                 
@@ -1619,33 +1644,7 @@
             })
             .then(res => res.json())
             .then(data => {
-                submitBtn.innerHTML = '<i class="fas fa-check"></i> Application Sent';
-                submitBtn.style.backgroundColor = '#10b981';
-                submitBtn.style.color = '#fff';
-                submitBtn.style.opacity = '1';
-                
-                setTimeout(() => {
-                    e.target.reset();
-                    const uploadBtn = document.getElementById('uploadBtnText');
-                    if(uploadBtn) {
-                        const uploadBtnText = uploadBtn.querySelector('span');
-                        if(uploadBtnText) {
-                            uploadBtnText.textContent = "Upload Resume (PDF)";
-                            uploadBtnText.style.color = "";
-                        }
-                    }
-                    const photoBtn = document.getElementById('photoUploadBtnText');
-                    if(photoBtn) {
-                        const photoUploadBtnText = photoBtn.querySelector('span');
-                        if(photoUploadBtnText) {
-                            photoUploadBtnText.textContent = "Upload Photo (JPEG, WebP)";
-                            photoUploadBtnText.style.color = "";
-                        }
-                    }
-                    submitBtn.innerHTML = originalText;
-                    submitBtn.style = 'width: 100%; margin-top: 20px; padding: 18px; font-size: 1.1rem; border-radius: 8px;';
-                    submitBtn.disabled = false;
-                }, 3000);
+                document.getElementById('volunteerForm').innerHTML = '<div style="text-align: center; padding: 40px 20px;"><i class="fas fa-check-circle" style="font-size: 4rem; color: #10b981; margin-bottom: 20px;"></i><h3 style="font-size: 1.5rem; margin-bottom: 15px; color: var(--color-heading);">Thank you for registering with PRAJAYA Foundation.</h3><p style="font-size: 1.1rem; color: var(--color-text); line-height: 1.6;">Your application has been received and will be reviewed based on programme requirements and volunteer opportunities. Submission of the form does not constitute automatic selection.</p></div>';
             })
             .catch(err => {
                 console.error("Error submitting application:", err);
