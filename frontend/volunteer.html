@@ -1393,7 +1393,12 @@
 
                 <div class="form-group-grid grid-2">
                     <div>
-                        <label class="form-label">Temporary Address<span class="required-asterisk">*</span></label>
+                        <div style="display: flex; justify-content: space-between; align-items: baseline;">
+                            <label class="form-label">Temporary Address<span class="required-asterisk">*</span></label>
+                            <label style="font-size: 0.8rem; cursor: pointer; display: flex; align-items: center; gap: 6px; color: var(--color-accent); font-weight: 500;">
+                                <input type="checkbox" id="same_address_chk" style="transform: scale(1.1);"> Same as Permanent
+                            </label>
+                        </div>
                         <textarea class="form-control" id="temp_address" rows="2" placeholder="Your current address" autocomplete="street-address" required></textarea>
                     </div>
                     <div>
@@ -1605,6 +1610,27 @@
         });
 
 
+        // Copy Permanent Address to Temporary Address
+        const permAddress = document.getElementById('perm_address');
+        const tempAddress = document.getElementById('temp_address');
+        const sameAddressChk = document.getElementById('same_address_chk');
+        
+        if (sameAddressChk && permAddress && tempAddress) {
+            sameAddressChk.addEventListener('change', function() {
+                if (this.checked) {
+                    tempAddress.value = permAddress.value;
+                } else {
+                    tempAddress.value = '';
+                }
+            });
+            
+            permAddress.addEventListener('input', function() {
+                if (sameAddressChk.checked) {
+                    tempAddress.value = permAddress.value;
+                }
+            });
+        }
+
         // Form Submission
         document.getElementById('volunteerForm').addEventListener('submit', (e) => {
             e.preventDefault();
@@ -1721,12 +1747,12 @@
         }
         
         // Preloader Logic
-        window.addEventListener('load', () => {
+        const hidePreloader = () => {
             const preloader = document.getElementById('preloader');
-            setTimeout(() => {
-                preloader.classList.add('fade-out');
-            }, 600);
-        });
+            if (preloader) preloader.classList.add('fade-out');
+        };
+        window.addEventListener('load', () => setTimeout(hidePreloader, 150));
+        setTimeout(hidePreloader, 800);
     </script>
 
 

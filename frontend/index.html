@@ -1772,18 +1772,124 @@
                     }
                 }
             );
+                    <h4 class="footer-heading">Connect</h4>
+                    <div class="social-links">
+                        <a href="https://www.facebook.com/share/1BzsAep6Fs/?mibextid=wwXIfr" target="_blank"><i class="fab fa-facebook-f"></i></a>
+                        <a href="https://youtube.com/@prajayafoundation?si=XGDLbeNWjzkmBlZx" target="_blank"><i class="fab fa-youtube"></i></a>
+                        <a href="https://www.instagram.com/prajaya_foundation?igsh=a3pydThkeDhyand5&utm_source=qr" target="_blank"><i class="fab fa-instagram"></i></a>
+                    </div>
+                </div>
+
+            </div>
+            
+            <div class="footer-bottom">
+                <span>&copy; 2026 Prajaya Foundation. All Rights Reserved.</span>
+                <span style="font-family: var(--font-heading); color: var(--color-accent); font-size: 1.1rem; font-weight: 600;">Deserve to Deserve</span>
+            </div>
+        </div>
+    </footer>
+
+
+
+    <!-- GSAP & Lenis -->
+    <script src="https://unpkg.com/@studio-freight/lenis@1.0.39/dist/lenis.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+
+    <!-- Scripts -->
+    <script>
+        // Header Scroll Effect
+        const header = document.getElementById('header');
+        const heroSection = document.querySelector('.hero');
+        window.addEventListener('scroll', () => {
+            const heroHeight = heroSection ? heroSection.offsetHeight : 100;
+            // Subtract approx header height (80px) to trigger just as the next section comes up
+            if (window.scrollY > heroHeight - 80) {
+                header.classList.add('scrolled');
+                header.classList.remove('hidden');
+            } else if (window.scrollY > 50) {
+                header.classList.remove('scrolled');
+                header.classList.add('hidden');
+            } else {
+                header.classList.remove('scrolled');
+                header.classList.remove('hidden');
+            }
+        });
+
+        // Mobile Menu
+        const mobileBtn = document.getElementById('mobile-btn');
+        const navLinks = document.getElementById('nav-links');
+        const navItems = document.querySelectorAll('.nav-links a');
+
+        mobileBtn.addEventListener('click', () => {
+            navLinks.classList.toggle('active');
+            const icon = mobileBtn.querySelector('i');
+            if (navLinks.classList.contains('active')) {
+                icon.classList.replace('fa-bars', 'fa-times');
+            } else {
+                icon.classList.replace('fa-times', 'fa-bars');
+            }
+        });
+
+        navItems.forEach(item => {
+            item.addEventListener('click', () => {
+                navLinks.classList.remove('active');
+                mobileBtn.querySelector('i').classList.replace('fa-times', 'fa-bars');
+            });
+        });
+
+        // Initialize Lenis
+        const lenis = new Lenis({
+            duration: 1.2,
+            easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+            direction: 'vertical',
+            gestureDirection: 'vertical',
+            smooth: true,
+            mouseMultiplier: 1,
+            smoothTouch: false,
+            touchMultiplier: 2,
+            infinite: false,
+        });
+
+        // Sync GSAP ScrollTrigger with Lenis
+        lenis.on('scroll', ScrollTrigger.update);
+        gsap.ticker.add((time) => {
+            lenis.raf(time * 1000);
+        });
+        gsap.ticker.lagSmoothing(0);
+
+        // GSAP Animations
+        gsap.registerPlugin(ScrollTrigger);
+
+        // Reveal Animations
+        const revealElements = document.querySelectorAll('.reveal');
+        revealElements.forEach((el) => {
+            gsap.fromTo(el, 
+                { autoAlpha: 0, y: 50 }, 
+                {
+                    duration: 1,
+                    autoAlpha: 1,
+                    y: 0,
+                    ease: "power3.out",
+                    scrollTrigger: {
+                        trigger: el,
+                        start: "top 85%",
+                        toggleActions: "play none none none"
+                    }
+                }
+            );
         });
 
 
 
 
         // Preloader Logic
-        window.addEventListener('load', () => {
+        const hidePreloader = () => {
             const preloader = document.getElementById('preloader');
-            setTimeout(() => {
-                preloader.classList.add('fade-out');
-            }, 600);
-        });
+            if (preloader) preloader.classList.add('fade-out');
+        };
+        window.addEventListener('load', () => setTimeout(hidePreloader, 150));
+        setTimeout(hidePreloader, 800);
     </script>
 
 
