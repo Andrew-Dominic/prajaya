@@ -1,5 +1,5 @@
 /**
- * Prajaya Foundation — Express Server
+ * PRAJAYA Foundation — Express Server
  * 
  * Entry point for the entire application.
  * 
@@ -253,7 +253,7 @@ app.get('/api/v1/applications', async (req, res) => {
 app.get('/api/health', (req, res) => {
   res.status(200).json({
     success: true,
-    message: 'Prajaya Foundation API is running',
+    message: 'PRAJAYA Foundation API is running',
     environment: config.nodeEnv,
     timestamp: new Date().toISOString(),
   });
