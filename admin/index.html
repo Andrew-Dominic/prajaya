@@ -251,14 +251,17 @@
 
         /* Table Section */
         .table-container {
-            background: var(--color-surface);
-            border-radius: 16px;
-            border: 1px solid var(--color-border);
+            background: #ffffff;
+            border-radius: 4px;
+            border: 1px solid #d4d4d4;
+            overflow-x: auto;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
         }
 
         .table-header {
-            padding: 30px;
-            border-bottom: 1px solid var(--color-border);
+            padding: 12px 20px;
+            border-bottom: 1px solid #d4d4d4;
+            background-color: #f8f8fa;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -292,73 +295,82 @@
         table {
             width: 100%;
             border-collapse: collapse;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-size: 13px;
         }
 
         th, td {
-            padding: 20px 30px;
+            padding: 6px 12px;
             text-align: left;
-            border-bottom: 1px solid var(--color-border);
-        }
-        
-        tr:last-child td {
-            border-bottom: none;
+            border: 1px solid #d4d4d4;
+            white-space: nowrap;
         }
 
         th {
-            font-size: 0.75rem;
-            text-transform: uppercase;
-            letter-spacing: 1.5px;
-            color: var(--color-text-light);
+            background-color: #f3f2f1;
+            color: #323130;
             font-weight: 600;
-            background: var(--color-surface);
+            position: sticky;
+            top: 0;
+            border-bottom: 2px solid #c8c6c4;
+            text-transform: none;
+            letter-spacing: normal;
         }
 
         td {
-            font-size: 0.95rem;
-            color: var(--color-text);
+            color: #323130;
+            background-color: #ffffff;
+        }
+        
+        tr:nth-child(even) td {
+            background-color: #faf9f8;
+        }
+        
+        tr:hover td {
+            background-color: #e5f3ff;
+            cursor: default;
         }
 
         td.date {
-            color: var(--color-text-light);
-            font-size: 0.9rem;
+            color: #605e5c;
+            font-size: 13px;
         }
         
         td.name-col {
-            font-weight: 500;
-            color: var(--color-heading);
+            font-weight: 600;
+            color: #323130;
         }
 
         .status-badge {
             display: inline-block;
-            padding: 6px 12px;
-            border-radius: 30px;
-            font-size: 0.75rem;
+            padding: 2px 6px;
+            border-radius: 2px;
+            font-size: 11px;
             font-weight: 600;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
-            background: rgba(16, 185, 129, 0.1);
-            color: var(--color-success);
+            background: #dff6dd;
+            color: #107c41;
+            border: 1px solid #107c41;
         }
 
         .action-btn {
-            background: var(--color-bg);
-            border: 1px solid var(--color-border);
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
-            color: var(--color-text);
+            background: #ffffff;
+            border: 1px solid #c8c6c4;
+            height: 24px;
+            width: 28px;
+            border-radius: 2px;
+            color: #323130;
             cursor: pointer;
-            font-size: 0.9rem;
+            font-size: 12px;
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            transition: var(--transition);
+            transition: all 0.1s;
         }
 
         .action-btn:hover {
-            background: var(--color-heading);
-            color: white;
-            border-color: var(--color-heading);
+            background: #f3f2f1;
+            border-color: #8a8886;
         }
         
         .empty-state {
