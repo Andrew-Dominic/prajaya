@@ -271,6 +271,7 @@
             padding-bottom: 100px;
             background-color: var(--color-heading);
             background-image: 
+
                 url('data:image/svg+xml,%3Csvg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"%3E%3Cfilter id="noiseFilter"%3E%3CfeTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="3" stitchTiles="stitch"/%3E%3C/filter%3E%3Crect width="100%25" height="100%25" filter="url(%23noiseFilter)" opacity="0.03"/%3E%3C/svg%3E'),
                 radial-gradient(circle at 50% 0%, rgba(212, 166, 90, 0.1) 0%, transparent 70%);
             position: relative;
@@ -1318,8 +1319,8 @@
             </a>
             
             <nav class="nav-links" id="nav-links">
-                <a href="#about">About</a>
-                <a href="#programs">Our Work</a>
+                <a href="#vision">About</a>
+                <a href="#programs">Objectives</a>
                 <a href="#events">Events</a>
                 <a href="#founder">Founder</a>
                 <a href="#suggestions">Contact</a>
@@ -1368,34 +1369,11 @@
             </div> <!-- End layout wrapper -->
 
         </div>
-    </section>
-
-    <!-- About -->
-    <section class="section section-alt" id="about" style="position: relative; z-index: 10;">
-        <div class="container">
-            <div class="about-grid">
-                <div class="about-text reveal">
-                    <div class="section-label" style="margin-bottom: 24px;">Who We Are</div>
-                    
-                    <div style="margin-bottom: 40px; border-left: 2px solid var(--color-accent); padding-left: 20px;">
-                        <div style="color: var(--color-heading); font-size: 0.9rem; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase;">Registered Charitable Trust</div>
-                        <div style="color: var(--color-text); font-size: 0.85rem; letter-spacing: 1px; text-transform: uppercase; margin-top: 8px;">Founded 2025</div>
-                    </div>
-                    
-                    <h2 class="section-title" style="margin-bottom: 40px;">Empowering individuals to create lasting change.</h2>
-                    
-                    <p>At PRAJAYA FOUNDATION, we believe that lasting change begins with empowered individuals. By nurturing knowledge, character, discipline, and service, we strive to create responsible citizens who positively impact society.</p>
-                    
-                    <div class="motto-block">
-                        <h4>Deserve to Deserve</h4>
-                        <p style="margin: 0; font-size: 1rem;">Our motto embodies the belief that true empowerment comes through merit, effort, and an unwavering commitment to continuous self-improvement and service to others.</p>
-                    </div>
-                </div>
-                
-                <div class="about-image reveal delay-1">
-                    <img src="assets/images/community_support.png" alt="Community Support">
-                </div>
-            </div>
+        <!-- Shape Divider for smooth blend -->
+        <div class="hero-shape-divider" style="position: absolute; bottom: -1px; left: 0; width: 100%; overflow: hidden; line-height: 0; z-index: 1;">
+            <svg data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none" style="position: relative; display: block; width: calc(100% + 1.3px); height: 60px;">
+                <path d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V120H0V95.8C79.44,79.52,204.34,74.56,321.39,56.44Z" fill="#f4f3f8"></path>
+            </svg>
         </div>
     </section>
 
@@ -1513,9 +1491,9 @@
                     <div class="list-container">
                         <div class="list-item"><i class="fas fa-check"></i> <span>Awareness Campaigns & Outreach</span></div>
                         <div class="list-item"><i class="fas fa-check"></i> <span>Workshops & Seminars</span></div>
-                        <div class="list-item"><i class="fas fa-check"></i> <span>Training Programs</span></div>
+                        <div class="list-item"><i class="fas fa-check"></i> <span>Training Programs & Partnerships</span></div>
                         <div class="list-item"><i class="fas fa-check"></i> <span>Sports & Fitness Activities</span></div>
-                        <div class="list-item"><i class="fas fa-check"></i> <span>Volunteer Networks & Partnerships</span></div>
+                        <div class="list-item"><i class="fas fa-check"></i> <span>Volunteer Networks & Sponsorships</span></div>
                     </div>
                 </div>
 
@@ -1561,6 +1539,12 @@
                     <div class="program-icon"><i class="fas fa-book"></i></div>
                     <h4>Education Drive</h4>
                     <p>Distributing study materials to underprivileged students.</p>
+                    <span style="font-size: 0.85rem; color: var(--color-accent); font-weight: 500; display: block; margin-top: 15px;">Coming Soon</span>
+                </div>
+                <div class="program-card reveal">
+                    <div class="program-icon"><i class="fas fa-laptop"></i></div>
+                    <h4>Digital Literacy</h4>
+                    <p>Digital Literacy training for school students.</p>
                     <span style="font-size: 0.85rem; color: var(--color-accent); font-weight: 500; display: block; margin-top: 15px;">Coming Soon</span>
                 </div>
             </div>
@@ -1644,26 +1628,6 @@
                         <li><a href="#vision">Vision & Mission</a></li>
                         <li><a href="#programs">Our Programs</a></li>
                         <li><a href="#founder">Founder</a></li>
-                    </ul>
-                </div>
-                <div>
-
-                    <h4 class="footer-heading">Policies</h4>
-                    <ul class="footer-links" style="margin-bottom: 20px;">
-                        <li><a href="privacy-policy.html">Privacy Policy</a></li>
-                        <li><a href="safeguarding-policy.html">Child & Vulnerable Persons Safeguarding</a></li>
-                        <li><a href="anti-sexual-harassment-policy.html">Anti-Sexual Harassment Policy</a></li>
-                        <li><a href="donation-refund-policy.html">Donation & Refund Policy</a></li>
-                        <li><a href="terms-of-use.html">Terms of Website Use</a></li>
-                    </ul>
-                    <h4 class="footer-heading">Resources</h4>
-                    <ul class="footer-links">
-                        <li><a href="volunteer-opportunities.html">Volunteer Opportunities</a></li>
-                        <li><a href="volunteer-terms.html">Volunteer Terms</a></li>
-                        <li><a href="grievance.html">Grievance and Complaints</a></li>
-                        <li><a href="report-concern.html">Report a Concern</a></li>
-                        <li><a href="parent-consent.html">Parent/Guardian Consent</a></li>
-                        <li><a href="media-consent.html">Media Consent Form</a></li>
                     </ul>
                 </div>
                 
