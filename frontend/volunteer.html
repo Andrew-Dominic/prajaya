@@ -115,20 +115,25 @@
             padding: 16px 40px;
             font-family: var(--font-body);
             font-size: 0.95rem;
-            font-weight: 500;
+            font-weight: 600;
             letter-spacing: 0.5px;
             cursor: pointer;
             transition: var(--transition);
             border: 1px solid transparent;
+            border-radius: 8px;
         }
 
         .btn-primary {
             background-color: var(--color-heading);
             color: var(--color-bg);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
         }
         
         .btn-primary:hover {
             background-color: var(--color-accent);
+            color: var(--color-heading);
+            box-shadow: 0 6px 20px rgba(212, 166, 90, 0.3);
+            transform: translateY(-2px);
         }
 
         .btn-outline {
@@ -877,6 +882,42 @@
             margin-bottom: 25px;
         }
 
+        .form-section-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--color-heading);
+            margin-top: 45px;
+            margin-bottom: 25px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid rgba(0,0,0,0.06);
+            letter-spacing: 0.5px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .form-section-title:first-child {
+            margin-top: 0;
+        }
+
+        .form-card {
+            background: var(--color-surface); 
+            padding: 60px 80px; 
+            border-radius: 20px; 
+            border: 1px solid rgba(0,0,0,0.05); 
+            box-shadow: 0 25px 50px rgba(0,0,0,0.04);
+        }
+
+        .terms-card {
+            background: var(--color-bg); 
+            padding: 30px; 
+            border-radius: 12px; 
+            border: 1px solid rgba(0,0,0,0.08); 
+            margin-bottom: 30px; 
+            margin-top: 20px; 
+            box-shadow: 0 4px 20px rgba(0,0,0,0.03);
+        }
+
         .form-group-grid {
             display: grid;
             gap: 30px;
@@ -921,6 +962,13 @@
 
         .form-control::placeholder {
             color: rgba(0,0,0,0.3);
+        }
+
+        input[type="checkbox"] {
+            accent-color: var(--color-accent);
+            cursor: pointer;
+            width: 18px;
+            height: 18px;
         }
 
         .file-upload-wrapper {
@@ -978,6 +1026,13 @@
             }
             .modal-title {
                 font-size: 1.6rem;
+            }
+            .form-card {
+                padding: 30px 20px;
+                border-radius: 12px;
+            }
+            .terms-card {
+                padding: 20px 15px;
             }
             .grid-2, .grid-3 {
                 grid-template-columns: 1fr !important;
@@ -1355,8 +1410,9 @@
             <h2 class="section-title" style="text-align: center; margin-bottom: 15px;">Become a Volunteer</h2>
             <p style="text-align: center; margin-bottom: 50px; color: var(--color-text);">Become a part of PRAJAYA Foundation. Share your details below.</p>
             
-            <div style="background: var(--color-surface); padding: 60px 80px; border-radius: 20px; border: 1px solid rgba(0,0,0,0.05); box-shadow: 0 25px 50px rgba(0,0,0,0.04);">
+            <div class="form-card">
                 <form id="volunteerForm">
+                <h3 class="form-section-title"><i class="fas fa-user-circle" style="color: var(--color-accent);"></i> Personal Information</h3>
                 <div class="form-group-grid grid-2">
                     <div>
                         <label class="form-label">Full Name<span class="required-asterisk">*</span></label>
@@ -1388,6 +1444,7 @@
                     </div>
                 </div>
 
+                <h3 class="form-section-title"><i class="fas fa-address-book" style="color: var(--color-accent);"></i> Contact Details</h3>
                 <div class="form-group-grid grid-3">
                     <div>
                         <label class="form-label">Mobile Number<span class="required-asterisk">*</span></label>
@@ -1421,6 +1478,7 @@
                     </div>
                 </div>
                 
+                <h3 class="form-section-title"><i class="fas fa-map-marker-alt" style="color: var(--color-accent);"></i> Location & Address</h3>
                 <div class="form-group-grid grid-2">
                     <div>
                         <label class="form-label">Current City<span class="required-asterisk">*</span></label>
@@ -1486,6 +1544,7 @@
                     </div>
                 </div>
 
+                <h3 class="form-section-title"><i class="fas fa-briefcase" style="color: var(--color-accent);"></i> Education & Experience</h3>
                 <div class="form-group-grid grid-3">
                     <div>
                         <label class="form-label">Current Status<span class="required-asterisk">*</span></label>
@@ -1563,6 +1622,7 @@
                     <textarea class="form-control" id="experience" rows="2" placeholder="Briefly describe any past volunteering experience..."></textarea>
                 </div>
 
+                <h3 class="form-section-title"><i class="fas fa-file-alt" style="color: var(--color-accent);"></i> Documents</h3>
                 <div class="form-group">
                     <label class="form-label">Resume / CV (Optional for Little Changemakers)</label>
                     <div class="file-upload-wrapper">
@@ -1586,7 +1646,7 @@
 
                 <div class="form-group" style="margin-top: 35px;">
                     <label class="form-label">Volunteer Terms & Conditions</label>
-                                <div style="background: var(--color-bg); padding: 30px; border-radius: 12px; border: 1px solid rgba(0,0,0,0.08); margin-bottom: 30px; margin-top: 20px; box-shadow: 0 4px 20px rgba(0,0,0,0.03);">
+                                <div class="terms-card">
                 <p style="margin-bottom: 40px; font-size: 1.1rem;">A volunteer agreement helps clarify that volunteers are contributing their time voluntarily, sets expectations, and protects the organisation’s reputation and confidential information. It also makes clear that volunteering is not an employment relationship.</p>
                 
                 <ol class="terms-list">
@@ -1920,9 +1980,9 @@
                 </div>
 
                 <div class="form-group" style="margin-top: 35px;">
-<label style="display: flex; align-items: flex-start; gap: 12px; font-size: 0.9rem; cursor: pointer;">
-                        <input type="checkbox" required style="margin-top: 4px; transform: scale(1.1);">
-                        <span>By registering as a volunteer, I confirm that I have read, understood, and agree to abide by these Terms &amp; Conditions and the values of PRAJAYA Foundation. (Parents/Guardians must check this for minors).</span>
+<label style="display: flex; align-items: flex-start; gap: 12px; font-size: 0.95rem; cursor: pointer; color: var(--color-heading); font-weight: 500;">
+                        <input type="checkbox" required style="margin-top: 4px;">
+                        <span style="flex: 1; line-height: 1.6;">By registering as a volunteer, I confirm that I have read, understood, and agree to abide by these Terms &amp; Conditions and the values of PRAJAYA Foundation. (Parents/Guardians must check this for minors).</span>
                     </label>
                 </div>
 
