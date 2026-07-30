@@ -1369,12 +1369,7 @@
             </div> <!-- End layout wrapper -->
 
         </div>
-        <!-- Shape Divider for smooth blend -->
-        <div class="hero-shape-divider" style="position: absolute; bottom: -1px; left: 0; width: 100%; overflow: hidden; line-height: 0; z-index: 1;">
-            <svg data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none" style="position: relative; display: block; width: calc(100% + 1.3px); height: 60px;">
-                <path d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V120H0V95.8C79.44,79.52,204.34,74.56,321.39,56.44Z" fill="#f4f3f8"></path>
-            </svg>
-        </div>
+
     </section>
 
     <!-- Vision & Mission -->
@@ -1587,7 +1582,17 @@
                         <input type="email" class="form-control" name="Email" placeholder="Your Email" required>
                     </div>
                     <div class="form-group">
-                        <textarea class="form-control" name="Suggestion" rows="4" placeholder="Your Idea, Query, or Suggestion" required></textarea>
+                        <select class="form-control" name="Subject" required style="appearance: none; cursor: pointer;">
+                            <option value="" disabled selected>What is this regarding?</option>
+                            <option value="Suggest a Project">Suggest a Project</option>
+                            <option value="Event Idea">Event Idea</option>
+                            <option value="Partnership / Sponsorship">Partnership / Sponsorship</option>
+                            <option value="General Feedback">General Feedback</option>
+                            <option value="Other">Other Query</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <textarea class="form-control" name="Suggestion" rows="4" placeholder="Elaborate on your project idea or suggestion..." required></textarea>
                     </div>
                     <button type="submit" class="btn btn-outline" style="width: 100%;">Send Message</button>
                 </form>
