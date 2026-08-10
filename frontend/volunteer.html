@@ -1369,9 +1369,80 @@
         .term-content ul { padding-left: 20px; margin-top: 10px; list-style-type: disc; }
         .term-content ul li { margin-bottom: 5px; }
 
+        /* Objective Overlay Dialogue Box */
+        .objective-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(44, 41, 70, 0.95);
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(8px);
+            opacity: 1;
+            transition: opacity 0.5s;
+        }
+        .objective-dialogue {
+            background: var(--color-bg);
+            max-width: 600px;
+            width: 90%;
+            padding: 40px;
+            border-radius: 16px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+            text-align: left;
+            transform: translateY(20px);
+            animation: slideUpDialogue 0.5s forwards ease-out;
+        }
+        @keyframes slideUpDialogue {
+            to { transform: translateY(0); }
+        }
+        .objective-dialogue h2 {
+            font-size: 2rem; color: var(--color-heading); margin-bottom: 5px; text-align: center;
+        }
+        .objective-dialogue .subtitle {
+            text-align: center; color: var(--color-accent); font-weight: 500; margin-bottom: 25px; letter-spacing: 1px; text-transform: uppercase; font-size: 0.9rem;
+        }
+        .objective-content {
+            font-size: 1.05rem; line-height: 1.6; color: var(--color-text); margin-bottom: 30px;
+        }
+        .objective-content ul {
+            list-style: none; padding-left: 0; margin-top: 15px;
+        }
+        .objective-content ul li {
+            margin-bottom: 12px; display: flex; align-items: flex-start; gap: 10px; font-size: 1rem;
+        }
+        .objective-content ul li i {
+            color: var(--color-accent); margin-top: 4px;
+        }
+        .commitment-text {
+            font-weight: 600; color: var(--color-heading); margin-top: 20px; text-align: center; border-top: 1px solid rgba(0,0,0,0.1); padding-top: 20px; font-size: 0.95rem;
+        }
+        #closeObjectiveBtn {
+            width: 100%; font-size: 1.05rem; padding: 14px;
+        }
+
     </style>
 </head>
 <body>
+    
+    <!-- Objective Overlay Dialogue Box -->
+    <div id="objectiveOverlay" class="objective-overlay">
+        <div class="objective-dialogue">
+            <h2>Volunteer Objectives</h2>
+            <p class="subtitle">Serve. Learn. Lead. Create Impact.</p>
+            <div class="objective-content">
+                <p>PRAJAYA Foundation welcomes responsible and committed individuals to contribute their time and skills towards community development.</p>
+                <ul>
+                    <li><i class="fas fa-bullseye"></i> Empower individuals through education & digital literacy.</li>
+                    <li><i class="fas fa-heartbeat"></i> Promote health, wellness, and environmental sustainability.</li>
+                    <li><i class="fas fa-users"></i> Support women empowerment, youth leadership, and child development.</li>
+                    <li><i class="fas fa-hands-helping"></i> Build sustainable social change and foster a spirit of community service.</li>
+                </ul>
+                <p class="commitment-text">By proceeding, you express your genuine intention to serve the society selflessly.</p>
+            </div>
+            <button id="closeObjectiveBtn" class="btn btn-primary" style="opacity: 0; pointer-events: none; transition: opacity 0.5s;">I Understand & Wish to Proceed</button>
+        </div>
+    </div>
 
     <!-- Preloader -->
     <div id="preloader" class="preloader">
@@ -2358,8 +2429,26 @@
         };
         window.addEventListener('load', () => setTimeout(hidePreloader, 150));
         setTimeout(hidePreloader, 800);
+        // Objective Overlay Logic
+        document.addEventListener("DOMContentLoaded", () => {
+            const overlay = document.getElementById('objectiveOverlay');
+            const closeBtn = document.getElementById('closeObjectiveBtn');
+            
+            if (overlay && closeBtn) {
+                // Show close button after 4 seconds
+                setTimeout(() => {
+                    closeBtn.style.opacity = '1';
+                    closeBtn.style.pointerEvents = 'auto';
+                }, 4000);
+                
+                closeBtn.addEventListener('click', () => {
+                    overlay.style.opacity = '0';
+                    setTimeout(() => {
+                        overlay.remove();
+                    }, 500); // Wait for transition
+                });
+            }
+        });
     </script>
-
-
 </body>
 </html>
