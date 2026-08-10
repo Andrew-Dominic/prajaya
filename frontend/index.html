@@ -200,6 +200,7 @@
         .brand-text {
             display: flex;
             flex-direction: column;
+            align-items: flex-start;
         }
 
         .brand-name {
@@ -207,6 +208,7 @@
             font-size: 1.4rem;
             color: #ffffff;
             line-height: 1;
+            letter-spacing: 1px;
             transition: var(--transition);
         }
 
@@ -217,9 +219,9 @@
         .brand-tagline {
             font-size: 0.65rem;
             color: var(--color-accent);
-            letter-spacing: 2px;
+            letter-spacing: 3.8px;
             text-transform: uppercase;
-            margin-top: 6px;
+            margin-top: 4px;
             font-weight: 500;
         }
 
@@ -1321,10 +1323,10 @@
             <nav class="nav-links" id="nav-links">
                 <a href="#vision">About</a>
                 <a href="#programs">Objectives</a>
-                <a href="#events">Events</a>
                 <a href="#founder">Founder</a>
+                <a href="#events">Events</a>
                 <a href="#suggestions">Contact</a>
-                <a href="volunteer.html" class="btn btn-primary volunteer-trigger nav-volunteer-btn">Become a Volunteer</a>
+                <a href="volunteer.html" class="btn btn-primary volunteer-trigger nav-volunteer-btn">Join as Volunteer</a>
             </nav>
             
             <div class="mobile-menu-btn" id="mobile-btn">
@@ -1354,7 +1356,7 @@
                     
                     <div class="hero-actions">
                         <a href="#programs" class="btn btn-primary">Discover Our Work</a>
-                        <a href="volunteer.html" class="btn btn-outline volunteer-trigger">Become a Volunteer</a>
+                        <a href="volunteer.html" class="btn btn-outline volunteer-trigger">Join as Volunteer</a>
                     </div>
                 </div>
 
@@ -1510,42 +1512,6 @@
     </section>
 
 
-    <!-- Upcoming Events -->
-    <section class="section section-alt" id="events">
-        <div class="container">
-            <div class="section-header reveal">
-                <div class="section-label">Join Us</div>
-                <h2 class="section-title">Upcoming Events</h2>
-            </div>
-            <div class="programs-grid">
-                <div class="program-card reveal">
-                    <div class="program-icon"><i class="fas fa-calendar-alt"></i></div>
-                    <h4>Community Health Camp</h4>
-                    <p>Free health checkups and awareness sessions in local communities.</p>
-                    <span style="font-size: 0.85rem; color: var(--color-accent); font-weight: 500; display: block; margin-top: 15px;">Coming Soon</span>
-                </div>
-                <div class="program-card reveal delay-1">
-                    <div class="program-icon"><i class="fas fa-tree"></i></div>
-                    <h4>Mega Tree Plantation</h4>
-                    <p>Join our volunteers in planting trees across the city.</p>
-                    <span style="font-size: 0.85rem; color: var(--color-accent); font-weight: 500; display: block; margin-top: 15px;">Coming Soon</span>
-                </div>
-                <div class="program-card reveal delay-2">
-                    <div class="program-icon"><i class="fas fa-book"></i></div>
-                    <h4>Education Drive</h4>
-                    <p>Distributing study materials to underprivileged students.</p>
-                    <span style="font-size: 0.85rem; color: var(--color-accent); font-weight: 500; display: block; margin-top: 15px;">Coming Soon</span>
-                </div>
-                <div class="program-card reveal">
-                    <div class="program-icon"><i class="fas fa-laptop"></i></div>
-                    <h4>Digital Literacy</h4>
-                    <p>Digital Literacy training for school students.</p>
-                    <span style="font-size: 0.85rem; color: var(--color-accent); font-weight: 500; display: block; margin-top: 15px;">Coming Soon</span>
-                </div>
-            </div>
-        </div>
-    </section>
-
     <!-- Founder -->
     <section class="section section-alt" id="founder">
         <div class="container">
@@ -1566,8 +1532,38 @@
         </div>
     </section>
 
+    <!-- Upcoming Events -->
+    <section class="section" id="events">
+        <div class="container">
+            <div class="section-header reveal">
+                <div class="section-label">Join Us</div>
+                <h2 class="section-title">Upcoming Events</h2>
+            </div>
+            <div class="programs-grid">
+                <div class="program-card reveal">
+                    <div class="program-icon"><i class="fas fa-laptop"></i></div>
+                    <h4>Digital Literacy</h4>
+                    <p>Digital Literacy training for school students.</p>
+                    <span style="font-size: 0.85rem; color: var(--color-accent); font-weight: 500; display: block; margin-top: 15px;">Coming Soon</span>
+                </div>
+                <div class="program-card reveal delay-1">
+                    <div class="program-icon"><i class="fas fa-calendar-alt"></i></div>
+                    <h4>Community Health Camp</h4>
+                    <p>Free health checkups and awareness sessions in local communities.</p>
+                    <span style="font-size: 0.85rem; color: var(--color-accent); font-weight: 500; display: block; margin-top: 15px;">Coming Soon</span>
+                </div>
+                <div class="program-card reveal delay-2">
+                    <div class="program-icon"><i class="fas fa-tree"></i></div>
+                    <h4>Mega Tree Plantation</h4>
+                    <p>Join our volunteers in planting trees across the city.</p>
+                    <span style="font-size: 0.85rem; color: var(--color-accent); font-weight: 500; display: block; margin-top: 15px;">Coming Soon</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <!-- Suggestion Space & Donate -->
-    <section class="section" id="suggestions">
+    <section class="section section-alt" id="suggestions">
         <div class="container" style="max-width: 700px; margin: 0 auto;">
             <div class="reveal">
                 <div class="section-label" style="justify-content: center;">Your Voice Matters</div>
@@ -1629,10 +1625,10 @@
                 <div>
                     <h4 class="footer-heading">Navigation</h4>
                     <ul class="footer-links">
-                        <li><a href="#about">About Us</a></li>
-                        <li><a href="#vision">Vision & Mission</a></li>
-                        <li><a href="#programs">Our Programs</a></li>
+                        <li><a href="#vision">About Us</a></li>
+                        <li><a href="#programs">Objectives</a></li>
                         <li><a href="#founder">Founder</a></li>
+                        <li><a href="#events">Events</a></li>
                     </ul>
                 </div>
                 
