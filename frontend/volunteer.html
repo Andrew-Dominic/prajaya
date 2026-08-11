@@ -224,7 +224,7 @@
         .brand-tagline {
             font-size: 0.65rem;
             color: var(--color-accent);
-            letter-spacing: 3.8px;
+            letter-spacing: 4.6px;
             text-transform: uppercase;
             margin-top: 4px;
             font-weight: 500;
@@ -1108,7 +1108,7 @@
 
             .brand-tagline {
                 font-size: 0.55rem;
-                letter-spacing: 1.5px;
+                letter-spacing: 3.8px;
                 margin-top: 4px;
             }
 
@@ -1392,6 +1392,19 @@
             text-align: left;
             transform: translateY(20px);
             animation: slideUpDialogue 0.5s forwards ease-out;
+            max-height: 85vh;
+            overflow-y: auto;
+        }
+        @media (max-width: 768px) {
+            .objective-dialogue {
+                padding: 25px;
+            }
+            .objective-dialogue h2 {
+                font-size: 1.6rem;
+            }
+            .objective-content {
+                font-size: 0.95rem;
+            }
         }
         @keyframes slideUpDialogue {
             to { transform: translateY(0); }
