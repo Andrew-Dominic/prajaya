@@ -17,8 +17,7 @@
  * 8. Global error handler (must be last)
  */
 
-// Ensure IPv4 is preferred for DNS resolution (fixes Supabase ENOTFOUND issues)
-require('dns').setDefaultResultOrder('ipv4first');
+// require('dns').setDefaultResultOrder('ipv4first');
 
 const express = require('express');
 const helmet = require('helmet');
@@ -174,26 +173,53 @@ app.use('/admin', express.static(config.adminPath));
 // API routes will be mounted here in Phase 3+
 // app.use('/api/v1', require('./routes'));
 
-// Set up Multer storage for file uploads
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, path.join(__dirname, '../uploads/'));
-  },
-  filename: function (req, file, cb) {
-    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
-    cb(null, uniqueSuffix + '-' + file.originalname);
-  }
-});
+// Import Supabase
+const { createClient } = require('@supabase/supabase-js');
+
+// Initialize Supabase Client (if keys exist)
+const supabaseUrl = process.env.SUPABASE_URL || 'https://bnmgzrskfwuuhlnxavan.supabase.co';
+const supabaseKey = process.env.SUPABASE_KEY || process.env.SUPABASE_SERVICE_ROLE_KEY;
+let supabase = null;
+if (supabaseUrl && supabaseKey) {
+  supabase = createClient(supabaseUrl, supabaseKey);
+  console.log('Supabase Storage Client Initialized');
+} else {
+  console.warn('⚠️ SUPABASE_KEY is missing from .env! File uploads to S3 bucket will fail.');
+}
+
+// Set up Multer using Memory Storage for direct cloud upload
+const storage = multer.memoryStorage();
 const upload = multer({ 
   storage: storage,
   limits: { fileSize: 5 * 1024 * 1024 } // 5MB limit
 });
 
+// Helper function to upload to Supabase
+async function uploadToSupabase(file, folder) {
+  if (!supabase) throw new Error('Supabase client not initialized. Check SUPABASE_KEY.');
+  
+  const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+  // Clean filename: remove spaces, special chars
+  const cleanName = file.originalname.replace(/[^a-zA-Z0-9.]/g, '_');
+  const filePath = `${folder}/${uniqueSuffix}-${cleanName}`;
+  
+  const { data, error } = await supabase
+    .storage
+    .from('uploads') // Bucket name must be 'uploads'
+    .upload(filePath, file.buffer, {
+      contentType: file.mimetype,
+      upsert: false
+    });
+    
+  if (error) throw error;
+  
+  // Get public URL
+  const { data: publicUrlData } = supabase.storage.from('uploads').getPublicUrl(filePath);
+  return publicUrlData.publicUrl;
+}
+
 app.post('/api/v1/applications', upload.fields([{ name: 'resume', maxCount: 1 }, { name: 'photo', maxCount: 1 }]), async (req, res) => {
   console.log('--- NEW APPLICATION RECEIVED ---');
-  console.log('Body:', req.body);
-  console.log('Files:', req.files);
-  console.log('--------------------------------');
   
   try {
     const { 
@@ -205,11 +231,12 @@ app.post('/api/v1/applications', upload.fields([{ name: 'resume', maxCount: 1 },
     let resume_path = null;
     let photo_path = null;
 
+    // Upload files to Supabase Storage if present
     if (req.files && req.files['resume'] && req.files['resume'][0]) {
-      resume_path = req.files['resume'][0].filename;
+      resume_path = await uploadToSupabase(req.files['resume'][0], 'resumes');
     }
     if (req.files && req.files['photo'] && req.files['photo'][0]) {
-      photo_path = req.files['photo'][0].filename;
+      photo_path = await uploadToSupabase(req.files['photo'][0], 'photos');
     }
 
     const query = `
@@ -230,8 +257,8 @@ app.post('/api/v1/applications', upload.fields([{ name: 'resume', maxCount: 1 },
     console.log('Inserted into database:', result.rows[0].id);
     res.status(200).json({ success: true, message: 'Application received', data: result.rows[0] });
   } catch (error) {
-    console.error('Database insertion error:', error);
-    res.status(500).json({ success: false, message: 'Server error' });
+    console.error('Submission error:', error);
+    res.status(500).json({ success: false, message: 'Server error processing application', error: error.message });
   }
 });
 
