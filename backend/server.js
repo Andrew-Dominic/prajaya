@@ -248,7 +248,7 @@ app.post('/api/v1/applications', upload.fields([{ name: 'resume', maxCount: 1 },
       RETURNING *
     `;
     const values = [
-      category, name, age, dob, blood_group, phone, alt_phone, 
+      category, name, age || null, dob || null, blood_group, phone, alt_phone, 
       email, alt_email, hometown, current_city, state, temp_address, perm_address, 
       current_status, education_level, degree, interest, hobbies, languages, motivation, experience, resume_path, photo_path
     ];
