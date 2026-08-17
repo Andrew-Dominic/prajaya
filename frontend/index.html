@@ -1520,15 +1520,113 @@
         .carousel-track::-webkit-scrollbar { display: none; }
         .carousel-slide { min-width: 320px; flex: 0 0 calc(33.333% - 16px); scroll-snap-align: center; display: flex; justify-content: center; }
         
-        .founders-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 30px;
+        .founders-showcase {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 40px;
             max-width: 1200px;
             margin: 0 auto;
             padding: 20px 10px;
         }
+
+        .showcase-card {
+            background: #ffffff;
+            border-radius: 24px;
+            padding: 45px 30px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            transition: all 0.4s ease;
+            position: relative;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.02);
+            border: 1px solid rgba(0,0,0,0.03);
+            flex: 1;
+            max-width: 340px;
+        }
+
+        .showcase-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.05);
+            border-color: rgba(212, 166, 90, 0.15);
+        }
+
+        .showcase-image {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 4px solid #ffffff;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+            transition: transform 0.4s ease;
+            margin: 0 auto 24px;
+            position: relative;
+            z-index: 2;
+        }
         
+        .showcase-card:hover .showcase-image {
+            transform: scale(1.05);
+        }
+
+        .showcase-name {
+            font-size: 1.3rem;
+            color: var(--color-heading);
+            font-weight: 700;
+            margin-bottom: 8px;
+            letter-spacing: -0.3px;
+        }
+
+        .showcase-role {
+            font-size: 0.7rem;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            font-weight: 600;
+            color: var(--color-accent);
+            background: rgba(212, 166, 90, 0.05);
+            padding: 6px 16px;
+            border-radius: 20px;
+            display: inline-block;
+        }
+
+        /* Main Founder Card - Minimal & Elegant */
+        .showcase-card.main {
+            transform: scale(1.03);
+            z-index: 10;
+            border: 1px solid rgba(212, 166, 90, 0.15);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.04);
+            padding: 55px 30px;
+        }
+
+        .showcase-card.main::before {
+            content: '';
+            position: absolute;
+            top: -1px; left: 30px; right: 30px;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, var(--color-accent), transparent);
+            opacity: 0.6;
+        }
+
+        .showcase-card.main:hover {
+            transform: scale(1.03) translateY(-10px);
+            box-shadow: 0 25px 50px rgba(212, 166, 90, 0.08);
+        }
+
+        .showcase-card.main .showcase-name {
+            color: var(--color-heading);
+        }
+
+        .showcase-card.main .showcase-image {
+            width: 170px;
+            height: 170px;
+            box-shadow: 0 0 0 2px rgba(212, 166, 90, 0.1), 0 15px 30px rgba(0,0,0,0.08);
+        }
+
+        /* Card Positioning */
+        .card-left { order: 1; }
+        .card-center { order: 2; }
+        .card-right { order: 3; }
+
         .founder-card { 
             display: flex; flex-direction: column; align-items: center; justify-content: flex-start; text-align: center; 
             background: linear-gradient(145deg, #ffffff, #fcfbfe); 
@@ -1574,31 +1672,29 @@
             font-size: 0.75rem; letter-spacing: 1.5px; text-transform: uppercase; color: var(--color-accent); font-weight: 600; 
             background: rgba(212, 166, 90, 0.08); padding: 6px 16px; border-radius: 20px; display: inline-block;
         }
-        
-        /* Premium Card Specifics */
-        .premium-card {
-            background: linear-gradient(180deg, #ffffff 0%, #f7f7fa 100%);
-            padding: 55px 30px;
-            border-color: rgba(212, 166, 90, 0.15);
-            box-shadow: 0 15px 35px rgba(0,0,0,0.04);
-        }
-        .premium-card .founder-image {
-            width: 180px; height: 180px;
-            box-shadow: 0 15px 35px rgba(212, 166, 90, 0.15);
-            border: 8px solid #fff;
-        }
 
         .carousel-controls { display: flex; justify-content: center; gap: 20px; margin-top: 30px; }
         .carousel-btn { width: 48px; height: 48px; border-radius: 50%; border: 1px solid rgba(0,0,0,0.08); background: var(--color-bg); color: var(--color-heading); cursor: pointer; transition: var(--transition); display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 12px rgba(0,0,0,0.04); }
         .carousel-btn:hover { background: var(--color-heading); color: var(--color-bg); border-color: var(--color-heading); transform: scale(1.05); }
         
         @media (max-width: 1024px) { 
+            .founders-showcase { gap: 20px; }
+            .showcase-card.main { transform: scale(1.05); }
+            .showcase-card.main:hover { transform: scale(1.05) translateY(-10px); }
+            .showcase-card { padding: 40px 20px; }
             .carousel-slide { flex: 0 0 calc(50% - 12px); } 
-            .founders-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+        @media (max-width: 850px) { 
+            .founders-showcase { flex-direction: column; gap: 40px; }
+            .showcase-card.main { transform: scale(1); }
+            .showcase-card.main:hover { transform: translateY(-10px); }
+            .card-left { order: 2; }
+            .card-center { order: 1; margin-bottom: 20px; }
+            .card-right { order: 3; }
+            .showcase-card { max-width: 400px; width: 100%; }
         }
         @media (max-width: 650px) { 
             .carousel-slide { flex: 0 0 100%; } 
-            .founders-grid { grid-template-columns: 1fr; }
         }
     </style>
     <section class="section section-alt" id="founder">
@@ -1608,33 +1704,27 @@
                 <h2 class="section-title">Founders</h2>
             </div>
             
-            <div class="founders-grid reveal">
+            <div class="founders-showcase reveal">
                 
-                <!-- Founder -->
-                <div class="founder-card premium-card">
-                    <div class="founder-image">
-                        <img src="assets/images/founder.jpeg" alt="Founder">
-                    </div>
-                    <h3 class="founder-name">Mr. Pradeep Babu. M</h3>
-                    <span class="founder-role">Founder & Managing Trustee</span>
+                <!-- Trustee 1 (Left) -->
+                <div class="showcase-card card-left">
+                    <img src="assets/images/jagadeesan co founder.png" alt="Trustee" class="showcase-image">
+                    <h3 class="showcase-name">Mr. Jagadeesan. M</h3>
+                    <span class="showcase-role">Trustee</span>
                 </div>
 
-                <!-- Co-Founder -->
-                <div class="founder-card premium-card">
-                    <div class="founder-image">
-                        <img src="assets/images/jagadeesan co founder.png" alt="Co-Founder">
-                    </div>
-                    <h3 class="founder-name">Mr. Jagadeesan. M</h3>
-                    <span class="founder-role">Co-Founder</span>
+                <!-- Main Founder (Center) -->
+                <div class="showcase-card main card-center">
+                    <img src="assets/images/founder.jpeg" alt="Founder" class="showcase-image">
+                    <h3 class="showcase-name">Mr. Pradeep Babu. M</h3>
+                    <span class="showcase-role">Founder & Managing Trustee</span>
                 </div>
 
-                <!-- Co-Founder -->
-                <div class="founder-card premium-card">
-                    <div class="founder-image">
-                        <img src="assets/images/Mr Murali C  co founder.png" alt="Co-Founder">
-                    </div>
-                    <h3 class="founder-name">Mr. Murali. C</h3>
-                    <span class="founder-role">Co-Founder</span>
+                <!-- Trustee 2 (Right) -->
+                <div class="showcase-card card-right">
+                    <img src="assets/images/Mr Murali C  co founder.png" alt="Trustee" class="showcase-image">
+                    <h3 class="showcase-name">Mr. Murali. C</h3>
+                    <span class="showcase-role">Trustee</span>
                 </div>
 
             </div>
@@ -1668,7 +1758,7 @@
                             <div class="founder-image">
                                 <img src="assets/images/vp.jpeg" alt="Secretary">
                             </div>
-                            <h3 class="founder-name">Indira M</h3>
+                            <h3 class="founder-name">C.Giri</h3>
                             <span class="founder-role">Secretary</span>
                         </div>
                     </div>
@@ -1690,7 +1780,7 @@
                             <div class="founder-image">
                                 <img src="assets/images/joinsec.jpeg" alt="Joint Secretary">
                             </div>
-                            <h3 class="founder-name">Shalini P</h3>
+                            <h3 class="founder-name">Indu shalini J</h3>
                             <span class="founder-role">Joint Secretary</span>
                         </div>
                     </div>

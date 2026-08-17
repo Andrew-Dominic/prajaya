@@ -23,11 +23,11 @@ if (phoneIndex !== -1) {
     const altPhoneReplacement = `                <div class="form-group-grid grid-3">
                     <div>
                         <label class="form-label">Mobile Number<span class="required-asterisk">*</span></label>
-                        <input type="tel" class="form-control" id="phone" placeholder="+91 98765 43210" autocomplete="tel" required>
+                        <input type="tel" class="form-control" id="phone" placeholder="+91 XXXXX XXXXX" autocomplete="tel" required>
                     </div>
                     <div>
                         <label class="form-label">Alternative Mobile</label>
-                        <input type="tel" class="form-control" id="alt_phone" placeholder="+91 98765 00000" autocomplete="tel">
+                        <input type="tel" class="form-control" id="alt_phone" placeholder="+91 XXXXX XXXXX" autocomplete="tel">
                     </div>
                     <div>
                         <label class="form-label">Alt Mobile Relation</label>
