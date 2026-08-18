@@ -785,11 +785,40 @@
                         <div class="detail-value">${resumeLink}</div>
                     </div>
                 </div>
+                
+                <div style="margin-top: 30px; border-top: 1px solid var(--color-border); padding-top: 20px; display: flex; gap: 15px;">
+                    <button onclick="updateStatus('${app.id}', 'approved')" style="flex: 1; padding: 12px; border-radius: 8px; background: rgba(16, 185, 129, 0.1); color: var(--color-success); border: 1px solid var(--color-success); cursor: pointer; font-weight: 500; transition: all 0.2s;">Approve Application</button>
+                    <button onclick="updateStatus('${app.id}', 'rejected')" style="flex: 1; padding: 12px; border-radius: 8px; background: rgba(239, 68, 68, 0.1); color: var(--color-danger); border: 1px solid var(--color-danger); cursor: pointer; font-weight: 500; transition: all 0.2s;">Reject Application</button>
+                </div>
             `;
 
             document.getElementById('modal-body-content').innerHTML = html;
             
             document.getElementById('appModal').classList.add('active');
+        }
+
+        async function updateStatus(id, status) {
+            const reason = prompt(`Please provide a reason for marking this application as ${status}:`);
+            if (reason === null) return; // User cancelled
+            
+            try {
+                const response = await fetch(`/api/v1/applications/${id}/status`, {
+                    method: 'PATCH',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ status, reason })
+                });
+                const result = await response.json();
+                if (result.success) {
+                    alert(`Application ${status} successfully! An email has been sent to the applicant.`);
+                    closeModal();
+                    fetchApplications(); // Refresh list
+                } else {
+                    alert(result.message || 'Error updating status');
+                }
+            } catch (err) {
+                console.error(err);
+                alert('Server error while updating status');
+            }
         }
 
         function closeModal() {

@@ -83,9 +83,21 @@ pool.query(`
     ALTER TABLE applications ADD COLUMN IF NOT EXISTS experience TEXT;
     ALTER TABLE applications ADD COLUMN IF NOT EXISTS resume_path TEXT;
     ALTER TABLE applications ADD COLUMN IF NOT EXISTS photo_path TEXT;
+    ALTER TABLE applications ADD COLUMN IF NOT EXISTS status TEXT DEFAULT 'pending';
+    ALTER TABLE applications ADD COLUMN IF NOT EXISTS admin_reason TEXT;
+    
+    CREATE TABLE IF NOT EXISTS suggestions (
+      id SERIAL PRIMARY KEY,
+      name TEXT NOT NULL,
+      email TEXT NOT NULL,
+      suggestion TEXT NOT NULL,
+      created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+    );
   `;
   return pool.query(alterTableQueries);
 }).catch(err => console.error("Error creating/altering table:", err));
+
+const { sendEmail } = require('./email');
 
 // ──────────────────────────────────────────────
 // 1. SECURITY MIDDLEWARE
@@ -255,6 +267,23 @@ app.post('/api/v1/applications', upload.fields([{ name: 'resume', maxCount: 1 },
     
     const result = await pool.query(query, values);
     console.log('Inserted into database:', result.rows[0].id);
+    
+    // Send email to applicant
+    await sendEmail(
+      email,
+      'Application Received - Prajaya Foundation',
+      `Hello ${name},\n\nYour application has been successfully submitted. Results will be sent shortly.\n\nThank you,\nPrajaya Foundation`,
+      `<p>Hello <strong>${name}</strong>,</p><p>Your application has been successfully submitted. Results will be sent shortly.</p><p>Thank you,<br>Prajaya Foundation</p>`
+    );
+
+    // Send notification email to admin
+    await sendEmail(
+      process.env.ADMIN_EMAIL || 'admin@prajaya.org', // Configure ADMIN_EMAIL in .env
+      'New Volunteer Application Received',
+      `A new application has been received from ${name} (${email}). Please check the admin panel.`,
+      `<p>A new application has been received from <strong>${name}</strong> (${email}). Please log in to the admin panel to review it.</p>`
+    );
+
     res.status(200).json({ success: true, message: 'Application received', data: result.rows[0] });
   } catch (error) {
     console.error('Submission error:', error);
@@ -270,6 +299,90 @@ app.get('/api/v1/applications', async (req, res) => {
   } catch (error) {
     console.error('Database fetch error:', error);
     res.status(500).json({ success: false, message: 'Server error' });
+  }
+});
+
+// Update application status
+app.patch('/api/v1/applications/:id/status', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { status, reason } = req.body;
+    
+    if (!['approved', 'rejected'].includes(status)) {
+      return res.status(400).json({ success: false, message: 'Invalid status' });
+    }
+
+    const result = await pool.query(
+      'UPDATE applications SET status = $1, admin_reason = $2 WHERE id = $3 RETURNING *',
+      [status, reason, id]
+    );
+
+    if (result.rowCount === 0) {
+      return res.status(404).json({ success: false, message: 'Application not found' });
+    }
+
+    const appData = result.rows[0];
+    
+    // Send email to applicant about decision
+    const decision = status === 'approved' ? 'Approved' : 'Disapproved';
+    await sendEmail(
+      appData.email,
+      `Update on Your Prajaya Foundation Application`,
+      `Hello ${appData.name},\n\nYour application has been ${decision}.\nReason: ${reason}\n\nThank you,\nPrajaya Foundation`,
+      `<p>Hello <strong>${appData.name}</strong>,</p><p>Your application has been <strong>${decision}</strong>.</p><p><strong>Reason:</strong> ${reason}</p><p>Thank you,<br>Prajaya Foundation</p>`
+    );
+
+    res.status(200).json({ success: true, data: appData });
+  } catch (error) {
+    console.error('Update status error:', error);
+    res.status(500).json({ success: false, message: 'Server error' });
+  }
+});
+
+// Submit a suggestion
+app.post('/api/v1/suggestions', async (req, res) => {
+  try {
+    const { name, email, suggestion } = req.body;
+    
+    const result = await pool.query(
+      'INSERT INTO suggestions (name, email, suggestion) VALUES ($1, $2, $3) RETURNING *',
+      [name, email, suggestion]
+    );
+
+    // Send email notification to admin about suggestion
+    await sendEmail(
+      process.env.ADMIN_EMAIL || 'admin@prajaya.org',
+      'New Suggestion Received - Prajaya Foundation',
+      `New suggestion from ${name} (${email}):\n\n${suggestion}`,
+      `<p>New suggestion from <strong>${name}</strong> (${email}):</p><p>${suggestion}</p>`
+    );
+
+    res.status(200).json({ success: true, message: 'Suggestion received', data: result.rows[0] });
+  } catch (error) {
+    console.error('Suggestion error:', error);
+    res.status(500).json({ success: false, message: 'Server error' });
+  }
+});
+
+// Admin Panel: Fetch suggestions
+app.get('/api/v1/suggestions', async (req, res) => {
+  try {
+    const result = await pool.query('SELECT * FROM suggestions ORDER BY created_at DESC');
+    res.status(200).json({ success: true, data: result.rows });
+  } catch (error) {
+    console.error('Database fetch error:', error);
+    res.status(500).json({ success: false, message: 'Server error' });
+  }
+});
+
+// Admin Login
+app.post('/api/v1/admin/login', (req, res) => {
+  const { password } = req.body;
+  const adminPassword = process.env.ADMIN_PASSWORD || 'prajaya123';
+  if (password === adminPassword) {
+    res.status(200).json({ success: true, token: 'admin_token_mock' });
+  } else {
+    res.status(401).json({ success: false, message: 'Invalid password' });
   }
 });
 

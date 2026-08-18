@@ -1867,15 +1867,15 @@
                 <h2 class="section-title" style="margin-bottom: 30px; text-align: center;">Suggestion Space</h2>
                 <p style="margin-bottom: 30px; text-align: center;">Have an idea, query, or suggestion? We value your input. Share your thoughts directly with our founder.</p>
                 
-                <form action="mailto:prajayafoundation@gmail.com" method="POST" enctype="text/plain">
+                <form id="suggestionForm">
                     <div class="form-group">
-                        <input type="text" class="form-control" name="Name" placeholder="Your Name" required>
+                        <input type="text" class="form-control" name="name" placeholder="Your Name" required>
                     </div>
                     <div class="form-group">
-                        <input type="email" class="form-control" name="Email" placeholder="Your Email" required>
+                        <input type="email" class="form-control" name="email" placeholder="Your Email" required>
                     </div>
                     <div class="form-group">
-                        <select class="form-control" name="Subject" required style="appearance: none; cursor: pointer;">
+                        <select class="form-control" name="subject" required style="appearance: none; cursor: pointer;">
                             <option value="" disabled selected>What is this regarding?</option>
                             <option value="Suggest a Project">Suggest a Project</option>
                             <option value="Event Idea">Event Idea</option>
@@ -1885,10 +1885,57 @@
                         </select>
                     </div>
                     <div class="form-group">
-                        <textarea class="form-control" name="Suggestion" rows="4" placeholder="Elaborate on your project idea or suggestion..." required></textarea>
+                        <textarea class="form-control" name="suggestion" rows="4" placeholder="Elaborate on your project idea or suggestion..." required></textarea>
                     </div>
                     <button type="submit" class="btn btn-outline" style="width: 100%;">Send Message</button>
+                    <div id="suggestionFormResult" style="margin-top: 15px; text-align: center; display: none;"></div>
                 </form>
+
+                <script>
+                    document.getElementById('suggestionForm').addEventListener('submit', async function(e) {
+                        e.preventDefault();
+                        const btn = this.querySelector('button[type="submit"]');
+                        const resultDiv = document.getElementById('suggestionFormResult');
+                        
+                        btn.textContent = 'Sending...';
+                        btn.disabled = true;
+                        
+                        const formData = new FormData(this);
+                        const subject = formData.get('subject');
+                        const suggestionText = formData.get('suggestion');
+                        
+                        const payload = {
+                            name: formData.get('name'),
+                            email: formData.get('email'),
+                            suggestion: `[${subject}] ${suggestionText}`
+                        };
+                        
+                        try {
+                            const res = await fetch('/api/v1/suggestions', {
+                                method: 'POST',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify(payload)
+                            });
+                            
+                            const data = await res.json();
+                            if(data.success) {
+                                resultDiv.style.display = 'block';
+                                resultDiv.style.color = '#10b981';
+                                resultDiv.textContent = 'Thank you for your suggestion!';
+                                this.reset();
+                            } else {
+                                throw new Error(data.message || 'Error submitting suggestion.');
+                            }
+                        } catch (err) {
+                            resultDiv.style.display = 'block';
+                            resultDiv.style.color = '#ef4444';
+                            resultDiv.textContent = err.message;
+                        } finally {
+                            btn.textContent = 'Send Message';
+                            btn.disabled = false;
+                        }
+                    });
+                </script>
             </div>
         </div>
     </section>
