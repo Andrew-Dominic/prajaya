@@ -1697,6 +1697,9 @@
                 <h3 class="form-section-title"><i class="fas fa-file-alt" style="color: var(--color-accent);"></i> Documents</h3>
                 <div class="form-group">
                     <label class="form-label">Resume / CV (Optional for Below 18)</label>
+                    <div style="font-size: 0.85rem; color: var(--color-text); margin-bottom: 10px; line-height: 1.4;">
+                        <i class="fas fa-exclamation-circle" style="color: #f59e0b; margin-right: 4px;"></i> Max file size: <strong>500KB</strong>. If your PDF is larger, please <a href="https://www.ilovepdf.com/compress_pdf" target="_blank" style="color: var(--color-accent); text-decoration: underline;">compress it here</a> first.
+                    </div>
                     <div class="file-upload-wrapper">
                         <input type="file" class="file-upload-input" id="resumeUpload" name="resume" accept=".pdf">
                         <div class="file-upload-button" id="uploadBtnText">
@@ -2370,8 +2373,8 @@
             fileInput.addEventListener('change', function(e) {
                 if(this.files && this.files.length > 0) {
                     const file = this.files[0];
-                    if (file.size > 2 * 1024 * 1024) { // 2MB limit
-                        alert("Please upload a resume smaller than 2MB.");
+                    if (file.size > 500 * 1024) { // 500KB limit
+                        alert("Resume is too large! Please upload a PDF smaller than 500KB. Use the compressor link above if needed.");
                         this.value = ""; // Clear the input
                         if (spanText) {
                             spanText.textContent = "Upload Resume (PDF)";
