@@ -1,15 +1,20 @@
 {
-  "version": 2,
-  "builds": [
+  "rewrites": [
     {
-      "src": "backend/server.js",
-      "use": "@vercel/node"
-    }
-  ],
-  "routes": [
+      "source": "/api/:match*",
+      "destination": "/backend/server.js"
+    },
     {
-      "src": "/(.*)",
-      "dest": "backend/server.js"
+      "source": "/admin",
+      "destination": "/admin/index.html"
+    },
+    {
+      "source": "/admin/:match*",
+      "destination": "/admin/:match*"
+    },
+    {
+      "source": "/:match*",
+      "destination": "/frontend/:match*"
     }
   ]
 }

@@ -63,8 +63,9 @@ app.use(
 
 app.use(
   cors({
-    origin: config.frontendUrl,
-    methods: ['GET', 'POST', 'PATCH', 'DELETE'],
+    origin: (origin, callback) => callback(null, true), // Reflect origin dynamically
+    credentials: true,
+    methods: ['GET', 'POST', 'PATCH', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization'],
   })
 );
