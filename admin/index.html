@@ -696,8 +696,17 @@
             const photoLink = app.photo_path 
                 ? `<a href="${getFileUrl(app.photo_path)}" target="_blank" style="color: var(--color-accent); text-decoration: underline;">View Photo <i class="fas fa-external-link-alt"></i></a>` 
                 : 'Not provided';
+                
+            const photoPreview = app.photo_path 
+                ? `<div style="text-align: center; margin-bottom: 25px;">
+                       <a href="${getFileUrl(app.photo_path)}" target="_blank">
+                           <img src="${getFileUrl(app.photo_path)}" alt="Applicant Photo" style="width: 120px; height: 120px; object-fit: cover; border-radius: 50%; border: 3px solid var(--color-accent); box-shadow: 0 4px 15px rgba(0,0,0,0.3); cursor: pointer; transition: transform 0.2s;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
+                       </a>
+                   </div>`
+                : '';
 
             const html = `
+                ${photoPreview}
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
                     <div class="detail-group">
                         <span class="detail-label">Full Name</span>
