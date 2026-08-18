@@ -27,6 +27,10 @@
       "destination": "/admin/:match*"
     },
     {
+      "source": "/",
+      "destination": "/frontend/index.html"
+    },
+    {
       "source": "/:match*",
       "destination": "/frontend/:match*"
     }
