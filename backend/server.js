@@ -12,6 +12,7 @@ const path = require('path');
 const fs = require('fs');
 const multer = require('multer');
 const { createClient } = require('@supabase/supabase-js');
+const jwt = require('jsonwebtoken');
 
 const config = require('./config');
 const { globalLimiter } = require('./middlewares/rateLimiter.middleware');
@@ -166,8 +167,25 @@ app.post('/api/v1/applications', upload.fields([{ name: 'resume', maxCount: 1 },
   }
 });
 
+// Admin Auth Middleware
+const requireAuth = (req, res, next) => {
+  const authHeader = req.headers.authorization;
+  if (!authHeader || !authHeader.startsWith('Bearer ')) {
+    return res.status(401).json({ success: false, message: 'Unauthorized access. Please log in.' });
+  }
+  const token = authHeader.split(' ')[1];
+  try {
+    const JWT_SECRET = process.env.JWT_SECRET || 'prajaya_super_secure_secret_key_2026';
+    const decoded = jwt.verify(token, JWT_SECRET);
+    req.admin = decoded;
+    next();
+  } catch (err) {
+    return res.status(401).json({ success: false, message: 'Invalid or expired session. Please log in again.' });
+  }
+};
+
 // Fetch all applications
-app.get('/api/v1/applications', async (req, res) => {
+app.get('/api/v1/applications', requireAuth, async (req, res) => {
   try {
     const { data, error } = await supabase
       .from('applications')
@@ -183,7 +201,7 @@ app.get('/api/v1/applications', async (req, res) => {
 });
 
 // Update application status
-app.patch('/api/v1/applications/:id/status', async (req, res) => {
+app.patch('/api/v1/applications/:id/status', requireAuth, async (req, res) => {
   try {
     const { id } = req.params;
     const { status, reason } = req.body;
@@ -248,7 +266,7 @@ app.post('/api/v1/suggestions', async (req, res) => {
 });
 
 // Fetch suggestions
-app.get('/api/v1/suggestions', async (req, res) => {
+app.get('/api/v1/suggestions', requireAuth, async (req, res) => {
   try {
     const { data, error } = await supabase
       .from('suggestions')
@@ -268,7 +286,9 @@ app.post('/api/v1/admin/login', (req, res) => {
   const { password } = req.body;
   const adminPassword = process.env.ADMIN_PASSWORD || 'prajaya123';
   if (password === adminPassword) {
-    res.status(200).json({ success: true, token: 'admin_token_mock' });
+    const JWT_SECRET = process.env.JWT_SECRET || 'prajaya_super_secure_secret_key_2026';
+    const token = jwt.sign({ role: 'admin', timestamp: Date.now() }, JWT_SECRET, { expiresIn: '12h' });
+    res.status(200).json({ success: true, token });
   } else {
     res.status(401).json({ success: false, message: 'Invalid password' });
   }

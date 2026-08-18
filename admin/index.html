@@ -453,6 +453,81 @@
             transform: translateY(0) scale(1);
         }
 
+        /* Login Modal Styles */
+        .login-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--color-bg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            transition: opacity 0.5s ease;
+        }
+
+        .login-box {
+            background: #111421;
+            padding: 50px;
+            border-radius: 20px;
+            border: 1px solid var(--color-border);
+            box-shadow: 0 30px 60px rgba(0,0,0,0.6);
+            width: 100%;
+            max-width: 450px;
+            text-align: center;
+        }
+
+        .login-box h2 {
+            font-size: 1.8rem;
+            margin-bottom: 30px;
+            color: var(--color-accent);
+        }
+
+        .login-input {
+            width: 100%;
+            padding: 15px 20px;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid var(--color-border);
+            border-radius: 12px;
+            color: var(--color-heading);
+            font-size: 1rem;
+            margin-bottom: 20px;
+            outline: none;
+            transition: var(--transition);
+        }
+
+        .login-input:focus {
+            border-color: var(--color-accent);
+            box-shadow: 0 0 15px rgba(212, 166, 90, 0.2);
+        }
+
+        .login-btn {
+            width: 100%;
+            padding: 16px;
+            background: var(--color-accent);
+            color: #000;
+            border: none;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .login-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(212, 166, 90, 0.3);
+        }
+
+        .login-error {
+            color: var(--color-danger);
+            margin-bottom: 15px;
+            font-size: 0.9rem;
+            display: none;
+        }
+
         .modal-header {
             display: flex;
             justify-content: space-between;
@@ -522,6 +597,18 @@
     </style>
 </head>
 <body>
+    <!-- Secure Login Overlay -->
+    <div class="login-overlay" id="loginOverlay">
+        <div class="login-box">
+            <div class="logo-circle" style="margin: 0 auto 20px; width: 60px; height: 60px; font-size: 1.8rem;">P</div>
+            <h2>Admin Authentication</h2>
+            <div class="login-error" id="loginError">Invalid credentials. Please try again.</div>
+            <form id="loginForm" onsubmit="handleLogin(event)">
+                <input type="password" id="adminPassword" class="login-input" placeholder="Enter Secure Master Password" required autocomplete="current-password">
+                <button type="submit" class="login-btn" id="loginBtn">Authenticate <i class="fas fa-lock"></i></button>
+            </form>
+        </div>
+    </div>
 
     <!-- Sidebar -->
     <aside class="sidebar">
@@ -658,16 +745,107 @@
 
     <script>
         let currentApplications = [];
+        let authToken = localStorage.getItem('prajaya_admin_token');
+
+        // Check authentication status on load
+        function checkAuth() {
+            if (authToken) {
+                document.getElementById('loginOverlay').style.opacity = '0';
+                setTimeout(() => {
+                    document.getElementById('loginOverlay').style.display = 'none';
+                    fetchApplications(); // Only fetch if logged in
+                }, 500);
+            } else {
+                document.getElementById('loginOverlay').style.display = 'flex';
+                document.getElementById('loginOverlay').style.opacity = '1';
+            }
+        }
+
+        // Handle Login Submission
+        async function handleLogin(e) {
+            e.preventDefault();
+            const password = document.getElementById('adminPassword').value;
+            const btn = document.getElementById('loginBtn');
+            const errorDiv = document.getElementById('loginError');
+            
+            btn.innerHTML = '<i class="fas fa-circle-notch fa-spin"></i> Verifying...';
+            btn.disabled = true;
+            errorDiv.style.display = 'none';
+
+            try {
+                const response = await fetch('/api/v1/admin/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ password })
+                });
+                
+                const result = await response.json();
+                
+                if (result.success && result.token) {
+                    authToken = result.token;
+                    localStorage.setItem('prajaya_admin_token', authToken);
+                    checkAuth();
+                } else {
+                    errorDiv.style.display = 'block';
+                    errorDiv.textContent = result.message || 'Invalid password';
+                }
+            } catch (err) {
+                errorDiv.style.display = 'block';
+                errorDiv.textContent = 'Server error. Please try again.';
+            } finally {
+                btn.innerHTML = 'Authenticate <i class="fas fa-lock"></i>';
+                btn.disabled = false;
+            }
+        }
+
+        // Handle Logout
+        function handleLogout() {
+            localStorage.removeItem('prajaya_admin_token');
+            authToken = null;
+            document.getElementById('adminPassword').value = '';
+            document.getElementById('applications-table-body').innerHTML = '';
+            document.getElementById('total-count').textContent = '0';
+            checkAuth();
+        }
+
+        // Add logout listener
+        document.querySelector('.logout-link').addEventListener('click', (e) => {
+            e.preventDefault();
+            handleLogout();
+        });
+
+        // Helper to append Auth Headers
+        const getAuthHeaders = () => ({
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${authToken}`
+        });
+
+        // Handle 401 Unauthorized globally
+        function handleUnauthorized(response) {
+            if (response.status === 401) {
+                alert('Session expired or unauthorized. Please log in again.');
+                handleLogout();
+                return true;
+            }
+            return false;
+        }
 
         // Fetch applications from the backend API
         async function fetchApplications() {
+            if (!authToken) return;
+            
             const tableBody = document.getElementById('applications-table-body');
             const totalCount = document.getElementById('total-count');
             
-            tableBody.innerHTML = '<tr><td colspan="6" class="empty-state"><i class="fas fa-circle-notch fa-spin"></i><br>Refreshing data...</td></tr>';
+            tableBody.innerHTML = '<tr><td colspan="27" class="empty-state"><i class="fas fa-circle-notch fa-spin"></i><br>Refreshing data...</td></tr>';
             
             try {
-                const response = await fetch('/api/v1/applications');
+                const response = await fetch('/api/v1/applications', {
+                    headers: getAuthHeaders()
+                });
+                
+                if (handleUnauthorized(response)) return;
+                
                 const result = await response.json();
                 
                 if (result.success && result.data.length > 0) {
@@ -889,9 +1067,12 @@
             try {
                 const response = await fetch(`/api/v1/applications/${id}/status`, {
                     method: 'PATCH',
-                    headers: { 'Content-Type': 'application/json' },
+                    headers: getAuthHeaders(),
                     body: JSON.stringify({ status, reason })
                 });
+                
+                if (handleUnauthorized(response)) return;
+                
                 const result = await response.json();
                 if (result.success) {
                     alert(`Application ${status} successfully! An email has been sent to the applicant.`);
@@ -918,7 +1099,7 @@
         });
 
         // Load data on start
-        window.addEventListener('DOMContentLoaded', fetchApplications);
+        window.addEventListener('DOMContentLoaded', checkAuth);
     </script>
 </body>
 </html>
