@@ -239,6 +239,59 @@ app.patch('/api/v1/applications/:id/status', requireAuth, async (req, res) => {
   }
 });
 
+// Delete application
+app.delete('/api/v1/applications/:id', requireAuth, async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { password } = req.body;
+    
+    // Verify master password again for critical action
+    const adminPassword = process.env.ADMIN_PASSWORD || 'prajaya123';
+    if (password !== adminPassword) {
+      return res.status(401).json({ success: false, message: 'Invalid master password. Deletion aborted.' });
+    }
+
+    // Get the application to find file paths
+    const { data: appData, error: fetchError } = await supabase
+      .from('applications')
+      .select('resume_path, photo_path')
+      .eq('id', id)
+      .single();
+
+    if (fetchError) {
+      return res.status(404).json({ success: false, message: 'Application not found' });
+    }
+
+    // Delete files from storage to save space
+    if (appData.resume_path) {
+      const pathPart = appData.resume_path.includes('http') 
+        ? appData.resume_path.split('/uploads/')[1] 
+        : appData.resume_path;
+      if (pathPart) await supabase.storage.from('uploads').remove([pathPart]);
+    }
+    
+    if (appData.photo_path) {
+      const pathPart = appData.photo_path.includes('http') 
+        ? appData.photo_path.split('/uploads/')[1] 
+        : appData.photo_path;
+      if (pathPart) await supabase.storage.from('uploads').remove([pathPart]);
+    }
+
+    // Delete from database
+    const { error: deleteError } = await supabase
+      .from('applications')
+      .delete()
+      .eq('id', id);
+
+    if (deleteError) throw deleteError;
+
+    res.status(200).json({ success: true, message: 'Application and associated files deleted successfully' });
+  } catch (error) {
+    console.error('Delete error:', error);
+    res.status(500).json({ success: false, message: 'Server error during deletion' });
+  }
+});
+
 // Submit a suggestion
 app.post('/api/v1/suggestions', async (req, res) => {
   try {

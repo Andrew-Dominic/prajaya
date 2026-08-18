@@ -1053,6 +1053,9 @@
                     <button onclick="updateStatus('${app.id}', 'approved')" style="flex: 1; padding: 12px; border-radius: 8px; background: rgba(16, 185, 129, 0.1); color: var(--color-success); border: 1px solid var(--color-success); cursor: pointer; font-weight: 500; transition: all 0.2s;">Approve Application</button>
                     <button onclick="updateStatus('${app.id}', 'rejected')" style="flex: 1; padding: 12px; border-radius: 8px; background: rgba(239, 68, 68, 0.1); color: var(--color-danger); border: 1px solid var(--color-danger); cursor: pointer; font-weight: 500; transition: all 0.2s;">Reject Application</button>
                 </div>
+                <div style="margin-top: 15px; display: flex;">
+                    <button onclick="deleteApplication('${app.id}')" style="flex: 1; padding: 12px; border-radius: 8px; background: transparent; color: var(--color-text-light); border: 1px solid var(--color-border); cursor: pointer; font-weight: 500; transition: all 0.2s; font-size: 0.9rem;" onmouseover="this.style.color='var(--color-danger)'; this.style.borderColor='var(--color-danger)';" onmouseout="this.style.color='var(--color-text-light)'; this.style.borderColor='var(--color-border)';"><i class="fas fa-trash-alt"></i> Delete Permanently</button>
+                </div>
             `;
 
             document.getElementById('modal-body-content').innerHTML = html;
@@ -1084,6 +1087,36 @@
             } catch (err) {
                 console.error(err);
                 alert('Server error while updating status');
+            }
+        }
+
+        async function deleteApplication(id) {
+            const confirmDelete = confirm('Are you sure you want to permanently delete this application? This action cannot be undone and will delete associated files from storage.');
+            if (!confirmDelete) return;
+
+            const password = prompt('SECURITY CHECK: Please enter the Master Admin Password to authorize this deletion:');
+            if (!password) return; // User cancelled
+
+            try {
+                const response = await fetch(`/api/v1/applications/${id}`, {
+                    method: 'DELETE',
+                    headers: getAuthHeaders(),
+                    body: JSON.stringify({ password })
+                });
+
+                if (handleUnauthorized(response)) return;
+
+                const result = await response.json();
+                if (result.success) {
+                    alert('Application deleted successfully!');
+                    closeModal();
+                    fetchApplications(); // Refresh list
+                } else {
+                    alert(result.message || 'Error deleting application.');
+                }
+            } catch (err) {
+                console.error(err);
+                alert('Server error while trying to delete application.');
             }
         }
 
