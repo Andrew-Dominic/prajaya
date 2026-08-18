@@ -310,6 +310,7 @@
 
         .table-wrapper {
             overflow-x: auto;
+            width: 100%;
         }
 
         table {
@@ -323,6 +324,12 @@
             text-align: left;
             border-bottom: 1px solid var(--color-border);
             white-space: nowrap;
+        }
+
+        .truncate-td {
+            max-width: 200px;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
 
         th {
@@ -588,26 +595,49 @@
                     <i class="fas fa-rotate-right"></i> Refresh Data
                 </button>
             </div>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Name</th>
-                        <th>Email</th>
-                        <th>Phone</th>
-                        <th>Applied On</th>
-                        <th>Status</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody id="applications-table-body">
-                    <tr>
-                        <td colspan="6" class="empty-state">
-                            <i class="fas fa-circle-notch fa-spin"></i><br>
-                            Loading applications...
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Category</th>
+                            <th>Age</th>
+                            <th>DOB</th>
+                            <th>Blood Grp</th>
+                            <th>Email</th>
+                            <th>Alt Email</th>
+                            <th>Phone</th>
+                            <th>Alt Phone</th>
+                            <th>Hometown</th>
+                            <th>Current City</th>
+                            <th>State</th>
+                            <th>Temp Address</th>
+                            <th>Perm Address</th>
+                            <th>Education</th>
+                            <th>Degree</th>
+                            <th>Current Status</th>
+                            <th>Languages</th>
+                            <th>Interest</th>
+                            <th>Hobbies</th>
+                            <th>Motivation</th>
+                            <th>Experience</th>
+                            <th>Photo</th>
+                            <th>Resume</th>
+                            <th>Applied On</th>
+                            <th>Status</th>
+                            <th style="position: sticky; right: 0; background: #151828; z-index: 1; border-left: 1px solid var(--color-border);">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="applications-table-body">
+                        <tr>
+                            <td colspan="27" class="empty-state">
+                                <i class="fas fa-circle-notch fa-spin"></i><br>
+                                Loading applications...
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </main>
 
@@ -648,15 +678,59 @@
                             year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute:'2-digit'
                         });
                         
+                        const dob = app.dob ? new Date(app.dob).toLocaleDateString('en-US') : 'N/A';
+                        const getFileUrl = (path) => path.startsWith('http') ? path : `/uploads/${path}`;
+                        const photoLink = app.photo_path ? `<a href="${getFileUrl(app.photo_path)}" target="_blank" style="color:var(--color-accent); text-decoration: underline;"><i class="fas fa-image"></i> View</a>` : '<span style="color: #666;">N/A</span>';
+                        const resumeLink = app.resume_path ? `<a href="${getFileUrl(app.resume_path)}" target="_blank" style="color:var(--color-accent); text-decoration: underline;"><i class="fas fa-file-pdf"></i> View</a>` : '<span style="color: #666;">N/A</span>';
+                        
+                        let statusBadge = '<span class="status-badge" style="background: rgba(16, 185, 129, 0.1); color: var(--color-success); border: 1px solid var(--color-success);">New</span>';
+                        if(app.status === 'approved') statusBadge = '<span class="status-badge" style="background: rgba(16, 185, 129, 0.2); color: var(--color-success); border: 1px solid var(--color-success);">Approved</span>';
+                        else if(app.status === 'rejected') statusBadge = '<span class="status-badge" style="background: rgba(239, 68, 68, 0.2); color: var(--color-danger); border: 1px solid var(--color-danger);">Rejected</span>';
+                        
+                        // Sanitize to prevent HTML injection breaks
+                        const escapeHTML = (str) => {
+                            if (!str) return '';
+                            return String(str).replace(/[&<>'"]/g, 
+                                tag => ({
+                                    '&': '&amp;',
+                                    '<': '&lt;',
+                                    '>': '&gt;',
+                                    "'": '&#39;',
+                                    '"': '&quot;'
+                                }[tag] || tag)
+                            );
+                        };
+
                         html += `
                             <tr>
-                                <td class="name-col">${app.name}</td>
-                                <td>${app.email}</td>
-                                <td>${app.phone}</td>
+                                <td class="name-col">${escapeHTML(app.name)}</td>
+                                <td>${escapeHTML(app.category || 'N/A')}</td>
+                                <td>${escapeHTML(app.age || 'N/A')}</td>
+                                <td>${dob}</td>
+                                <td>${escapeHTML(app.blood_group || 'N/A')}</td>
+                                <td>${escapeHTML(app.email)}</td>
+                                <td>${escapeHTML(app.alt_email || 'N/A')}</td>
+                                <td>${escapeHTML(app.phone)}</td>
+                                <td>${escapeHTML(app.alt_phone || 'N/A')}</td>
+                                <td>${escapeHTML(app.hometown || 'N/A')}</td>
+                                <td>${escapeHTML(app.current_city || 'N/A')}</td>
+                                <td>${escapeHTML(app.state || 'N/A')}</td>
+                                <td class="truncate-td" title="${escapeHTML(app.temp_address || '')}">${escapeHTML(app.temp_address || 'N/A')}</td>
+                                <td class="truncate-td" title="${escapeHTML(app.perm_address || '')}">${escapeHTML(app.perm_address || 'N/A')}</td>
+                                <td>${escapeHTML(app.education_level || 'N/A')}</td>
+                                <td class="truncate-td" title="${escapeHTML(app.degree || '')}">${escapeHTML(app.degree || 'N/A')}</td>
+                                <td>${escapeHTML(app.current_status || 'N/A')}</td>
+                                <td>${escapeHTML(app.languages || 'N/A')}</td>
+                                <td>${escapeHTML(app.interest || 'N/A')}</td>
+                                <td class="truncate-td" title="${escapeHTML(app.hobbies || '')}">${escapeHTML(app.hobbies || 'N/A')}</td>
+                                <td class="truncate-td" title="${escapeHTML(app.motivation || '')}">${escapeHTML(app.motivation || 'N/A')}</td>
+                                <td class="truncate-td" title="${escapeHTML(app.experience || '')}">${escapeHTML(app.experience || 'N/A')}</td>
+                                <td>${photoLink}</td>
+                                <td>${resumeLink}</td>
                                 <td class="date">${date}</td>
-                                <td><span class="status-badge">New</span></td>
-                                <td>
-                                    <button class="action-btn" title="View Details" onclick="viewApplication('${app.id}')"><i class="fas fa-arrow-right"></i></button>
+                                <td>${statusBadge}</td>
+                                <td style="position: sticky; right: 0; background: #151828; z-index: 1; border-left: 1px solid var(--color-border); text-align: center;">
+                                    <button class="action-btn" title="View Details in Modal" onclick="viewApplication('${app.id}')"><i class="fas fa-expand-arrows-alt"></i></button>
                                 </td>
                             </tr>
                         `;
@@ -665,7 +739,7 @@
                     tableBody.innerHTML = html;
                 } else {
                     currentApplications = [];
-                    tableBody.innerHTML = '<tr><td colspan="6" class="empty-state"><i class="fas fa-folder-open"></i><br>No applications found in the database.</td></tr>';
+                    tableBody.innerHTML = '<tr><td colspan="27" class="empty-state"><i class="fas fa-folder-open"></i><br>No applications found in the database.</td></tr>';
                     totalCount.textContent = '0';
                 }
             } catch (error) {
