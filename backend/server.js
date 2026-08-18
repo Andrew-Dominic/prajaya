@@ -13,14 +13,23 @@ const fs = require('fs');
 const multer = require('multer');
 const { createClient } = require('@supabase/supabase-js');
 const jwt = require('jsonwebtoken');
+const bcrypt = require('bcryptjs');
+const cookieParser = require('cookie-parser');
+const crypto = require('crypto');
 
 const config = require('./config');
-const { globalLimiter } = require('./middlewares/rateLimiter.middleware');
+const { globalLimiter, applicationLimiter, authLimiter, suggestionLimiter } = require('./middlewares/rateLimiter.middleware');
 const { errorHandler, AppError } = require('./middlewares/error.middleware');
 const { sendEmail } = require('./email');
 
 // Initialize Express
 const app = express();
+
+// Security: Secure JWT Secret & Hash
+const JWT_SECRET = process.env.JWT_SECRET || crypto.randomBytes(64).toString('hex');
+const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'prajaya123';
+// Generate bcrypt hash of the password on server start to defeat timing attacks
+const adminPasswordHash = bcrypt.hashSync(ADMIN_PASSWORD, 12);
 
 // Initialize Supabase Client
 const supabaseUrl = process.env.SUPABASE_URL || 'https://bnmgzrskfwuuhlnxavan.supabase.co';
@@ -75,6 +84,7 @@ app.use(globalLimiter);
 // ──────────────────────────────────────────────
 app.use(express.json({ limit: '1mb' }));
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
+app.use(cookieParser());
 
 // ──────────────────────────────────────────────
 // 5. STATIC FILE SERVING
@@ -111,7 +121,7 @@ async function uploadToSupabase(file, folder) {
 }
 
 // Submit volunteer application
-app.post('/api/v1/applications', upload.fields([{ name: 'resume', maxCount: 1 }, { name: 'photo', maxCount: 1 }]), async (req, res) => {
+app.post('/api/v1/applications', applicationLimiter, upload.fields([{ name: 'resume', maxCount: 1 }, { name: 'photo', maxCount: 1 }]), async (req, res) => {
   console.log('--- NEW APPLICATION RECEIVED ---');
   try {
     const { 
@@ -167,15 +177,13 @@ app.post('/api/v1/applications', upload.fields([{ name: 'resume', maxCount: 1 },
   }
 });
 
-// Admin Auth Middleware
+// Secure Admin Auth Middleware via HttpOnly Cookies
 const requireAuth = (req, res, next) => {
-  const authHeader = req.headers.authorization;
-  if (!authHeader || !authHeader.startsWith('Bearer ')) {
+  const token = req.cookies.admin_session || (req.headers.authorization && req.headers.authorization.split(' ')[1]);
+  if (!token) {
     return res.status(401).json({ success: false, message: 'Unauthorized access. Please log in.' });
   }
-  const token = authHeader.split(' ')[1];
   try {
-    const JWT_SECRET = process.env.JWT_SECRET || 'prajaya_super_secure_secret_key_2026';
     const decoded = jwt.verify(token, JWT_SECRET);
     req.admin = decoded;
     next();
@@ -245,9 +253,8 @@ app.delete('/api/v1/applications/:id', requireAuth, async (req, res) => {
     const { id } = req.params;
     const { password } = req.body;
     
-    // Verify master password again for critical action
-    const adminPassword = process.env.ADMIN_PASSWORD || 'prajaya123';
-    if (password !== adminPassword) {
+    // Constant time comparison via bcrypt for critical action
+    if (!password || !bcrypt.compareSync(password, adminPasswordHash)) {
       return res.status(401).json({ success: false, message: 'Invalid master password. Deletion aborted.' });
     }
 
@@ -293,7 +300,7 @@ app.delete('/api/v1/applications/:id', requireAuth, async (req, res) => {
 });
 
 // Submit a suggestion
-app.post('/api/v1/suggestions', async (req, res) => {
+app.post('/api/v1/suggestions', suggestionLimiter, async (req, res) => {
   try {
     const { name, email, suggestion } = req.body;
     
@@ -335,16 +342,37 @@ app.get('/api/v1/suggestions', requireAuth, async (req, res) => {
 });
 
 // Admin Login
-app.post('/api/v1/admin/login', (req, res) => {
+app.post('/api/v1/admin/login', authLimiter, (req, res) => {
   const { password } = req.body;
-  const adminPassword = process.env.ADMIN_PASSWORD || 'prajaya123';
-  if (password === adminPassword) {
-    const JWT_SECRET = process.env.JWT_SECRET || 'prajaya_super_secure_secret_key_2026';
+  if (!password) return res.status(400).json({ success: false, message: 'Password required' });
+
+  // Constant time comparison via bcrypt
+  const isValid = bcrypt.compareSync(password, adminPasswordHash);
+  if (isValid) {
     const token = jwt.sign({ role: 'admin', timestamp: Date.now() }, JWT_SECRET, { expiresIn: '12h' });
-    res.status(200).json({ success: true, token });
+    
+    res.cookie('admin_session', token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'strict',
+      maxAge: 12 * 60 * 60 * 1000 // 12 hours
+    });
+    
+    res.status(200).json({ success: true, message: 'Authenticated successfully' });
   } else {
-    res.status(401).json({ success: false, message: 'Invalid password' });
+    res.status(401).json({ success: false, message: 'Invalid secure password' });
   }
+});
+
+// Admin Logout
+app.post('/api/v1/admin/logout', (req, res) => {
+  res.clearCookie('admin_session');
+  res.status(200).json({ success: true });
+});
+
+// Admin Session Check
+app.get('/api/v1/admin/check', requireAuth, (req, res) => {
+  res.status(200).json({ success: true });
 });
 
 // ──────────────────────────────────────────────

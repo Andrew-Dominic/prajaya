@@ -745,17 +745,22 @@
 
     <script>
         let currentApplications = [];
-        let authToken = localStorage.getItem('prajaya_admin_token');
 
         // Check authentication status on load
-        function checkAuth() {
-            if (authToken) {
-                document.getElementById('loginOverlay').style.opacity = '0';
-                setTimeout(() => {
-                    document.getElementById('loginOverlay').style.display = 'none';
-                    fetchApplications(); // Only fetch if logged in
-                }, 500);
-            } else {
+        async function checkAuth() {
+            try {
+                const res = await fetch('/api/v1/admin/check');
+                if (res.ok) {
+                    document.getElementById('loginOverlay').style.opacity = '0';
+                    setTimeout(() => {
+                        document.getElementById('loginOverlay').style.display = 'none';
+                        fetchApplications(); // Only fetch if logged in
+                    }, 500);
+                } else {
+                    document.getElementById('loginOverlay').style.display = 'flex';
+                    document.getElementById('loginOverlay').style.opacity = '1';
+                }
+            } catch (err) {
                 document.getElementById('loginOverlay').style.display = 'flex';
                 document.getElementById('loginOverlay').style.opacity = '1';
             }
@@ -781,9 +786,7 @@
                 
                 const result = await response.json();
                 
-                if (result.success && result.token) {
-                    authToken = result.token;
-                    localStorage.setItem('prajaya_admin_token', authToken);
+                if (result.success) {
                     checkAuth();
                 } else {
                     errorDiv.style.display = 'block';
@@ -799,9 +802,8 @@
         }
 
         // Handle Logout
-        function handleLogout() {
-            localStorage.removeItem('prajaya_admin_token');
-            authToken = null;
+        async function handleLogout() {
+            await fetch('/api/v1/admin/logout', { method: 'POST' });
             document.getElementById('adminPassword').value = '';
             document.getElementById('applications-table-body').innerHTML = '';
             document.getElementById('total-count').textContent = '0';
@@ -812,12 +814,6 @@
         document.querySelector('.logout-link').addEventListener('click', (e) => {
             e.preventDefault();
             handleLogout();
-        });
-
-        // Helper to append Auth Headers
-        const getAuthHeaders = () => ({
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${authToken}`
         });
 
         // Handle 401 Unauthorized globally
@@ -832,7 +828,6 @@
 
         // Fetch applications from the backend API
         async function fetchApplications() {
-            if (!authToken) return;
             
             const tableBody = document.getElementById('applications-table-body');
             const totalCount = document.getElementById('total-count');
@@ -840,9 +835,7 @@
             tableBody.innerHTML = '<tr><td colspan="27" class="empty-state"><i class="fas fa-circle-notch fa-spin"></i><br>Refreshing data...</td></tr>';
             
             try {
-                const response = await fetch('/api/v1/applications', {
-                    headers: getAuthHeaders()
-                });
+                const response = await fetch('/api/v1/applications');
                 
                 if (handleUnauthorized(response)) return;
                 
@@ -1070,7 +1063,7 @@
             try {
                 const response = await fetch(`/api/v1/applications/${id}/status`, {
                     method: 'PATCH',
-                    headers: getAuthHeaders(),
+                    headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ status, reason })
                 });
                 
@@ -1100,7 +1093,7 @@
             try {
                 const response = await fetch(`/api/v1/applications/${id}`, {
                     method: 'DELETE',
-                    headers: getAuthHeaders(),
+                    headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ password })
                 });
 
