@@ -591,22 +591,20 @@
         }
 
         .detail-label {
-            font-size: 0.7rem;
+            font-size: 0.8rem;
             text-transform: uppercase;
             letter-spacing: 0.5px;
             color: var(--color-text-light);
-            font-weight: 600;
+            font-weight: 700;
         }
 
         .detail-value {
-            font-size: 0.9rem;
+            font-size: 1.05rem;
             color: var(--color-heading);
-            font-weight: 500;
-            padding: 12px 16px;
-            background: var(--color-bg);
-            border-radius: 8px;
-            border: 1px solid var(--color-border);
-            line-height: 1.5;
+            font-weight: 600;
+            padding: 4px 0 12px 0;
+            border-bottom: 1px solid var(--color-border);
+            line-height: 1.4;
             word-break: break-word;
         }
         
@@ -745,31 +743,12 @@
                         <tr>
                             <th>Name</th>
                             <th>Category</th>
-                            <th>Age</th>
-                            <th>DOB</th>
-                            <th>Blood Grp</th>
                             <th>Email</th>
-                            <th>Alt Email</th>
                             <th>Phone</th>
-                            <th>Alt Phone</th>
-                            <th>Hometown</th>
                             <th>Current City</th>
-                            <th>State</th>
-                            <th>Temp Address</th>
-                            <th>Perm Address</th>
-                            <th>Education</th>
-                            <th>Degree</th>
-                            <th>Current Status</th>
-                            <th>Languages</th>
-                            <th>Interest</th>
-                            <th>Hobbies</th>
-                            <th>Motivation</th>
-                            <th>Experience</th>
-                            <th>Photo</th>
-                            <th>Resume</th>
                             <th>Applied On</th>
                             <th>Status</th>
-                            <th class="sticky-actions">Actions</th>
+                            <th class="sticky-actions" style="text-align: center;">Actions</th>
                         </tr>
                     </thead>
                     <tbody id="applications-table-body">
@@ -994,34 +973,17 @@
 
                 html += `
                     <tr>
-                        <td class="name-col">${escapeHTML(app.name)}</td>
+                        <td class="name-col" style="font-weight: 600; color: var(--color-heading);">${escapeHTML(app.name)}</td>
                         <td>${escapeHTML(app.category || 'N/A')}</td>
-                        <td>${escapeHTML(app.age || 'N/A')}</td>
-                        <td>${dob}</td>
-                        <td>${escapeHTML(app.blood_group || 'N/A')}</td>
-                        <td>${escapeHTML(app.email)}</td>
-                        <td>${escapeHTML(app.alt_email || 'N/A')}</td>
+                        <td><a href="mailto:${escapeHTML(app.email)}" style="color: var(--color-accent); text-decoration: none;">${escapeHTML(app.email)}</a></td>
                         <td>${escapeHTML(app.phone)}</td>
-                        <td>${escapeHTML(app.alt_phone || 'N/A')}</td>
-                        <td>${escapeHTML(app.hometown || 'N/A')}</td>
                         <td>${escapeHTML(app.current_city || 'N/A')}</td>
-                        <td>${escapeHTML(app.state || 'N/A')}</td>
-                        <td class="truncate-td" title="${escapeHTML(app.temp_address || '')}">${escapeHTML(app.temp_address || 'N/A')}</td>
-                        <td class="truncate-td" title="${escapeHTML(app.perm_address || '')}">${escapeHTML(app.perm_address || 'N/A')}</td>
-                        <td>${escapeHTML(app.education_level || 'N/A')}</td>
-                        <td class="truncate-td" title="${escapeHTML(app.degree || '')}">${escapeHTML(app.degree || 'N/A')}</td>
-                        <td>${escapeHTML(app.current_status || 'N/A')}</td>
-                        <td>${escapeHTML(app.languages || 'N/A')}</td>
-                        <td>${escapeHTML(app.interest || 'N/A')}</td>
-                        <td class="truncate-td" title="${escapeHTML(app.hobbies || '')}">${escapeHTML(app.hobbies || 'N/A')}</td>
-                        <td class="truncate-td" title="${escapeHTML(app.motivation || '')}">${escapeHTML(app.motivation || 'N/A')}</td>
-                        <td class="truncate-td" title="${escapeHTML(app.experience || '')}">${escapeHTML(app.experience || 'N/A')}</td>
-                        <td>${photoLink}</td>
-                        <td>${resumeLink}</td>
                         <td class="date">${date}</td>
                         <td>${statusBadge}</td>
-                        <td class="sticky-actions" style="text-align: center;">
-                            <button class="action-btn" title="View Details in Modal" onclick="viewApplication('${app.id}')"><i class="fas fa-expand-arrows-alt"></i></button>
+                        <td class="sticky-actions" style="text-align: center; display: flex; justify-content: center; align-items: center;">
+                            <button class="action-btn" title="View Application Details" onclick="viewApplication('${app.id}')" style="padding: 6px 14px; background: var(--color-surface); color: var(--color-heading); border: 1px solid var(--color-border); border-radius: 6px; cursor: pointer; display: flex; align-items: center; gap: 6px; font-size: 0.85rem; transition: var(--transition); font-weight: 500;" onmouseover="this.style.background='var(--color-surface-hover)'; this.style.borderColor='var(--color-accent)';" onmouseout="this.style.background='var(--color-surface)'; this.style.borderColor='var(--color-border)';">
+                                <i class="fas fa-eye" style="color: var(--color-accent);"></i> View
+                            </button>
                         </td>
                     </tr>
                 `;
