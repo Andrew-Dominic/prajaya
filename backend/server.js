@@ -160,7 +160,35 @@ app.post('/api/v1/applications', applicationLimiter, upload.fields([{ name: 'res
       email,
       'Application Received - Prajaya Foundation',
       `Hello ${name},\n\nYour application has been successfully submitted. Results will be sent shortly.\n\nThank you,\nPrajaya Foundation`,
-      `<p>Hello <strong>${name}</strong>,</p><p>Your application has been successfully submitted. Results will be sent shortly.</p><p>Thank you,<br>Prajaya Foundation</p>`
+      `<div style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f8fafc; padding: 40px 20px; margin: 0;">
+         <div style="max-width: 600px; margin: 0 auto; background-color: #ffffff; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);">
+            <div style="background-color: #1e293b; padding: 30px; text-align: center; border-bottom: 4px solid #c59d5f;">
+              <h1 style="color: #ffffff; margin: 0; font-size: 24px; font-weight: 600; letter-spacing: 1px;">PRAJAYA FOUNDATION</h1>
+            </div>
+            <div style="padding: 40px 30px;">
+              <h2 style="color: #0f172a; margin-top: 0; margin-bottom: 20px; font-size: 20px;">Application Received</h2>
+              <p style="color: #475569; font-size: 16px; line-height: 1.6; margin-bottom: 20px;">
+                Dear <strong style="color: #0f172a;">${name}</strong>,
+              </p>
+              <p style="color: #475569; font-size: 16px; line-height: 1.6; margin-bottom: 30px;">
+                Thank you for your interest in volunteering with us. We have successfully received your application.
+              </p>
+              
+              <div style="background-color: #f1f5f9; border-left: 4px solid #10b981; padding: 18px 20px; margin-bottom: 35px; border-radius: 0 8px 8px 0;">
+                <p style="margin: 0; color: #334155; font-size: 15px; line-height: 1.6;">
+                  Your application will be reviewed by our administration team. You will receive another email notifying you of the final decision shortly.
+                </p>
+              </div>
+
+              <p style="color: #475569; font-size: 16px; line-height: 1.6;">
+                Thank you for your dedication to serving the community!<br><br>Warm Regards,<br><strong>Prajaya Foundation Team</strong>
+              </p>
+            </div>
+            <div style="background-color: #f8fafc; padding: 20px; text-align: center; border-top: 1px solid #e2e8f0;">
+              <p style="color: #94a3b8; font-size: 13px; margin: 0;">&copy; ${new Date().getFullYear()} Prajaya Foundation. All Rights Reserved.</p>
+            </div>
+         </div>
+       </div>`
     );
 
     // Send notification email to admin
@@ -264,12 +292,41 @@ app.patch('/api/v1/applications/:id/status', requireAuth, async (req, res) => {
     const appData = data[0];
     
     // Send email to applicant about decision
-    const decision = status === 'approved' ? 'Approved' : 'Disapproved';
+    const decision = status === 'approved' ? 'Selected' : 'Not Selected';
     await sendEmail(
       appData.email,
       `Update on Your Prajaya Foundation Application`,
       `Hello ${appData.name},\n\nYour application has been ${decision}.\nReason: ${reason}\n\nThank you,\nPrajaya Foundation`,
-      `<p>Hello <strong>${appData.name}</strong>,</p><p>Your application has been <strong>${decision}</strong>.</p><p><strong>Reason:</strong> ${reason}</p><p>Thank you,<br>Prajaya Foundation</p>`
+      `<div style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f8fafc; padding: 40px 20px; margin: 0;">
+         <div style="max-width: 600px; margin: 0 auto; background-color: #ffffff; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);">
+            <div style="background-color: #1e293b; padding: 30px; text-align: center; border-bottom: 4px solid #c59d5f;">
+              <h1 style="color: #ffffff; margin: 0; font-size: 24px; font-weight: 600; letter-spacing: 1px;">PRAJAYA FOUNDATION</h1>
+            </div>
+            <div style="padding: 40px 30px;">
+              <h2 style="color: #0f172a; margin-top: 0; margin-bottom: 20px; font-size: 20px;">Application Status Update</h2>
+              <p style="color: #475569; font-size: 16px; line-height: 1.6; margin-bottom: 20px;">
+                Dear <strong style="color: #0f172a;">${appData.name}</strong>,
+              </p>
+              <p style="color: #475569; font-size: 16px; line-height: 1.6; margin-bottom: 30px;">
+                We have reviewed your volunteer application. We are writing to inform you that your application has been <strong style="color: ${status === 'approved' ? '#10b981' : '#ef4444'};">${status === 'approved' ? 'SELECTED' : 'NOT SELECTED'}</strong>.
+              </p>
+              
+              <div style="background-color: #f1f5f9; border-left: 4px solid ${status === 'approved' ? '#10b981' : '#ef4444'}; padding: 18px 20px; margin-bottom: 35px; border-radius: 0 8px 8px 0;">
+                <p style="margin: 0; color: #334155; font-size: 15px; line-height: 1.8;">
+                  <strong style="color: #0f172a;">Message from Admin:</strong><br>
+                  ${reason}
+                </p>
+              </div>
+
+              <p style="color: #475569; font-size: 16px; line-height: 1.6;">
+                Thank you for your interest in volunteering with the Prajaya Foundation. We deeply appreciate your desire to serve the community.
+              </p>
+            </div>
+            <div style="background-color: #f8fafc; padding: 20px; text-align: center; border-top: 1px solid #e2e8f0;">
+              <p style="color: #94a3b8; font-size: 13px; margin: 0;">&copy; ${new Date().getFullYear()} Prajaya Foundation. All Rights Reserved.</p>
+            </div>
+         </div>
+       </div>`
     );
 
     res.status(200).json({ success: true, data: appData });
