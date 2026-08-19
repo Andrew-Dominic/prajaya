@@ -369,6 +369,18 @@
             color: var(--color-heading);
         }
 
+        .sticky-actions {
+            position: sticky;
+            right: 0;
+            background-color: #ffffff;
+            z-index: 2;
+            box-shadow: -2px 0 5px rgba(0,0,0,0.05);
+        }
+        
+        tr:hover .sticky-actions {
+            background-color: var(--color-surface-hover);
+        }
+
         .status-badge {
             display: inline-block;
             padding: 4px 10px;
@@ -384,12 +396,12 @@
         .action-btn {
             background: #ffffff;
             border: 1px solid var(--color-border);
-            height: 28px;
-            width: 28px;
+            height: 32px;
+            width: 32px;
             border-radius: 6px;
             color: var(--color-text-light);
             cursor: pointer;
-            font-size: 0.8rem;
+            font-size: 0.9rem;
             display: inline-flex;
             align-items: center;
             justify-content: center;
@@ -1074,7 +1086,7 @@
                         <td class="date">${date}</td>
                         <td>${statusBadge}</td>
                         <td class="sticky-actions" style="text-align: center;">
-                            <button class="action-btn" title="View Details in Modal" onclick="viewApplication('${app.id}')"><i class="fas fa-expand-arrows-alt"></i></button>
+                            <button class="action-btn" title="View Details in Modal" onclick="viewApplication('${app.id}')"><i class="fas fa-eye"></i></button>
                         </td>
                     </tr>
                 `;
