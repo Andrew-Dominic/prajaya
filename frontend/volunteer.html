@@ -2317,6 +2317,7 @@
                     throw new Error(data.message || 'Server error');
                 }
                 document.getElementById('volunteerForm').innerHTML = '<div style="text-align: center; padding: 40px 20px;"><i class="fas fa-check-circle" style="font-size: 4rem; color: #10b981; margin-bottom: 20px;"></i><h3 style="font-size: 1.5rem; margin-bottom: 15px; color: var(--color-heading);">Thank you for registering with PRAJAYA Foundation.</h3><p style="font-size: 1.1rem; color: var(--color-text); line-height: 1.6;">Your application has been received and will be reviewed based on programme requirements and volunteer opportunities. Submission of the form does not constitute automatic selection.</p></div>';
+                window.scrollTo({ top: document.getElementById('volunteer-page').offsetTop - 80, behavior: 'smooth' });
             })
             .catch(err => {
                 console.error("Error submitting application:", err);
