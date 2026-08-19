@@ -172,11 +172,33 @@ app.post('/api/v1/applications', applicationLimiter, upload.fields([{ name: 'res
       process.env.ADMIN_EMAIL || 'admin@prajaya.org',
       'New Volunteer Application Received',
       `A new application has been received from ${name} (${email}).\n\nReview the application here: ${adminUrl}`,
-      `<div style="font-family: sans-serif; line-height: 1.6; color: #333;">
-         <h2 style="color: #2563eb; margin-bottom: 10px;">New Volunteer Application</h2>
-         <p>A new application has been submitted by <strong>${name}</strong> (${email}).</p>
-         <p style="margin-bottom: 20px;">Please review the details and take action.</p>
-         <a href="${adminUrl}" style="display: inline-block; padding: 12px 24px; background-color: #2563eb; color: #ffffff; text-decoration: none; border-radius: 6px; font-weight: 600;">Go to Admin Dashboard</a>
+      `<div style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f8fafc; padding: 40px 20px; margin: 0;">
+         <div style="max-width: 600px; margin: 0 auto; background-color: #ffffff; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);">
+            <div style="background-color: #1e293b; padding: 30px; text-align: center; border-bottom: 4px solid #c59d5f;">
+              <h1 style="color: #ffffff; margin: 0; font-size: 24px; font-weight: 600; letter-spacing: 1px;">PRAJAYA FOUNDATION</h1>
+            </div>
+            <div style="padding: 40px 30px;">
+              <h2 style="color: #0f172a; margin-top: 0; margin-bottom: 20px; font-size: 20px;">New Volunteer Application</h2>
+              <p style="color: #475569; font-size: 16px; line-height: 1.6; margin-bottom: 30px;">
+                A new volunteer application has been submitted by <strong style="color: #0f172a;">${name}</strong> (<a href="mailto:${email}" style="color: #2563eb; text-decoration: none;">${email}</a>).
+              </p>
+              
+              <div style="background-color: #f1f5f9; border-left: 4px solid #2563eb; padding: 18px 20px; margin-bottom: 35px; border-radius: 0 8px 8px 0;">
+                <p style="margin: 0; color: #334155; font-size: 15px; line-height: 1.8;">
+                  <strong style="color: #0f172a;">Category:</strong> ${category || 'N/A'}<br>
+                  <strong style="color: #0f172a;">City:</strong> ${current_city || 'N/A'}, ${state || 'N/A'}<br>
+                  <strong style="color: #0f172a;">Status:</strong> ${current_status || 'N/A'}
+                </p>
+              </div>
+
+              <div style="text-align: center;">
+                <a href="${adminUrl}" style="display: inline-block; background-color: #2563eb; color: #ffffff; text-decoration: none; padding: 14px 32px; border-radius: 8px; font-weight: 600; font-size: 16px; box-shadow: 0 4px 6px rgba(37, 99, 235, 0.2);">Review Application Dashboard &rarr;</a>
+              </div>
+            </div>
+            <div style="background-color: #f8fafc; padding: 20px; text-align: center; border-top: 1px solid #e2e8f0;">
+              <p style="color: #94a3b8; font-size: 13px; margin: 0;">This is an automated security notification from the Prajaya Foundation backend.</p>
+            </div>
+         </div>
        </div>`
     );
 
