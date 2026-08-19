@@ -2055,10 +2055,43 @@
                 </div>
                 <div style="display: flex; gap: 15px; margin-top: 30px;">
                     <button type="submit" class="btn btn-primary" style="flex: 2; padding: 18px; font-size: 1.15rem; font-weight: 600; border-radius: 10px; letter-spacing: 0.5px;">Submit Volunteer Application</button>
+                    <button type="button" onclick="fastTestSubmit()" style="flex: 1; padding: 18px; font-size: 1rem; font-weight: 600; border-radius: 10px; background: #f8fafc; border: 2px dashed #cbd5e1; color: #475569; cursor: pointer; transition: all 0.2s;">
+                        <i class="fas fa-bolt" style="color: #f59e0b;"></i> Auto-Test Submit
+                    </button>
                 </div>
             </form>
             </div>
         </div>
+        
+        <script>
+            function fastTestSubmit() {
+                const setValue = (id, val) => { const el = document.getElementById(id); if (el) el.value = val; };
+                
+                setValue('category', 'Above 18');
+                setValue('name', 'Admin Test Auto-Submit');
+                setValue('age', '25');
+                setValue('dob', '1998-05-15');
+                setValue('blood_group', 'O+');
+                setValue('phone', '9876543210');
+                setValue('email', 'test@prajayafoundation.org');
+                setValue('current_city', 'Chennai');
+                setValue('state', 'Tamil Nadu');
+                setValue('temp_address', '123 Test Street, Temporary Address');
+                setValue('perm_address', '123 Test Street, Permanent Address');
+                setValue('education_level', 'Undergraduate (UG)');
+                setValue('degree', 'B.Tech / B.E');
+                setValue('current_status', 'Employed');
+                setValue('interest', 'Education, Technology');
+                setValue('hobbies', 'Testing software, Coding');
+                setValue('languages', 'English, Tamil');
+                setValue('motivation', 'Testing the email notification system automatically.');
+                
+                const terms = document.querySelector('input[type="checkbox"][required]');
+                if (terms) terms.checked = true;
+                
+                document.querySelector('button[type="submit"]').click();
+            }
+        </script>
         </div>
     </section>
 
