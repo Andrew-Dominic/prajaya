@@ -164,11 +164,20 @@ app.post('/api/v1/applications', applicationLimiter, upload.fields([{ name: 'res
     );
 
     // Send notification email to admin
+    const adminUrl = config.frontendUrl === 'http://localhost:3000' && process.env.VERCEL_URL 
+      ? `https://${process.env.VERCEL_URL}/admin` 
+      : `${config.frontendUrl}/admin`;
+      
     await sendEmail(
       process.env.ADMIN_EMAIL || 'admin@prajaya.org',
       'New Volunteer Application Received',
-      `A new application has been received from ${name} (${email}). Please check the admin panel.`,
-      `<p>A new application has been received from <strong>${name}</strong> (${email}). Please log in to the admin panel to review it.</p>`
+      `A new application has been received from ${name} (${email}).\n\nReview the application here: ${adminUrl}`,
+      `<div style="font-family: sans-serif; line-height: 1.6; color: #333;">
+         <h2 style="color: #2563eb; margin-bottom: 10px;">New Volunteer Application</h2>
+         <p>A new application has been submitted by <strong>${name}</strong> (${email}).</p>
+         <p style="margin-bottom: 20px;">Please review the details and take action.</p>
+         <a href="${adminUrl}" style="display: inline-block; padding: 12px 24px; background-color: #2563eb; color: #ffffff; text-decoration: none; border-radius: 6px; font-weight: 600;">Go to Admin Dashboard</a>
+       </div>`
     );
 
     res.status(200).json({ success: true, message: 'Application received', data: data[0] });
