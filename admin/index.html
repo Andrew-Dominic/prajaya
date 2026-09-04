@@ -1189,17 +1189,6 @@
                 alert('Server error.');
             }
         }
-                    
-                    renderTable();
-                } else {
-                    currentApplications = [];
-                    renderTable();
-                }
-            } catch (error) {
-                console.error('Error fetching applications:', error);
-                tableBody.innerHTML = '<tr><td colspan="27" class="empty-state" style="color: var(--color-danger);"><i class="fas fa-triangle-exclamation"></i><br>Failed to load applications. Make sure the server endpoint exists!</td></tr>';
-            }
-        }
 
         function renderTable() {
             const tableBody = document.getElementById('applications-table-body');
