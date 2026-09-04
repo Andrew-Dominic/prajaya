@@ -147,7 +147,7 @@ app.post('/api/v1/applications', applicationLimiter, upload.fields([{ name: 'res
         category, name, age: age || null, dob: dob || null, blood_group, phone, alt_phone, 
         email, alt_email, hometown, current_city, state, temp_address, perm_address, 
         current_status, education_level, degree, interest, hobbies, languages, motivation, experience, 
-        resume_path, photo_path, status: 'pending'
+        resume_path, photo_path, status: 'approved'
       }])
       .select();
 
@@ -155,28 +155,28 @@ app.post('/api/v1/applications', applicationLimiter, upload.fields([{ name: 'res
 
     console.log('Inserted into database:', data[0].id);
     
-    // Send email to applicant
+    // Send simple congratulatory email to applicant
     await sendEmail(
       email,
-      'Application Received - Prajaya Foundation',
-      `Hello ${name},\n\nYour application has been successfully submitted. Results will be sent shortly.\n\nThank you,\nPrajaya Foundation`,
+      'Congratulations! You are now a Volunteer at Prajaya Foundation',
+      `Hello ${name},\n\nCongratulations! You have been automatically selected as a volunteer.\nFurther information will be shared with you shortly.\n\nThank you,\nPrajaya Foundation`,
       `<div style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f8fafc; padding: 40px 20px; margin: 0;">
          <div style="max-width: 600px; margin: 0 auto; background-color: #ffffff; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);">
             <div style="background-color: #1e293b; padding: 30px; text-align: center; border-bottom: 4px solid #c59d5f;">
               <h1 style="color: #ffffff; margin: 0; font-size: 24px; font-weight: 600; letter-spacing: 1px;">PRAJAYA FOUNDATION</h1>
             </div>
             <div style="padding: 40px 30px;">
-              <h2 style="color: #0f172a; margin-top: 0; margin-bottom: 20px; font-size: 20px;">Application Received</h2>
+              <h2 style="color: #0f172a; margin-top: 0; margin-bottom: 20px; font-size: 20px;">Congratulations!</h2>
               <p style="color: #475569; font-size: 16px; line-height: 1.6; margin-bottom: 20px;">
                 Dear <strong style="color: #0f172a;">${name}</strong>,
               </p>
               <p style="color: #475569; font-size: 16px; line-height: 1.6; margin-bottom: 30px;">
-                Thank you for your interest in volunteering with us. We have successfully received your application.
+                Congratulations! You have been automatically selected as a volunteer at Prajaya Foundation.
               </p>
               
               <div style="background-color: #f1f5f9; border-left: 4px solid #10b981; padding: 18px 20px; margin-bottom: 35px; border-radius: 0 8px 8px 0;">
                 <p style="margin: 0; color: #334155; font-size: 15px; line-height: 1.6;">
-                  Your application will be reviewed by our administration team. You will receive another email notifying you of the final decision shortly.
+                  Further information regarding your roles, responsibilities, and next steps will be shared with you shortly.
                 </p>
               </div>
 
@@ -186,45 +186,6 @@ app.post('/api/v1/applications', applicationLimiter, upload.fields([{ name: 'res
             </div>
             <div style="background-color: #f8fafc; padding: 20px; text-align: center; border-top: 1px solid #e2e8f0;">
               <p style="color: #94a3b8; font-size: 13px; margin: 0;">&copy; ${new Date().getFullYear()} Prajaya Foundation. All Rights Reserved.</p>
-            </div>
-         </div>
-       </div>`
-    );
-
-    // Send notification email to admin
-    const adminUrl = config.frontendUrl === 'http://localhost:3000' && process.env.VERCEL_URL 
-      ? `https://${process.env.VERCEL_URL}/admin` 
-      : `${config.frontendUrl}/admin`;
-      
-    await sendEmail(
-      process.env.ADMIN_EMAIL || 'admin@prajaya.org',
-      'New Volunteer Application Received',
-      `A new application has been received from ${name} (${email}).\n\nReview the application here: ${adminUrl}`,
-      `<div style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f8fafc; padding: 40px 20px; margin: 0;">
-         <div style="max-width: 600px; margin: 0 auto; background-color: #ffffff; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);">
-            <div style="background-color: #1e293b; padding: 30px; text-align: center; border-bottom: 4px solid #c59d5f;">
-              <h1 style="color: #ffffff; margin: 0; font-size: 24px; font-weight: 600; letter-spacing: 1px;">PRAJAYA FOUNDATION</h1>
-            </div>
-            <div style="padding: 40px 30px;">
-              <h2 style="color: #0f172a; margin-top: 0; margin-bottom: 20px; font-size: 20px;">New Volunteer Application</h2>
-              <p style="color: #475569; font-size: 16px; line-height: 1.6; margin-bottom: 30px;">
-                A new volunteer application has been submitted by <strong style="color: #0f172a;">${name}</strong> (<a href="mailto:${email}" style="color: #2563eb; text-decoration: none;">${email}</a>).
-              </p>
-              
-              <div style="background-color: #f1f5f9; border-left: 4px solid #2563eb; padding: 18px 20px; margin-bottom: 35px; border-radius: 0 8px 8px 0;">
-                <p style="margin: 0; color: #334155; font-size: 15px; line-height: 1.8;">
-                  <strong style="color: #0f172a;">Category:</strong> ${category || 'N/A'}<br>
-                  <strong style="color: #0f172a;">City:</strong> ${current_city || 'N/A'}, ${state || 'N/A'}<br>
-                  <strong style="color: #0f172a;">Status:</strong> ${current_status || 'N/A'}
-                </p>
-              </div>
-
-              <div style="text-align: center;">
-                <a href="${adminUrl}" style="display: inline-block; background-color: #2563eb; color: #ffffff; text-decoration: none; padding: 14px 32px; border-radius: 8px; font-weight: 600; font-size: 16px; box-shadow: 0 4px 6px rgba(37, 99, 235, 0.2);">Review Application Dashboard &rarr;</a>
-              </div>
-            </div>
-            <div style="background-color: #f8fafc; padding: 20px; text-align: center; border-top: 1px solid #e2e8f0;">
-              <p style="color: #94a3b8; font-size: 13px; margin: 0;">This is an automated security notification from the Prajaya Foundation backend.</p>
             </div>
          </div>
        </div>`
@@ -426,6 +387,75 @@ app.get('/api/v1/suggestions', requireAuth, async (req, res) => {
     res.status(200).json({ success: true, data });
   } catch (error) {
     console.error('Database fetch error:', error);
+    res.status(500).json({ success: false, message: 'Server error' });
+  }
+});
+
+// ──────────────────────────────────────────────
+// QUOTES API
+// ──────────────────────────────────────────────
+app.post('/api/v1/quotes', requireAuth, async (req, res) => {
+  try {
+    const { text, author } = req.body;
+    const { data, error } = await supabase
+      .from('quotes')
+      .insert([{ text, author: author || 'Admin' }])
+      .select();
+
+    if (error) throw error;
+    res.status(200).json({ success: true, data: data[0] });
+  } catch (error) {
+    console.error('Quote create error:', error);
+    res.status(500).json({ success: false, message: 'Server error' });
+  }
+});
+
+app.get('/api/v1/quotes', async (req, res) => {
+  try {
+    const { data, error } = await supabase
+      .from('quotes')
+      .select('*')
+      .order('created_at', { ascending: false })
+      .limit(5);
+
+    if (error) throw error;
+    res.status(200).json({ success: true, data });
+  } catch (error) {
+    console.error('Database fetch error:', error);
+    res.status(500).json({ success: false, message: 'Server error' });
+  }
+});
+
+app.patch('/api/v1/quotes/:id', requireAuth, async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { text, author } = req.body;
+    const { data, error } = await supabase
+      .from('quotes')
+      .update({ text, author })
+      .eq('id', id)
+      .select();
+
+    if (error) throw error;
+    res.status(200).json({ success: true, data: data[0] });
+  } catch (error) {
+    console.error('Quote update error:', error);
+    res.status(500).json({ success: false, message: 'Server error' });
+  }
+});
+
+app.delete('/api/v1/quotes/:id', requireAuth, async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { error } = await supabase
+      .from('quotes')
+      .delete()
+      .eq('id', id);
+
+    if (error) throw error;
+    res.status(200).json({ success: true });
+  } catch (error) {
+    console.error('Quote delete error:', error);
     res.status(500).json({ success: false, message: 'Server error' });
   }
 });

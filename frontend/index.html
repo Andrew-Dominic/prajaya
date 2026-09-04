@@ -1375,6 +1375,35 @@
 
     </section>
 
+    <!-- Dynamic Quote Section -->
+    <section class="section section-alt" id="quote-section" style="display: none; padding: 80px 0; border-bottom: 1px solid rgba(0,0,0,0.05);">
+        <div class="container">
+            <div class="quote-container reveal" style="text-align: center; max-width: 900px; margin: 0 auto; position: relative; padding: 40px;">
+                <i class="fas fa-quote-left" style="font-size: 4rem; color: var(--color-accent); opacity: 0.15; position: absolute; top: 0; left: 0;"></i>
+                <h3 id="dynamic-quote-text" style="font-size: clamp(1.5rem, 2.5vw, 2.2rem); font-family: var(--font-heading); font-weight: 400; line-height: 1.6; font-style: italic; color: var(--color-heading); margin-bottom: 25px; position: relative; z-index: 1;"></h3>
+                <p id="dynamic-quote-author" style="font-size: 1.05rem; color: var(--color-accent); text-transform: uppercase; letter-spacing: 3px; font-weight: 600;"></p>
+                <i class="fas fa-quote-right" style="font-size: 4rem; color: var(--color-accent); opacity: 0.15; position: absolute; bottom: 0; right: 0;"></i>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', async () => {
+            try {
+                const res = await fetch('/api/v1/quotes');
+                const data = await res.json();
+                if (data.success && data.data && data.data.length > 0) {
+                    const latestQuote = data.data[0]; // Gets the most recent quote
+                    document.getElementById('dynamic-quote-text').innerText = `"${latestQuote.text}"`;
+                    document.getElementById('dynamic-quote-author').innerText = `- ${latestQuote.author}`;
+                    document.getElementById('quote-section').style.display = 'block';
+                }
+            } catch (err) {
+                console.error('Error fetching quote:', err);
+            }
+        });
+    </script>
+
     <!-- Vision & Mission -->
     <section class="section" id="vision">
         <div class="container">

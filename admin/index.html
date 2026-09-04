@@ -728,6 +728,9 @@
             <a href="#" class="nav-link" onclick="switchView('volunteers')">
                 <i class="fas fa-users"></i> Volunteers
             </a>
+            <a href="#" class="nav-link" onclick="switchView('quotes')">
+                <i class="fas fa-quote-right"></i> Quotes
+            </a>
             <a href="#" class="nav-link">
                 <i class="fas fa-inbox"></i> Messages
             </a>
@@ -842,6 +845,56 @@
                 </table>
             </div>
         </div>
+
+        <!-- Quotes Section -->
+        <div class="quotes-container" id="quotes-section" style="display: none;">
+            <div style="display: flex; gap: 30px; align-items: flex-start; flex-wrap: wrap;">
+                <!-- Add Quote Form -->
+                <div class="table-container" style="flex: 1; min-width: 300px; padding: 24px;">
+                    <h2 style="margin-bottom: 20px; font-size: 1.1rem;">Add New Quote</h2>
+                    <form id="addQuoteForm" onsubmit="handleAddQuote(event)">
+                        <div style="margin-bottom: 15px;">
+                            <label style="display: block; font-size: 0.8rem; font-weight: 600; color: var(--color-text-light); margin-bottom: 6px;">QUOTE TEXT</label>
+                            <textarea id="quoteText" required style="width: 100%; padding: 12px; border: 1px solid var(--color-border); border-radius: 8px; resize: vertical; min-height: 100px; font-family: var(--font-main);"></textarea>
+                        </div>
+                        <div style="margin-bottom: 20px;">
+                            <label style="display: block; font-size: 0.8rem; font-weight: 600; color: var(--color-text-light); margin-bottom: 6px;">AUTHOR (Optional)</label>
+                            <input type="text" id="quoteAuthor" placeholder="e.g. Swami Vivekananda" style="width: 100%; padding: 12px; border: 1px solid var(--color-border); border-radius: 8px; font-family: var(--font-main);">
+                        </div>
+                        <button type="submit" class="refresh-btn" style="background: var(--color-accent); color: white; border: none; width: 100%; justify-content: center; padding: 12px;">Add Quote</button>
+                    </form>
+                </div>
+                
+                <!-- Recent Quotes List -->
+                <div class="table-container" style="flex: 2; min-width: 300px;">
+                    <div class="table-header">
+                        <h2>Last 5 Quotes</h2>
+                        <button class="refresh-btn" onclick="fetchQuotes()">
+                            <i class="fas fa-rotate-right"></i> Refresh
+                        </button>
+                    </div>
+                    <div class="table-wrapper">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th style="width: 60%;">Quote Text</th>
+                                    <th style="width: 25%;">Author</th>
+                                    <th class="sticky-actions">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="quotes-table-body">
+                                <tr>
+                                    <td colspan="3" class="empty-state">
+                                        <i class="fas fa-quote-left"></i><br>
+                                        Loading quotes...
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
     </main>
 
     <!-- Modal -->
@@ -859,29 +912,41 @@
 
     <script>
         let currentApplications = [];
-        let currentView = 'dashboard'; // 'dashboard' or 'volunteers'
+        let currentQuotes = [];
+        let currentView = 'dashboard'; // 'dashboard', 'volunteers', 'quotes'
         let currentFilter = 'pending'; // 'pending', 'approved', 'rejected'
 
         function switchView(view) {
             currentView = view;
             document.querySelectorAll('.nav-link').forEach(el => el.classList.remove('active'));
             
+            // Hide all sections first
+            document.getElementById('dashboard-stats').style.display = 'none';
+            document.querySelector('.table-container').style.display = 'none';
+            document.getElementById('quotes-section').style.display = 'none';
+            
             if (view === 'dashboard') {
                 document.querySelector('.nav-link:nth-child(1)').classList.add('active');
                 document.getElementById('page-title').textContent = 'Applications Dashboard';
                 document.getElementById('dashboard-stats').style.display = 'grid';
+                document.querySelector('.table-container').style.display = 'block';
                 document.getElementById('table-header-title').textContent = 'Pending Applications';
                 document.getElementById('volunteer-filters').style.display = 'none';
                 currentFilter = 'pending';
+                renderTable();
             } else if (view === 'volunteers') {
                 document.querySelector('.nav-link:nth-child(2)').classList.add('active');
                 document.getElementById('page-title').textContent = 'Processed Volunteers';
-                document.getElementById('dashboard-stats').style.display = 'none';
+                document.querySelector('.table-container').style.display = 'block';
                 document.getElementById('table-header-title').textContent = 'Processed Volunteers';
                 document.getElementById('volunteer-filters').style.display = 'flex';
                 setFilter('approved'); // Default to approved on volunteer tab
+            } else if (view === 'quotes') {
+                document.querySelector('.nav-link:nth-child(3)').classList.add('active');
+                document.getElementById('page-title').textContent = 'Quote Management';
+                document.getElementById('quotes-section').style.display = 'block';
+                fetchQuotes();
             }
-            renderTable();
             document.querySelector('.sidebar').classList.remove('open');
         }
 
@@ -999,6 +1064,131 @@
                     document.getElementById('total-count').textContent = currentApplications.length;
                     document.getElementById('approved-count').textContent = approvedCount;
                     document.getElementById('pending-count').textContent = pendingCount;
+                    
+                    renderTable();
+                }
+            } catch (error) {
+                tableBody.innerHTML = '<tr><td colspan="27" class="empty-state" style="color:var(--color-danger);"><i class="fas fa-exclamation-circle"></i><br>Error loading applications. Check console for details.</td></tr>';
+            }
+        }
+
+        // Quotes Functions
+        async function fetchQuotes() {
+            const tableBody = document.getElementById('quotes-table-body');
+            tableBody.innerHTML = '<tr><td colspan="3" class="empty-state"><i class="fas fa-circle-notch fa-spin"></i><br>Loading quotes...</td></tr>';
+            try {
+                const response = await fetch('/api/v1/quotes?t=' + new Date().getTime());
+                const result = await response.json();
+                if (result.success && result.data) {
+                    currentQuotes = result.data;
+                    renderQuotes();
+                }
+            } catch (err) {
+                tableBody.innerHTML = '<tr><td colspan="3" class="empty-state" style="color:var(--color-danger);"><i class="fas fa-exclamation-circle"></i><br>Error loading quotes.</td></tr>';
+            }
+        }
+
+        function renderQuotes() {
+            const tbody = document.getElementById('quotes-table-body');
+            if (currentQuotes.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="3" class="empty-state"><i class="fas fa-quote-right"></i><br>No quotes found. Add one!</td></tr>';
+                return;
+            }
+            
+            tbody.innerHTML = currentQuotes.map(q => `
+                <tr>
+                    <td class="truncate-td" style="max-width: 300px;" title="${q.text}">${q.text}</td>
+                    <td>${q.author || 'Admin'}</td>
+                    <td class="sticky-actions">
+                        <button class="action-btn" title="Edit" onclick="editQuote('${q.id}', \`${q.text.replace(/`/g, "\\`")}\`, \`${(q.author || '').replace(/`/g, "\\`")}\`)">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="action-btn" title="Delete" onclick="deleteQuote('${q.id}')" style="color: var(--color-danger);">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        async function handleAddQuote(e) {
+            e.preventDefault();
+            const text = document.getElementById('quoteText').value;
+            const author = document.getElementById('quoteAuthor').value;
+            const btn = e.target.querySelector('button');
+            
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving...';
+            btn.disabled = true;
+            
+            try {
+                const res = await fetch('/api/v1/quotes', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ text, author })
+                });
+                const result = await res.json();
+                
+                if (handleUnauthorized(res)) return;
+                
+                if (result.success) {
+                    document.getElementById('addQuoteForm').reset();
+                    fetchQuotes();
+                } else {
+                    alert(result.message || 'Error adding quote');
+                }
+            } catch (err) {
+                alert('Server error.');
+            } finally {
+                btn.innerHTML = 'Add Quote';
+                btn.disabled = false;
+            }
+        }
+
+        async function deleteQuote(id) {
+            if (!confirm('Are you sure you want to delete this quote?')) return;
+            try {
+                const res = await fetch('/api/v1/quotes/' + id, { method: 'DELETE' });
+                if (handleUnauthorized(res)) return;
+                
+                const result = await res.json();
+                if (result.success) {
+                    fetchQuotes();
+                } else {
+                    alert(result.message || 'Error deleting quote');
+                }
+            } catch (err) {
+                alert('Server error.');
+            }
+        }
+
+        function editQuote(id, text, author) {
+            const newText = prompt("Edit quote text:", text);
+            if (newText === null) return;
+            const newAuthor = prompt("Edit quote author:", author);
+            if (newAuthor === null) return;
+            
+            updateQuote(id, newText, newAuthor);
+        }
+
+        async function updateQuote(id, text, author) {
+            try {
+                const res = await fetch('/api/v1/quotes/' + id, {
+                    method: 'PATCH',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ text, author })
+                });
+                if (handleUnauthorized(res)) return;
+                
+                const result = await res.json();
+                if (result.success) {
+                    fetchQuotes();
+                } else {
+                    alert(result.message || 'Error updating quote');
+                }
+            } catch (err) {
+                alert('Server error.');
+            }
+        }
                     
                     renderTable();
                 } else {
