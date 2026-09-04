@@ -1079,7 +1079,7 @@
                     document.getElementById('loginOverlay').style.opacity = '0';
                     setTimeout(() => {
                         document.getElementById('loginOverlay').style.display = 'none';
-                        fetchApplications(); // Only fetch if logged in
+                        switchView(currentView); // Initialize the active view (loads dashboard feed)
                     }, 500);
                 } else {
                     document.getElementById('loginOverlay').style.display = 'flex';
