@@ -191,6 +191,26 @@ app.post('/api/v1/applications', applicationLimiter, upload.fields([{ name: 'res
        </div>`
     );
 
+    // Notify the admin about the new application
+    const adminEmail = process.env.ADMIN_EMAIL || 'admin@prajaya.org';
+    await sendEmail(
+      adminEmail,
+      'New Volunteer Application - Prajaya Foundation',
+      `A new volunteer application has been submitted by ${name}.\n\nName: ${name}\nEmail: ${email}\nPhone: ${phone}\nCity: ${current_city}\n\nPlease log in to the admin dashboard to view their full profile and resume.`,
+      `<div style="font-family: sans-serif; padding: 20px;">
+        <h2>New Volunteer Application</h2>
+        <p>A new volunteer has just submitted an application on the website.</p>
+        <div style="background-color: #f1f5f9; padding: 15px; border-radius: 8px; margin: 20px 0;">
+          <p><strong>Name:</strong> ${name}</p>
+          <p><strong>Email:</strong> ${email}</p>
+          <p><strong>Phone:</strong> ${phone}</p>
+          <p><strong>City:</strong> ${current_city}</p>
+          <p><strong>Category:</strong> ${category || 'N/A'}</p>
+        </div>
+        <p>Log in to your <a href="${process.env.FRONTEND_URL || 'http://localhost:3000'}/admin">admin dashboard</a> to view the complete details and downloaded attachments.</p>
+      </div>`
+    );
+
     res.status(200).json({ success: true, message: 'Application received', data: data[0] });
   } catch (error) {
     console.error('Submission error:', error);
@@ -352,11 +372,11 @@ app.delete('/api/v1/applications/:id', requireAuth, async (req, res) => {
 // Submit a suggestion
 app.post('/api/v1/suggestions', suggestionLimiter, async (req, res) => {
   try {
-    const { name, email, suggestion } = req.body;
+    const { name, email, subject, suggestion } = req.body;
     
     const { data, error } = await supabase
       .from('suggestions')
-      .insert([{ name, email, suggestion }])
+      .insert([{ name, email, subject, suggestion }])
       .select();
 
     if (error) throw error;
@@ -364,8 +384,17 @@ app.post('/api/v1/suggestions', suggestionLimiter, async (req, res) => {
     await sendEmail(
       process.env.ADMIN_EMAIL || 'admin@prajaya.org',
       'New Suggestion Received - Prajaya Foundation',
-      `New suggestion from ${name} (${email}):\n\n${suggestion}`,
-      `<p>New suggestion from <strong>${name}</strong> (${email}):</p><p>${suggestion}</p>`
+      `New message from ${name} (${email}):\nSubject: ${subject || 'N/A'}\n\n${suggestion}`,
+      `<div style="font-family: sans-serif; padding: 20px;">
+        <h2>New Message via Suggestion Space</h2>
+        <div style="background-color: #f1f5f9; padding: 15px; border-radius: 8px; margin: 20px 0;">
+          <p><strong>Name:</strong> ${name}</p>
+          <p><strong>Email:</strong> ${email}</p>
+          <p><strong>Subject:</strong> ${subject || 'N/A'}</p>
+          <p><strong>Message:</strong></p>
+          <p style="white-space: pre-wrap; background: white; padding: 10px; border-radius: 5px;">${suggestion}</p>
+        </div>
+      </div>`
     );
 
     res.status(200).json({ success: true, message: 'Suggestion received', data: data[0] });

@@ -731,7 +731,7 @@
             <a href="#" class="nav-link" onclick="switchView('quotes')">
                 <i class="fas fa-quote-right"></i> Quotes
             </a>
-            <a href="#" class="nav-link">
+            <a href="#" class="nav-link" onclick="switchView('messages')">
                 <i class="fas fa-inbox"></i> Messages
             </a>
             <a href="#" class="nav-link">
@@ -895,6 +895,37 @@
                 </div>
             </div>
         </div>
+
+        <!-- Messages Section -->
+        <div class="table-container" id="messages-section" style="display: none;">
+            <div class="table-header">
+                <h2>Inbox / Suggestions</h2>
+                <button class="refresh-btn" onclick="fetchSuggestions()">
+                    <i class="fas fa-rotate-right"></i> Refresh
+                </button>
+            </div>
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Subject</th>
+                            <th style="width: 40%">Message</th>
+                        </tr>
+                    </thead>
+                    <tbody id="messages-table-body">
+                        <tr>
+                            <td colspan="5" class="empty-state">
+                                <i class="fas fa-circle-notch fa-spin"></i><br>
+                                Loading messages...
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </main>
 
     <!-- Modal -->
@@ -913,7 +944,8 @@
     <script>
         let currentApplications = [];
         let currentQuotes = [];
-        let currentView = 'dashboard'; // 'dashboard', 'volunteers', 'quotes'
+        let currentSuggestions = [];
+        let currentView = 'dashboard'; // 'dashboard', 'volunteers', 'quotes', 'messages'
         let currentFilter = 'pending'; // 'pending', 'approved', 'rejected'
 
         function switchView(view) {
@@ -924,6 +956,7 @@
             document.getElementById('dashboard-stats').style.display = 'none';
             document.querySelector('.table-container').style.display = 'none';
             document.getElementById('quotes-section').style.display = 'none';
+            document.getElementById('messages-section').style.display = 'none';
             
             if (view === 'dashboard') {
                 document.querySelector('.nav-link:nth-child(1)').classList.add('active');
@@ -946,6 +979,11 @@
                 document.getElementById('page-title').textContent = 'Quote Management';
                 document.getElementById('quotes-section').style.display = 'block';
                 fetchQuotes();
+            } else if (view === 'messages') {
+                document.querySelector('.nav-link:nth-child(4)').classList.add('active');
+                document.getElementById('page-title').textContent = 'Inbox & Suggestions';
+                document.getElementById('messages-section').style.display = 'block';
+                fetchSuggestions();
             }
             document.querySelector('.sidebar').classList.remove('open');
         }
@@ -1188,6 +1226,49 @@
             } catch (err) {
                 alert('Server error.');
             }
+        }
+
+        // Suggestions Functions
+        async function fetchSuggestions() {
+            const tableBody = document.getElementById('messages-table-body');
+            tableBody.innerHTML = '<tr><td colspan="5" class="empty-state"><i class="fas fa-circle-notch fa-spin"></i><br>Loading messages...</td></tr>';
+            try {
+                const response = await fetch('/api/v1/suggestions?t=' + new Date().getTime());
+                if (handleUnauthorized(response)) return;
+                
+                const result = await response.json();
+                if (result.success && result.data) {
+                    currentSuggestions = result.data;
+                    renderSuggestions();
+                }
+            } catch (err) {
+                tableBody.innerHTML = '<tr><td colspan="5" class="empty-state" style="color:var(--color-danger);"><i class="fas fa-exclamation-circle"></i><br>Error loading messages.</td></tr>';
+            }
+        }
+
+        function renderSuggestions() {
+            const tbody = document.getElementById('messages-table-body');
+            if (currentSuggestions.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="5" class="empty-state"><i class="fas fa-inbox"></i><br>No messages found.</td></tr>';
+                return;
+            }
+            
+            tbody.innerHTML = currentSuggestions.map(s => {
+                const date = new Date(s.created_at).toLocaleDateString('en-US', {
+                    year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute:'2-digit'
+                });
+                const esc = (str) => String(str || '').replace(/[&<>'"]/g, tag => ({'&': '&amp;','<': '&lt;','>': '&gt;',"'": '&#39;','"': '&quot;'}[tag]));
+                
+                return \`
+                <tr>
+                    <td style="white-space: nowrap;">\${date}</td>
+                    <td><strong>\${esc(s.name)}</strong></td>
+                    <td><a href="mailto:\${esc(s.email)}" style="color: var(--color-accent); text-decoration: underline;">\${esc(s.email)}</a></td>
+                    <td><span class="status-badge" style="background: rgba(16, 185, 129, 0.1); color: var(--color-success); border: 1px solid var(--color-success);">\${esc(s.subject) || 'N/A'}</span></td>
+                    <td style="white-space: normal; line-height: 1.5;">\${esc(s.suggestion)}</td>
+                </tr>
+                \`;
+            }).join('');
         }
 
         function renderTable() {
