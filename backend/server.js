@@ -369,6 +369,59 @@ app.delete('/api/v1/applications/:id', requireAuth, async (req, res) => {
   }
 });
 
+// Bulk Delete applications
+app.post('/api/v1/applications/bulk-delete', requireAuth, async (req, res) => {
+  try {
+    const { ids, password } = req.body;
+    
+    if (!password || !bcrypt.compareSync(password, adminPasswordHash)) {
+      return res.status(401).json({ success: false, message: 'Invalid master password. Deletion aborted.' });
+    }
+
+    if (!Array.isArray(ids) || ids.length === 0) {
+      return res.status(400).json({ success: false, message: 'No applications selected.' });
+    }
+
+    // Get the applications to find file paths
+    const { data: appsData, error: fetchError } = await supabase
+      .from('applications')
+      .select('id, resume_path, photo_path')
+      .in('id', ids);
+
+    if (fetchError) throw fetchError;
+
+    // Delete files from storage
+    const filesToRemove = [];
+    appsData.forEach(app => {
+      if (app.resume_path) {
+        const pathPart = app.resume_path.includes('http') ? app.resume_path.split('/uploads/')[1] : app.resume_path;
+        if (pathPart) filesToRemove.push(pathPart);
+      }
+      if (app.photo_path) {
+        const pathPart = app.photo_path.includes('http') ? app.photo_path.split('/uploads/')[1] : app.photo_path;
+        if (pathPart) filesToRemove.push(pathPart);
+      }
+    });
+
+    if (filesToRemove.length > 0) {
+      await supabase.storage.from('uploads').remove(filesToRemove);
+    }
+
+    // Delete from database
+    const { error: deleteError } = await supabase
+      .from('applications')
+      .delete()
+      .in('id', ids);
+
+    if (deleteError) throw deleteError;
+
+    res.status(200).json({ success: true, message: `${ids.length} applications deleted successfully` });
+  } catch (error) {
+    console.error('Bulk delete error:', error);
+    res.status(500).json({ success: false, message: 'Server error during bulk deletion' });
+  }
+});
+
 // Submit a suggestion
 app.post('/api/v1/suggestions', suggestionLimiter, async (req, res) => {
   try {

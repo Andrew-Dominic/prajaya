@@ -760,42 +760,57 @@
         <div class="stats-grid" id="dashboard-stats">
             <div class="stat-card">
                 <div class="stat-icon">
-                    <i class="fas fa-user-plus"></i>
+                    <i class="fas fa-users"></i>
                 </div>
                 <div class="stat-info">
-                    <h3>Total Applications</h3>
+                    <h3>Total Volunteers</h3>
                     <p id="total-count">0</p>
                 </div>
             </div>
             <div class="stat-card">
                 <div class="stat-icon" style="background: rgba(16, 185, 129, 0.1); color: var(--color-success);">
-                    <i class="fas fa-check"></i>
+                    <i class="fas fa-envelope"></i>
                 </div>
                 <div class="stat-info">
-                    <h3>Approved Volunteers</h3>
-                    <p id="approved-count">0</p>
+                    <h3>Total Messages</h3>
+                    <p id="messages-count">0</p>
                 </div>
             </div>
             <div class="stat-card">
                 <div class="stat-icon" style="background: rgba(245, 158, 11, 0.1); color: #f59e0b;">
-                    <i class="fas fa-hourglass-half"></i>
+                    <i class="fas fa-quote-left"></i>
                 </div>
                 <div class="stat-info">
-                    <h3>Pending Review</h3>
-                    <p id="pending-count">0</p>
+                    <h3>Total Quotes</h3>
+                    <p id="quotes-count">0</p>
                 </div>
             </div>
         </div>
 
-        <!-- Table -->
-        <div class="table-container">
+        <!-- Dashboard Activity Feed -->
+        <div class="table-container" id="dashboard-feed-section" style="padding: 24px;">
             <div class="table-header">
-                <h2 id="table-header-title">Pending Applications</h2>
+                <h2>Recent Activity</h2>
+                <button class="refresh-btn" onclick="loadDashboardFeed()">
+                    <i class="fas fa-rotate-right"></i> Refresh
+                </button>
+            </div>
+            <div id="dashboard-feed-content" style="display: flex; flex-direction: column; gap: 15px; margin-top: 20px;">
+                <div class="empty-state"><i class="fas fa-circle-notch fa-spin"></i><br>Loading activity feed...</div>
+            </div>
+        </div>
+
+        <!-- Table -->
+        <div class="table-container" id="volunteers-section" style="display: none;">
+            <div class="table-header">
+                <h2 id="table-header-title">Volunteers Database</h2>
                 <div style="display: flex; gap: 15px; align-items: center;">
-                    <div id="volunteer-filters" style="display: none; gap: 10px;">
-                        <button class="filter-btn active" id="filter-approved" onclick="setFilter('approved')">Selected</button>
-                        <button class="filter-btn" id="filter-rejected" onclick="setFilter('rejected')">Not Selected</button>
-                    </div>
+                    <button class="refresh-btn" onclick="exportToCSV()" style="background: rgba(16, 185, 129, 0.1); color: var(--color-success); border-color: transparent;">
+                        <i class="fas fa-download"></i> Export CSV
+                    </button>
+                    <button class="refresh-btn" id="bulkDeleteBtn" onclick="deleteSelected()" style="display: none; background: rgba(239, 68, 68, 0.1); color: var(--color-danger); border-color: transparent;">
+                        <i class="fas fa-trash-alt"></i> Delete Selected (<span id="selectedCount">0</span>)
+                    </button>
                     <button class="refresh-btn" onclick="fetchApplications()">
                         <i class="fas fa-rotate-right"></i> Refresh Data
                     </button>
@@ -805,6 +820,7 @@
                 <table>
                     <thead>
                         <tr>
+                            <th style="width: 40px; padding-left: 20px;"><input type="checkbox" id="selectAllCheckbox" onclick="toggleAllCheckboxes(this)" style="cursor: pointer; width: 16px; height: 16px;"></th>
                             <th>Name</th>
                             <th>Category</th>
                             <th>Age</th>
@@ -941,7 +957,78 @@
         </div>
     </div>
 
+    <!-- Custom Dialog Modal -->
+    <div class="modal-overlay" id="customDialogModal" style="z-index: 10000; align-items: center; justify-content: center;">
+        <div class="modal-content" style="max-width: 450px; text-align: center; padding: 30px;">
+            <div id="dialogIcon" style="font-size: 3rem; margin-bottom: 15px;"></div>
+            <h2 id="dialogTitle" style="margin-bottom: 10px;">Title</h2>
+            <p id="dialogMessage" style="color: var(--color-text-light); margin-bottom: 25px;">Message</p>
+            <div id="dialogInputContainer" style="margin-bottom: 25px; display: none;">
+                <input type="password" id="dialogInput" style="width: 100%; border: 1px solid var(--color-border); padding: 12px; border-radius: 8px; font-family: var(--font-main);" />
+            </div>
+            <div style="display: flex; gap: 15px; justify-content: center;">
+                <button id="dialogCancelBtn" class="refresh-btn" style="flex: 1; background: transparent; color: var(--color-text-light); border: 1px solid var(--color-border); justify-content: center;">Cancel</button>
+                <button id="dialogConfirmBtn" class="refresh-btn" style="flex: 1; justify-content: center; border: none; color: white;">OK</button>
+            </div>
+        </div>
+    </div>
+
     <script>
+        function showCustomDialog({ title, message, type = 'alert', icon = '<i class="fas fa-info-circle" style="color: var(--color-accent);"></i>', inputPlaceholder = '', inputType = 'text', confirmText = 'OK', cancelText = 'Cancel', confirmColor = 'var(--color-accent)' }) {
+            return new Promise((resolve) => {
+                const modal = document.getElementById('customDialogModal');
+                const titleEl = document.getElementById('dialogTitle');
+                const msgEl = document.getElementById('dialogMessage');
+                const iconEl = document.getElementById('dialogIcon');
+                const inputCont = document.getElementById('dialogInputContainer');
+                const inputEl = document.getElementById('dialogInput');
+                const cancelBtn = document.getElementById('dialogCancelBtn');
+                const confirmBtn = document.getElementById('dialogConfirmBtn');
+
+                titleEl.textContent = title;
+                msgEl.textContent = message;
+                iconEl.innerHTML = icon;
+                confirmBtn.textContent = confirmText;
+                confirmBtn.style.background = confirmColor;
+                cancelBtn.textContent = cancelText;
+
+                if (type === 'prompt') {
+                    inputCont.style.display = 'block';
+                    inputEl.type = inputType;
+                    inputEl.placeholder = inputPlaceholder;
+                    inputEl.value = '';
+                } else {
+                    inputCont.style.display = 'none';
+                }
+
+                if (type === 'alert') cancelBtn.style.display = 'none';
+                else cancelBtn.style.display = 'flex';
+
+                modal.classList.add('active');
+                if (type === 'prompt') setTimeout(() => inputEl.focus(), 100);
+
+                const cleanup = () => {
+                    modal.classList.remove('active');
+                    confirmBtn.onclick = null;
+                    cancelBtn.onclick = null;
+                };
+
+                confirmBtn.onclick = () => {
+                    cleanup();
+                    resolve(type === 'prompt' ? inputEl.value : true);
+                };
+
+                cancelBtn.onclick = () => {
+                    cleanup();
+                    resolve(type === 'prompt' ? null : false);
+                };
+            });
+        }
+
+        async function uiAlert(message) { return showCustomDialog({ title: 'Notice', message, type: 'alert' }); }
+        async function uiConfirm(message) { return showCustomDialog({ title: 'Please Confirm', message, type: 'confirm', icon: '<i class="fas fa-question-circle" style="color: #f59e0b;"></i>' }); }
+        async function uiPrompt(message, type = 'text') { return showCustomDialog({ title: 'Input Required', message, type: 'prompt', inputType: type, icon: '<i class="fas fa-lock" style="color: var(--color-accent);"></i>' }); }
+
         let currentApplications = [];
         let currentQuotes = [];
         let currentSuggestions = [];
@@ -954,7 +1041,8 @@
             
             // Hide all sections first
             document.getElementById('dashboard-stats').style.display = 'none';
-            document.querySelector('.table-container').style.display = 'none';
+            document.getElementById('dashboard-feed-section').style.display = 'none';
+            document.getElementById('volunteers-section').style.display = 'none';
             document.getElementById('quotes-section').style.display = 'none';
             document.getElementById('messages-section').style.display = 'none';
             
@@ -962,18 +1050,13 @@
                 document.querySelector('.nav-link:nth-child(1)').classList.add('active');
                 document.getElementById('page-title').textContent = 'Applications Dashboard';
                 document.getElementById('dashboard-stats').style.display = 'grid';
-                document.querySelector('.table-container').style.display = 'block';
-                document.getElementById('table-header-title').textContent = 'Pending Applications';
-                document.getElementById('volunteer-filters').style.display = 'none';
-                currentFilter = 'pending';
-                renderTable();
+                document.getElementById('dashboard-feed-section').style.display = 'block';
+                loadDashboardFeed();
             } else if (view === 'volunteers') {
                 document.querySelector('.nav-link:nth-child(2)').classList.add('active');
-                document.getElementById('page-title').textContent = 'Processed Volunteers';
-                document.querySelector('.table-container').style.display = 'block';
-                document.getElementById('table-header-title').textContent = 'Processed Volunteers';
-                document.getElementById('volunteer-filters').style.display = 'flex';
-                setFilter('approved'); // Default to approved on volunteer tab
+                document.getElementById('page-title').textContent = 'Volunteers Database';
+                document.getElementById('volunteers-section').style.display = 'block';
+                fetchApplications(); // Auto load data when viewing tab
             } else if (view === 'quotes') {
                 document.querySelector('.nav-link:nth-child(3)').classList.add('active');
                 document.getElementById('page-title').textContent = 'Quote Management';
@@ -986,13 +1069,6 @@
                 fetchSuggestions();
             }
             document.querySelector('.sidebar').classList.remove('open');
-        }
-
-        function setFilter(filter) {
-            currentFilter = filter;
-            document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
-            document.getElementById(`filter-${filter}`).classList.add('active');
-            renderTable();
         }
 
         // Check authentication status on load
@@ -1095,15 +1171,11 @@
                 
                 if (result.success && result.data) {
                     currentApplications = result.data;
-                    
-                    const approvedCount = currentApplications.filter(a => a.status === 'approved').length;
-                    const pendingCount = currentApplications.filter(a => !a.status || a.status === 'pending').length;
-                    
                     document.getElementById('total-count').textContent = currentApplications.length;
-                    document.getElementById('approved-count').textContent = approvedCount;
-                    document.getElementById('pending-count').textContent = pendingCount;
                     
-                    renderTable();
+                    if (currentView === 'volunteers') {
+                        renderTable();
+                    }
                 }
             } catch (error) {
                 tableBody.innerHTML = '<tr><td colspan="27" class="empty-state" style="color:var(--color-danger);"><i class="fas fa-exclamation-circle"></i><br>Error loading applications. Check console for details.</td></tr>';
@@ -1119,7 +1191,8 @@
                 const result = await response.json();
                 if (result.success && result.data) {
                     currentQuotes = result.data;
-                    renderQuotes();
+                    document.getElementById('quotes-count').textContent = currentQuotes.length;
+                    if (currentView === 'quotes') renderQuotes();
                 }
             } catch (err) {
                 tableBody.innerHTML = '<tr><td colspan="3" class="empty-state" style="color:var(--color-danger);"><i class="fas fa-exclamation-circle"></i><br>Error loading quotes.</td></tr>';
@@ -1172,10 +1245,10 @@
                     document.getElementById('addQuoteForm').reset();
                     fetchQuotes();
                 } else {
-                    alert(result.message || 'Error adding quote');
+                    uiAlert(result.message || 'Error adding quote');
                 }
             } catch (err) {
-                alert('Server error.');
+                uiAlert('Server error.');
             } finally {
                 btn.innerHTML = 'Add Quote';
                 btn.disabled = false;
@@ -1183,7 +1256,7 @@
         }
 
         async function deleteQuote(id) {
-            if (!confirm('Are you sure you want to delete this quote?')) return;
+            if (!(await uiConfirm('Are you sure you want to delete this quote?'))) return;
             try {
                 const res = await fetch('/api/v1/quotes/' + id, { method: 'DELETE' });
                 if (handleUnauthorized(res)) return;
@@ -1192,17 +1265,17 @@
                 if (result.success) {
                     fetchQuotes();
                 } else {
-                    alert(result.message || 'Error deleting quote');
+                    uiAlert(result.message || 'Error deleting quote');
                 }
             } catch (err) {
-                alert('Server error.');
+                uiAlert('Server error.');
             }
         }
 
-        function editQuote(id, text, author) {
-            const newText = prompt("Edit quote text:", text);
+        async function editQuote(id, text, author) {
+            const newText = await uiPrompt("Edit quote text:");
             if (newText === null) return;
-            const newAuthor = prompt("Edit quote author:", author);
+            const newAuthor = await uiPrompt("Edit quote author:");
             if (newAuthor === null) return;
             
             updateQuote(id, newText, newAuthor);
@@ -1221,10 +1294,10 @@
                 if (result.success) {
                     fetchQuotes();
                 } else {
-                    alert(result.message || 'Error updating quote');
+                    uiAlert(result.message || 'Error updating quote');
                 }
             } catch (err) {
-                alert('Server error.');
+                uiAlert('Server error.');
             }
         }
 
@@ -1239,7 +1312,8 @@
                 const result = await response.json();
                 if (result.success && result.data) {
                     currentSuggestions = result.data;
-                    renderSuggestions();
+                    document.getElementById('messages-count').textContent = currentSuggestions.length;
+                    if (currentView === 'messages') renderSuggestions();
                 }
             } catch (err) {
                 tableBody.innerHTML = '<tr><td colspan="5" class="empty-state" style="color:var(--color-danger);"><i class="fas fa-exclamation-circle"></i><br>Error loading messages.</td></tr>';
@@ -1259,15 +1333,15 @@
                 });
                 const esc = (str) => String(str || '').replace(/[&<>'"]/g, tag => ({'&': '&amp;','<': '&lt;','>': '&gt;',"'": '&#39;','"': '&quot;'}[tag]));
                 
-                return \`
+                return `
                 <tr>
-                    <td style="white-space: nowrap;">\${date}</td>
-                    <td><strong>\${esc(s.name)}</strong></td>
-                    <td><a href="mailto:\${esc(s.email)}" style="color: var(--color-accent); text-decoration: underline;">\${esc(s.email)}</a></td>
-                    <td><span class="status-badge" style="background: rgba(16, 185, 129, 0.1); color: var(--color-success); border: 1px solid var(--color-success);">\${esc(s.subject) || 'N/A'}</span></td>
-                    <td style="white-space: normal; line-height: 1.5;">\${esc(s.suggestion)}</td>
+                    <td style="white-space: nowrap;">${date}</td>
+                    <td><strong>${esc(s.name)}</strong></td>
+                    <td><a href="mailto:${esc(s.email)}" style="color: var(--color-accent); text-decoration: underline;">${esc(s.email)}</a></td>
+                    <td><span class="status-badge" style="background: rgba(16, 185, 129, 0.1); color: var(--color-success); border: 1px solid var(--color-success);">${esc(s.subject) || 'N/A'}</span></td>
+                    <td style="white-space: normal; line-height: 1.5;">${esc(s.suggestion)}</td>
                 </tr>
-                \`;
+                `;
             }).join('');
         }
 
@@ -1319,6 +1393,7 @@
 
                 html += `
                     <tr>
+                        <td style="padding-left: 20px;"><input type="checkbox" class="app-checkbox" value="${app.id}" onchange="updateBulkDeleteBtn()" style="cursor: pointer; width: 16px; height: 16px;"></td>
                         <td class="name-col">${escapeHTML(app.name)}</td>
                         <td>${escapeHTML(app.category || 'N/A')}</td>
                         <td>${escapeHTML(app.age || 'N/A')}</td>
@@ -1345,17 +1420,135 @@
                         <td>${resumeLink}</td>
                         <td class="date">${date}</td>
                         <td>${statusBadge}</td>
-                        <td class="sticky-actions" style="text-align: center;">
-                            <button class="action-btn" title="View Details in Modal" onclick="viewApplication('${app.id}')"><i class="fas fa-eye"></i></button>
+                        <td class="sticky-actions">
+                            <button class="action-btn" title="View Details" onclick="viewDetails('${app.id}')">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                            <button class="action-btn" title="Delete Application" onclick="deleteApplication('${app.id}')" style="color: var(--color-danger);">
+                                <i class="fas fa-trash-alt"></i>
+                            </button>
                         </td>
                     </tr>
                 `;
             });
             
             tableBody.innerHTML = html;
+            
+            // Reset Select All
+            const selectAllCheckbox = document.getElementById('selectAllCheckbox');
+            if(selectAllCheckbox) selectAllCheckbox.checked = false;
+            updateBulkDeleteBtn();
         }
 
-        function viewApplication(id) {
+        function toggleAllCheckboxes(source) {
+            const checkboxes = document.querySelectorAll('.app-checkbox');
+            checkboxes.forEach(cb => cb.checked = source.checked);
+            updateBulkDeleteBtn();
+        }
+
+        function updateBulkDeleteBtn() {
+            const checkboxes = document.querySelectorAll('.app-checkbox:checked');
+            const btn = document.getElementById('bulkDeleteBtn');
+            const countSpan = document.getElementById('selectedCount');
+            if(checkboxes.length > 0) {
+                btn.style.display = 'inline-flex';
+                countSpan.textContent = checkboxes.length;
+            } else {
+                btn.style.display = 'none';
+            }
+        }
+
+        async function deleteSelected() {
+            const checkboxes = document.querySelectorAll('.app-checkbox:checked');
+            if (checkboxes.length === 0) return;
+            
+            const count = checkboxes.length;
+            if (!(await showCustomDialog({ title: 'Danger', message: `WARNING: Are you absolutely sure you want to permanently delete ${count} selected application(s) and their attached files? This action cannot be undone!`, type: 'confirm', icon: '<i class="fas fa-exclamation-triangle" style="color: var(--color-danger);"></i>', confirmText: 'Yes, Delete', confirmColor: 'var(--color-danger)' }))) {
+                return;
+            }
+
+            const password = await uiPrompt("To confirm deletion, please enter the Secure Master Password:", 'password');
+            if (!password) return;
+
+            const ids = Array.from(checkboxes).map(cb => cb.value);
+            const btn = document.getElementById('bulkDeleteBtn');
+            const originalText = btn.innerHTML;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Deleting...';
+            btn.disabled = true;
+
+            try {
+                const res = await fetch('/api/v1/applications/bulk-delete', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ ids, password })
+                });
+
+                if (handleUnauthorized(res)) return;
+
+                const result = await res.json();
+                if (result.success) {
+                    uiAlert(`${count} applications successfully deleted.`);
+                    fetchApplications();
+                } else {
+                    uiAlert(result.message || 'Error deleting applications.');
+                }
+            } catch (err) {
+                uiAlert('Server error while deleting applications.');
+            } finally {
+                btn.innerHTML = originalText;
+                btn.disabled = false;
+            }
+        }
+
+        async function exportToCSV() {
+            let filteredApps = currentApplications;
+            if (currentView === 'dashboard') {
+                filteredApps = currentApplications.filter(a => !a.status || a.status === 'pending');
+            } else if (currentView === 'volunteers') {
+                filteredApps = currentApplications.filter(a => a.status === currentFilter);
+            }
+
+            if(filteredApps.length === 0) {
+                uiAlert('No data to export in the current view.');
+                return;
+            }
+
+            const headers = ['Name', 'Category', 'Age', 'DOB', 'Blood Group', 'Email', 'Alt Email', 'Phone', 'Alt Phone', 'Hometown', 'Current City', 'State', 'Temp Address', 'Perm Address', 'Education', 'Degree', 'Current Status', 'Languages', 'Interest', 'Hobbies', 'Motivation', 'Experience', 'Status', 'Applied On'];
+            
+            const escapeCSV = (str) => {
+                if(str == null) return 'N/A';
+                str = String(str).replace(/"/g, '""');
+                if(str.search(/("|,|\n)/g) >= 0) {
+                    str = `"${str}"`;
+                }
+                return str;
+            };
+
+            const csvRows = [headers.join(',')];
+
+            filteredApps.forEach(app => {
+                const row = [
+                    app.name, app.category, app.age, app.dob, app.blood_group, app.email, app.alt_email, app.phone, app.alt_phone,
+                    app.hometown, app.current_city, app.state, app.temp_address, app.perm_address, app.education_level, app.degree,
+                    app.current_status, app.languages, app.interest, app.hobbies, app.motivation, app.experience,
+                    app.status || 'pending', app.created_at
+                ].map(escapeCSV);
+                csvRows.push(row.join(','));
+            });
+
+            const csvString = csvRows.join('\n');
+            const blob = new Blob([csvString], { type: 'text/csv;charset=utf-8;' });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement("a");
+            link.setAttribute("href", url);
+            link.setAttribute("download", `Prajaya_Volunteers_${currentView}_${new Date().toISOString().split('T')[0]}.csv`);
+            link.style.visibility = 'hidden';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+
+        function viewDetails(id) {
             const app = currentApplications.find(a => a.id == id); // Use loose equality in case of string/number mismatch
             if (!app) {
                 console.error("Could not find application with id", id);
@@ -1491,7 +1684,7 @@
         }
 
         async function updateStatus(id, status) {
-            const reason = prompt(`Please provide a reason for marking this application as ${status}:`);
+            const reason = await uiPrompt(`Please provide a reason for marking this application as ${status}:`, 'text');
             if (reason === null) return; // User cancelled
             
             try {
@@ -1505,23 +1698,23 @@
                 
                 const result = await response.json();
                 if (result.success) {
-                    alert(`Application ${status} successfully! An email has been sent to the applicant.`);
+                    uiAlert(`Application ${status} successfully! An email has been sent to the applicant.`);
                     closeModal();
                     fetchApplications(); // Refresh list
                 } else {
-                    alert(result.message || 'Error updating status');
+                    uiAlert(result.message || 'Error updating status');
                 }
             } catch (err) {
                 console.error(err);
-                alert('Server error while updating status');
+                uiAlert('Server error while updating status');
             }
         }
 
         async function deleteApplication(id) {
-            const confirmDelete = confirm('Are you sure you want to permanently delete this application? This action cannot be undone and will delete associated files from storage.');
+            const confirmDelete = await showCustomDialog({ title: 'Danger', message: 'Are you sure you want to permanently delete this application? This action cannot be undone and will delete associated files from storage.', type: 'confirm', icon: '<i class="fas fa-exclamation-triangle" style="color: var(--color-danger);"></i>', confirmText: 'Yes, Delete', confirmColor: 'var(--color-danger)' });
             if (!confirmDelete) return;
 
-            const password = prompt('SECURITY CHECK: Please enter the Master Admin Password to authorize this deletion:');
+            const password = await uiPrompt('SECURITY CHECK: Please enter the Master Admin Password to authorize this deletion:', 'password');
             if (!password) return; // User cancelled
 
             try {
@@ -1535,15 +1728,15 @@
 
                 const result = await response.json();
                 if (result.success) {
-                    alert('Application deleted successfully!');
+                    uiAlert('Application deleted successfully!');
                     closeModal();
                     fetchApplications(); // Refresh list
                 } else {
-                    alert(result.message || 'Error deleting application.');
+                    uiAlert(result.message || 'Error deleting application.');
                 }
             } catch (err) {
                 console.error(err);
-                alert('Server error while trying to delete application.');
+                uiAlert('Server error while trying to delete application.');
             }
         }
 
@@ -1557,6 +1750,85 @@
                 closeModal();
             }
         });
+
+        
+        async function loadDashboardFeed() {
+            const feedContent = document.getElementById('dashboard-feed-content');
+            feedContent.innerHTML = '<div class="empty-state"><i class="fas fa-circle-notch fa-spin"></i><br>Loading activity feed...</div>';
+
+            try {
+                await Promise.all([
+                    fetchApplications(),
+                    fetchQuotes(),
+                    fetchSuggestions()
+                ]);
+
+                const allActivity = [];
+
+                currentApplications.forEach(app => {
+                    allActivity.push({
+                        type: 'application',
+                        date: new Date(app.created_at),
+                        title: 'New Volunteer Application',
+                        desc: `${app.name} applied as a volunteer (${app.category || 'General'}).`,
+                        icon: 'fa-user-plus',
+                        color: 'var(--color-accent)',
+                        linkView: 'volunteers'
+                    });
+                });
+
+                currentSuggestions.forEach(msg => {
+                    allActivity.push({
+                        type: 'message',
+                        date: new Date(msg.created_at),
+                        title: 'New Suggestion / Message',
+                        desc: `${msg.name} sent a message regarding: ${msg.subject || 'General'}.`,
+                        icon: 'fa-envelope',
+                        color: 'var(--color-success)',
+                        linkView: 'messages'
+                    });
+                });
+
+                currentQuotes.forEach(quote => {
+                    allActivity.push({
+                        type: 'quote',
+                        date: new Date(quote.created_at),
+                        title: 'New Quote Added',
+                        desc: `"${quote.text}" - ${quote.author || 'Admin'}`,
+                        icon: 'fa-quote-left',
+                        color: '#f59e0b',
+                        linkView: 'quotes'
+                    });
+                });
+
+                allActivity.sort((a, b) => b.date - a.date);
+
+                if (allActivity.length === 0) {
+                    feedContent.innerHTML = '<div class="empty-state"><i class="fas fa-history"></i><br>No recent activity found.</div>';
+                    return;
+                }
+
+                feedContent.innerHTML = allActivity.slice(0, 30).map(item => `
+                    <div style="background: white; border: 1px solid var(--color-border); border-radius: 8px; padding: 16px; display: flex; gap: 16px; align-items: flex-start; transition: var(--transition);">
+                        <div style="width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; background: ${item.color}20; color: ${item.color}; flex-shrink: 0;">
+                            <i class="fas ${item.icon}"></i>
+                        </div>
+                        <div style="flex: 1;">
+                            <h4 style="margin-bottom: 4px; font-size: 0.95rem; color: var(--color-heading);">${item.title}</h4>
+                            <p style="color: var(--color-text); font-size: 0.85rem; line-height: 1.4; margin-bottom: 8px;">${item.desc}</p>
+                            <button onclick="switchView('${item.linkView}')" style="background: transparent; border: 1px solid var(--color-border); padding: 4px 12px; border-radius: 4px; font-size: 0.75rem; cursor: pointer; color: var(--color-text); transition: var(--transition);" onmouseover="this.style.borderColor='var(--color-accent)'; this.style.color='var(--color-accent)';" onmouseout="this.style.borderColor='var(--color-border)'; this.style.color='var(--color-text)';">View Section <i class="fas fa-arrow-right" style="font-size: 0.7rem; margin-left: 4px;"></i></button>
+                        </div>
+                        <div style="color: var(--color-text-light); font-size: 0.75rem; white-space: nowrap;">
+                            ${item.date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })}
+                        </div>
+                    </div>
+                `).join('');
+
+            } catch (err) {
+                feedContent.innerHTML = '<div class="empty-state" style="color: var(--color-danger);"><i class="fas fa-exclamation-triangle"></i><br>Error loading activity feed.</div>';
+            }
+        }
+
 
         // Load data on start
         window.addEventListener('DOMContentLoaded', checkAuth);
