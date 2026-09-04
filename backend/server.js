@@ -26,7 +26,7 @@ const { sendEmail } = require('./email');
 const app = express();
 
 // Security: Secure JWT Secret & Hash
-const JWT_SECRET = process.env.JWT_SECRET || crypto.randomBytes(64).toString('hex');
+const JWT_SECRET = process.env.JWT_SECRET || 'prajaya_super_secret_fallback_key_123!@#';
 const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'prajaya123';
 // Generate bcrypt hash of the password on server start to defeat timing attacks
 const adminPasswordHash = bcrypt.hashSync(ADMIN_PASSWORD, 12);
