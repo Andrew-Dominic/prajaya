@@ -1369,6 +1369,18 @@
         .term-content { font-size: 1rem; color: var(--color-text); }
         .term-content ul { padding-left: 20px; margin-top: 10px; list-style-type: disc; }
         .term-content ul li { margin-bottom: 5px; }
+        @media (max-width: 768px) {
+            .term-content ul {
+                list-style-type: none;
+                padding-left: 0;
+            }
+            .terms-list > li {
+                padding-left: 28px;
+            }
+            .terms-list > li::before {
+                font-size: 1rem;
+            }
+        }
 
         /* Objective Overlay Dialogue Box */
         .objective-overlay {
@@ -1393,12 +1405,16 @@
             text-align: left;
             transform: translateY(20px);
             animation: slideUpDialogue 0.5s forwards ease-out;
-            max-height: 85vh;
+            max-height: 80vh;
+            max-height: 80dvh;
             overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
         }
         @media (max-width: 768px) {
             .objective-dialogue {
                 padding: 25px;
+                max-height: 75vh;
+                max-height: 75dvh;
             }
             .objective-dialogue h2 {
                 font-size: 1.6rem;
@@ -1466,7 +1482,7 @@
     <!-- Header -->
     <header class="header" id="header">
         <div class="container nav-container">
-            <a href="#" class="brand">
+            <a href="index.html#home" class="brand">
                 <img src="assets/images/logo.png" alt="PRAJAYA Foundation Logo" class="brand-logo">
                 <div class="brand-text">
                     <span class="brand-name">PRAJAYA</span>
@@ -1475,6 +1491,7 @@
             </a>
             
             <nav class="nav-links" id="nav-links">
+                <a href="index.html#home">Home</a>
                 <a href="index.html#vision">About</a>
                 <a href="index.html#programs">Objectives</a>
                 <a href="index.html#founder">Founder</a>

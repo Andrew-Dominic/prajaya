@@ -1350,12 +1350,6 @@
             
             let filteredApps = currentApplications;
             
-            if (currentView === 'dashboard') {
-                filteredApps = currentApplications.filter(a => !a.status || a.status === 'pending');
-            } else if (currentView === 'volunteers') {
-                filteredApps = currentApplications.filter(a => a.status === currentFilter);
-            }
-            
             if (filteredApps.length === 0) {
                 tableBody.innerHTML = '<tr><td colspan="27" class="empty-state"><i class="fas fa-folder-open"></i><br>No applications found in this view.</td></tr>';
                 return;
