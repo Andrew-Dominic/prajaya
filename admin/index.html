@@ -1495,11 +1495,14 @@
         }
 
         async function exportToCSV() {
-            let filteredApps = currentApplications;
-            if (currentView === 'dashboard') {
-                filteredApps = currentApplications.filter(a => !a.status || a.status === 'pending');
-            } else if (currentView === 'volunteers') {
-                filteredApps = currentApplications.filter(a => a.status === currentFilter);
+            let filteredApps = [];
+            const selectedCheckboxes = document.querySelectorAll('.app-checkbox:checked');
+            
+            if (selectedCheckboxes.length > 0) {
+                const selectedIds = Array.from(selectedCheckboxes).map(cb => cb.value);
+                filteredApps = currentApplications.filter(a => selectedIds.includes(a.id.toString()));
+            } else {
+                filteredApps = currentApplications;
             }
 
             if(filteredApps.length === 0) {
