@@ -821,6 +821,7 @@
                     <thead>
                         <tr>
                             <th style="width: 40px; padding-left: 20px;"><input type="checkbox" id="selectAllCheckbox" onclick="toggleAllCheckboxes(this)" style="cursor: pointer; width: 16px; height: 16px;"></th>
+                            <th style="min-width: 120px;">Applicant Code</th>
                             <th>Name</th>
                             <th>Category</th>
                             <th>Age</th>
@@ -852,7 +853,7 @@
                     </thead>
                     <tbody id="applications-table-body">
                         <tr>
-                            <td colspan="27" class="empty-state">
+                            <td colspan="28" class="empty-state">
                                 <i class="fas fa-circle-notch fa-spin"></i><br>
                                 Loading applications...
                             </td>
@@ -1159,7 +1160,7 @@
         async function fetchApplications() {
             
             const tableBody = document.getElementById('applications-table-body');
-            tableBody.innerHTML = '<tr><td colspan="27" class="empty-state"><i class="fas fa-circle-notch fa-spin"></i><br>Refreshing data...</td></tr>';
+            tableBody.innerHTML = '<tr><td colspan="28" class="empty-state"><i class="fas fa-circle-notch fa-spin"></i><br>Refreshing data...</td></tr>';
             
             try {
                 // Prevent browser caching of the API response
@@ -1178,7 +1179,7 @@
                     }
                 }
             } catch (error) {
-                tableBody.innerHTML = '<tr><td colspan="27" class="empty-state" style="color:var(--color-danger);"><i class="fas fa-exclamation-circle"></i><br>Error loading applications. Check console for details.</td></tr>';
+                tableBody.innerHTML = '<tr><td colspan="28" class="empty-state" style="color:var(--color-danger);"><i class="fas fa-exclamation-circle"></i><br>Error loading applications. Check console for details.</td></tr>';
             }
         }
 
@@ -1351,7 +1352,7 @@
             let filteredApps = currentApplications;
             
             if (filteredApps.length === 0) {
-                tableBody.innerHTML = '<tr><td colspan="27" class="empty-state"><i class="fas fa-folder-open"></i><br>No applications found in this view.</td></tr>';
+                tableBody.innerHTML = '<tr><td colspan="28" class="empty-state"><i class="fas fa-folder-open"></i><br>No applications found in this view.</td></tr>';
                 return;
             }
             
@@ -1388,6 +1389,7 @@
                 html += `
                     <tr>
                         <td style="padding-left: 20px;"><input type="checkbox" class="app-checkbox" value="${app.id}" onchange="updateBulkDeleteBtn()" style="cursor: pointer; width: 16px; height: 16px;"></td>
+                        <td style="white-space: nowrap; font-family: monospace; font-weight: 700; color: var(--color-accent);">${escapeHTML(app.applicant_code || 'N/A')}</td>
                         <td class="name-col">${escapeHTML(app.name)}</td>
                         <td>${escapeHTML(app.category || 'N/A')}</td>
                         <td>${escapeHTML(app.age || 'N/A')}</td>
@@ -1510,7 +1512,7 @@
                 return;
             }
 
-            const headers = ['Name', 'Category', 'Age', 'DOB', 'Blood Group', 'Email', 'Alt Email', 'Phone', 'Alt Phone', 'Hometown', 'Current City', 'State', 'Temp Address', 'Perm Address', 'Education', 'Degree', 'Current Status', 'Languages', 'Interest', 'Hobbies', 'Motivation', 'Experience', 'Status', 'Applied On'];
+            const headers = ['Applicant Code', 'Name', 'Category', 'Age', 'DOB', 'Blood Group', 'Email', 'Alt Email', 'Phone', 'Alt Phone', 'Hometown', 'Current City', 'State', 'Temp Address', 'Perm Address', 'Education', 'Degree', 'Current Status', 'Languages', 'Interest', 'Hobbies', 'Motivation', 'Experience', 'Status', 'Applied On'];
             
             const escapeCSV = (str) => {
                 if(str == null) return 'N/A';
@@ -1525,7 +1527,7 @@
 
             filteredApps.forEach(app => {
                 const row = [
-                    app.name, app.category, app.age, app.dob, app.blood_group, app.email, app.alt_email, app.phone, app.alt_phone,
+                    app.applicant_code || 'N/A', app.name, app.category, app.age, app.dob, app.blood_group, app.email, app.alt_email, app.phone, app.alt_phone,
                     app.hometown, app.current_city, app.state, app.temp_address, app.perm_address, app.education_level, app.degree,
                     app.current_status, app.languages, app.interest, app.hobbies, app.motivation, app.experience,
                     app.status || 'pending', app.created_at
@@ -1576,8 +1578,22 @@
                    </div>`
                 : '';
 
+            const codeBadge = `
+                <div style="background: rgba(197, 157, 95, 0.12); border: 1px solid var(--color-accent); border-radius: 8px; padding: 12px 18px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center;">
+                    <div>
+                        <span style="font-size: 0.75rem; font-weight: 700; color: var(--color-accent); text-transform: uppercase; letter-spacing: 1px; display: block;">Applicant Code</span>
+                        <span style="font-size: 1.3rem; font-weight: 800; font-family: monospace; color: var(--color-text);">${app.applicant_code || 'N/A'}</span>
+                    </div>
+                    <div style="text-align: right;">
+                        <span style="font-size: 0.75rem; font-weight: 700; color: var(--color-text-light); text-transform: uppercase; letter-spacing: 1px; display: block;">Status</span>
+                        <span style="font-size: 0.9rem; font-weight: 600; text-transform: capitalize; color: ${app.status === 'approved' ? 'var(--color-success)' : app.status === 'rejected' ? 'var(--color-danger)' : '#f59e0b'};">${app.status || 'pending'}</span>
+                    </div>
+                </div>
+            `;
+
             const html = `
                 ${photoPreview}
+                ${codeBadge}
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
                     <div class="detail-group">
                         <span class="detail-label">Full Name</span>

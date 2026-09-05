@@ -2300,7 +2300,21 @@
                 if (!data.success) {
                     throw new Error(data.message || 'Server error');
                 }
-                document.getElementById('volunteerForm').innerHTML = '<div style="text-align: center; padding: 40px 20px;"><i class="fas fa-check-circle" style="font-size: 4rem; color: #10b981; margin-bottom: 20px;"></i><h3 style="font-size: 1.5rem; margin-bottom: 15px; color: var(--color-heading);">Congratulations! You are now a Volunteer.</h3><p style="font-size: 1.1rem; color: var(--color-text); line-height: 1.6;">You have been automatically selected as a volunteer at PRAJAYA Foundation. Further information will be shared with you shortly.</p></div>';
+                const appCode = (data.data && data.data.applicant_code) ? data.data.applicant_code : '';
+                const codeHtml = appCode ? `
+                    <div style="background: rgba(197, 157, 95, 0.1); border: 2px dashed #c59d5f; border-radius: 12px; padding: 22px; margin: 25px auto; max-width: 420px; box-shadow: 0 4px 12px rgba(0,0,0,0.05);">
+                        <div style="font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1.5px; color: #856404; font-weight: 700; margin-bottom: 6px;">Your Volunteer ID / Code</div>
+                        <div style="font-size: 2rem; font-weight: 800; color: #1e293b; letter-spacing: 2px; font-family: monospace;">${appCode}</div>
+                        <div style="font-size: 0.85rem; color: #64748b; margin-top: 8px;">A confirmation email containing this code has been sent to your email.</div>
+                    </div>` : '';
+
+                document.getElementById('volunteerForm').innerHTML = `
+                    <div style="text-align: center; padding: 40px 20px;">
+                        <i class="fas fa-check-circle" style="font-size: 4rem; color: #10b981; margin-bottom: 20px;"></i>
+                        <h3 style="font-size: 1.6rem; margin-bottom: 12px; color: var(--color-heading);">Congratulations! You are now a Volunteer.</h3>
+                        ${codeHtml}
+                        <p style="font-size: 1.05rem; color: var(--color-text); line-height: 1.6; max-width: 550px; margin: 0 auto;">You have been automatically selected as a volunteer at PRAJAYA Foundation. Further information will be shared with you shortly.</p>
+                    </div>`;
                 window.scrollTo({ top: document.getElementById('volunteer-page').offsetTop - 80, behavior: 'smooth' });
             })
             .catch(err => {

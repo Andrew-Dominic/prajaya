@@ -21,6 +21,7 @@ const config = require('./config');
 const { globalLimiter, applicationLimiter, authLimiter, suggestionLimiter } = require('./middlewares/rateLimiter.middleware');
 const { errorHandler, AppError } = require('./middlewares/error.middleware');
 const { sendEmail } = require('./email');
+const { initApplicantCodeSystem, generateNextApplicantCode } = require('./services/applicantCode.service');
 
 // Initialize Express
 const app = express();
@@ -38,8 +39,14 @@ let supabase = null;
 if (supabaseUrl && supabaseKey) {
   supabase = createClient(supabaseUrl, supabaseKey);
   console.log('Supabase Client Initialized for DB and Storage');
+  initApplicantCodeSystem(supabase).catch(err => {
+    console.error('Failed to init applicant code system:', err);
+  });
 } else {
   console.warn('⚠️ SUPABASE_KEY is missing from .env!');
+  initApplicantCodeSystem(null).catch(err => {
+    console.error('Failed to init applicant code system:', err);
+  });
 }
 
 // ──────────────────────────────────────────────
@@ -141,9 +148,13 @@ app.post('/api/v1/applications', applicationLimiter, upload.fields([{ name: 'res
       photo_path = await uploadToSupabase(req.files['photo'][0], 'photos');
     }
 
+    // Generate persistent sequential applicant code (e.g. pjf/26/001)
+    const applicant_code = await generateNextApplicantCode(supabase);
+
     const { data, error } = await supabase
       .from('applications')
       .insert([{
+        applicant_code,
         category, name, age: age || null, dob: dob || null, blood_group, phone, alt_phone, 
         email, alt_email, hometown, current_city, state, temp_address, perm_address, 
         current_status, education_level, degree, interest, hobbies, languages, motivation, experience, 
@@ -153,13 +164,13 @@ app.post('/api/v1/applications', applicationLimiter, upload.fields([{ name: 'res
 
     if (error) throw error;
 
-    console.log('Inserted into database:', data[0].id);
+    console.log(`Inserted into database: ID ${data[0].id} with code ${applicant_code}`);
     
-    // Send simple congratulatory email to applicant
+    // Send congratulatory email to applicant with sequential code
     await sendEmail(
       email,
-      'Congratulations! You are now a Volunteer at Prajaya Foundation',
-      `Hello ${name},\n\nCongratulations! You have been automatically selected as a volunteer.\nFurther information will be shared with you shortly.\n\nThank you,\nPrajaya Foundation`,
+      `Congratulations! You are now a Volunteer at Prajaya Foundation [${applicant_code}]`,
+      `Hello ${name},\n\nCongratulations! You have been automatically selected as a volunteer at Prajaya Foundation.\nYour Volunteer Code: ${applicant_code}\n\nFurther information will be shared with you shortly.\n\nThank you,\nPrajaya Foundation`,
       `<div style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f8fafc; padding: 40px 20px; margin: 0;">
          <div style="max-width: 600px; margin: 0 auto; background-color: #ffffff; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);">
             <div style="background-color: #1e293b; padding: 30px; text-align: center; border-bottom: 4px solid #c59d5f;">
@@ -170,9 +181,16 @@ app.post('/api/v1/applications', applicationLimiter, upload.fields([{ name: 'res
               <p style="color: #475569; font-size: 16px; line-height: 1.6; margin-bottom: 20px;">
                 Dear <strong style="color: #0f172a;">${name}</strong>,
               </p>
-              <p style="color: #475569; font-size: 16px; line-height: 1.6; margin-bottom: 30px;">
+              <p style="color: #475569; font-size: 16px; line-height: 1.6; margin-bottom: 25px;">
                 Congratulations! You have been automatically selected as a volunteer at Prajaya Foundation.
               </p>
+
+              <!-- Highlighted Volunteer ID / Applicant Code Box -->
+              <div style="background-color: #fdf8f0; border: 2px dashed #c59d5f; border-radius: 10px; padding: 20px; text-align: center; margin-bottom: 30px;">
+                <span style="font-size: 12px; font-weight: 700; color: #856404; text-transform: uppercase; letter-spacing: 1.5px; display: block; margin-bottom: 6px;">Your Volunteer ID / Applicant Code</span>
+                <span style="font-size: 26px; font-weight: 800; color: #1e293b; letter-spacing: 2px; font-family: monospace; display: block;">${applicant_code}</span>
+                <span style="font-size: 12px; color: #64748b; margin-top: 6px; display: block;">Please retain this code for all future communications.</span>
+              </div>
               
               <div style="background-color: #f1f5f9; border-left: 4px solid #10b981; padding: 18px 20px; margin-bottom: 35px; border-radius: 0 8px 8px 0;">
                 <p style="margin: 0; color: #334155; font-size: 15px; line-height: 1.6;">
@@ -191,16 +209,17 @@ app.post('/api/v1/applications', applicationLimiter, upload.fields([{ name: 'res
        </div>`
     );
 
-    // Notify the admin about the new application
+    // Notify the admin about the new application with applicant code
     const adminEmail = process.env.ADMIN_EMAIL || 'admin@prajaya.org';
     await sendEmail(
       adminEmail,
-      'New Volunteer Application - Prajaya Foundation',
-      `A new volunteer application has been submitted by ${name}.\n\nName: ${name}\nEmail: ${email}\nPhone: ${phone}\nCity: ${current_city}\n\nPlease log in to the admin dashboard to view their full profile and resume.`,
+      `New Volunteer Application [${applicant_code}] - Prajaya Foundation`,
+      `A new volunteer application has been submitted by ${name}.\n\nApplicant Code: ${applicant_code}\nName: ${name}\nEmail: ${email}\nPhone: ${phone}\nCity: ${current_city}\n\nPlease log in to the admin dashboard to view their full profile and resume.`,
       `<div style="font-family: sans-serif; padding: 20px;">
         <h2>New Volunteer Application</h2>
         <p>A new volunteer has just submitted an application on the website.</p>
         <div style="background-color: #f1f5f9; padding: 15px; border-radius: 8px; margin: 20px 0;">
+          <p><strong>Applicant Code:</strong> <span style="font-family: monospace; font-weight: bold; color: #c59d5f; font-size: 16px;">${applicant_code}</span></p>
           <p><strong>Name:</strong> ${name}</p>
           <p><strong>Email:</strong> ${email}</p>
           <p><strong>Phone:</strong> ${phone}</p>
@@ -274,10 +293,11 @@ app.patch('/api/v1/applications/:id/status', requireAuth, async (req, res) => {
     
     // Send email to applicant about decision
     const decision = status === 'approved' ? 'Selected' : 'Not Selected';
+    const codeTag = appData.applicant_code ? ` [${appData.applicant_code}]` : '';
     await sendEmail(
       appData.email,
-      `Update on Your Prajaya Foundation Application`,
-      `Hello ${appData.name},\n\nYour application has been ${decision}.\nReason: ${reason}\n\nThank you,\nPrajaya Foundation`,
+      `Update on Your Prajaya Foundation Application${codeTag}`,
+      `Hello ${appData.name},\n\nYour application${appData.applicant_code ? ` (${appData.applicant_code})` : ''} has been ${decision}.\nReason: ${reason}\n\nThank you,\nPrajaya Foundation`,
       `<div style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f8fafc; padding: 40px 20px; margin: 0;">
          <div style="max-width: 600px; margin: 0 auto; background-color: #ffffff; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);">
             <div style="background-color: #1e293b; padding: 30px; text-align: center; border-bottom: 4px solid #c59d5f;">
@@ -288,6 +308,10 @@ app.patch('/api/v1/applications/:id/status', requireAuth, async (req, res) => {
               <p style="color: #475569; font-size: 16px; line-height: 1.6; margin-bottom: 20px;">
                 Dear <strong style="color: #0f172a;">${appData.name}</strong>,
               </p>
+              ${appData.applicant_code ? `
+              <div style="display: inline-block; background-color: #f1f5f9; padding: 6px 12px; border-radius: 6px; font-family: monospace; font-size: 14px; font-weight: bold; color: #1e293b; margin-bottom: 20px;">
+                Applicant Code: ${appData.applicant_code}
+              </div>` : ''}
               <p style="color: #475569; font-size: 16px; line-height: 1.6; margin-bottom: 30px;">
                 We have reviewed your volunteer application. We are writing to inform you that your application has been <strong style="color: ${status === 'approved' ? '#10b981' : '#ef4444'};">${status === 'approved' ? 'SELECTED' : 'NOT SELECTED'}</strong>.
               </p>
