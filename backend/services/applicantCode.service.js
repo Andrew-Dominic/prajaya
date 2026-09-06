@@ -6,21 +6,33 @@
  * Deleting or exporting rows in the `applications` table will NEVER reset or decrement this counter.
  */
 
-const { Pool } = require('pg');
+let Pool = null;
+try {
+  Pool = require('pg').Pool;
+} catch (e) {
+  // pg module optional or not yet installed in runtime
+}
 
 let pool = null;
 
 function getPool() {
+  if (!Pool) return null;
   if (!pool && process.env.DATABASE_URL) {
-    pool = new Pool({
-      connectionString: process.env.DATABASE_URL,
-      ssl: { rejectUnauthorized: false },
-      max: 10,
-      idleTimeoutMillis: 30000,
-    });
-    pool.on('error', (err) => {
-      console.error('PostgreSQL Pool unexpected error on idle client:', err);
-    });
+    try {
+      pool = new Pool({
+        connectionString: process.env.DATABASE_URL,
+        ssl: { rejectUnauthorized: false },
+        max: 5,
+        connectionTimeoutMillis: 5000,
+        idleTimeoutMillis: 15000,
+      });
+      pool.on('error', (err) => {
+        console.error('PostgreSQL Pool idle error:', err.message);
+      });
+    } catch (err) {
+      console.warn('PostgreSQL Pool initialization error:', err.message);
+      pool = null;
+    }
   }
   return pool;
 }
@@ -173,11 +185,11 @@ async function generateNextApplicantCode(supabaseClient) {
         .from('applicant_counters')
         .select('last_number')
         .eq('id', 'applicant_counter')
-        .single();
+        .maybeSingle();
 
       let nextNum = 1;
-      if (!fetchErr && currentRows) {
-        nextNum = (currentRows.last_number || 0) + 1;
+      if (!fetchErr && currentRows && typeof currentRows.last_number === 'number') {
+        nextNum = currentRows.last_number + 1;
         await supabaseClient
           .from('applicant_counters')
           .update({ last_number: nextNum, updated_at: new Date().toISOString() })
@@ -185,7 +197,7 @@ async function generateNextApplicantCode(supabaseClient) {
       } else {
         await supabaseClient
           .from('applicant_counters')
-          .insert([{ id: 'applicant_counter', last_number: nextNum }]);
+          .upsert([{ id: 'applicant_counter', last_number: nextNum, updated_at: new Date().toISOString() }]);
       }
 
       const code = formatApplicantCode(nextNum);

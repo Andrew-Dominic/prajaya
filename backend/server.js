@@ -114,13 +114,13 @@ async function uploadToSupabase(file, folder) {
   if (!supabase) throw new Error('Supabase client not initialized. Check SUPABASE_KEY.');
   
   const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
-  const cleanName = file.originalname.replace(/[^a-zA-Z0-9.]/g, '_');
+  const cleanName = (file.originalname || 'file').replace(/[^a-zA-Z0-9.]/g, '_');
   const filePath = `${folder}/${uniqueSuffix}-${cleanName}`;
   
   const { data, error } = await supabase
     .storage
     .from('uploads')
-    .upload(filePath, file.buffer, { contentType: file.mimetype, upsert: false });
+    .upload(filePath, file.buffer, { contentType: file.mimetype || 'application/octet-stream', upsert: false });
     
   if (error) throw error;
   
@@ -142,98 +142,136 @@ app.post('/api/v1/applications', applicationLimiter, upload.fields([{ name: 'res
     let photo_path = null;
 
     if (req.files && req.files['resume'] && req.files['resume'][0]) {
-      resume_path = await uploadToSupabase(req.files['resume'][0], 'resumes');
+      try {
+        resume_path = await uploadToSupabase(req.files['resume'][0], 'resumes');
+      } catch (uploadErr) {
+        console.warn('Resume upload warning:', uploadErr.message);
+      }
     }
     if (req.files && req.files['photo'] && req.files['photo'][0]) {
-      photo_path = await uploadToSupabase(req.files['photo'][0], 'photos');
+      try {
+        photo_path = await uploadToSupabase(req.files['photo'][0], 'photos');
+      } catch (uploadErr) {
+        console.warn('Photo upload warning:', uploadErr.message);
+      }
     }
 
     // Generate persistent sequential applicant code (e.g. pjf/26/001)
-    const applicant_code = await generateNextApplicantCode(supabase);
+    let applicant_code = `pjf/${new Date().getFullYear().toString().slice(-2)}/001`;
+    try {
+      applicant_code = await generateNextApplicantCode(supabase);
+    } catch (codeErr) {
+      console.error('Applicant code generation failed, using fallback:', codeErr);
+    }
+
+    const parsedAge = (age && !isNaN(parseInt(age, 10))) ? parseInt(age, 10) : null;
+    const cleanDob = (dob && typeof dob === 'string' && dob.trim().length > 0) ? dob.trim() : null;
 
     const { data, error } = await supabase
       .from('applications')
       .insert([{
         applicant_code,
-        category, name, age: age || null, dob: dob || null, blood_group, phone, alt_phone, 
-        email, alt_email, hometown, current_city, state, temp_address, perm_address, 
-        current_status, education_level, degree, interest, hobbies, languages, motivation, experience, 
-        resume_path, photo_path, status: 'approved'
+        category: category || null,
+        name: name || '',
+        age: parsedAge,
+        dob: cleanDob,
+        blood_group: blood_group || null,
+        phone: phone || '',
+        alt_phone: alt_phone || null, 
+        email: email || '',
+        alt_email: alt_email || null,
+        hometown: hometown || null,
+        current_city: current_city || null,
+        state: state || null,
+        temp_address: temp_address || null,
+        perm_address: perm_address || null, 
+        current_status: current_status || null,
+        education_level: education_level || null,
+        degree: degree || null,
+        interest: interest || null,
+        hobbies: hobbies || null,
+        languages: languages || null,
+        motivation: motivation || null,
+        experience: experience || null, 
+        resume_path,
+        photo_path,
+        status: 'approved'
       }])
       .select();
 
     if (error) throw error;
 
-    console.log(`Inserted into database: ID ${data[0].id} with code ${applicant_code}`);
+    const applicationRecord = (data && data.length > 0) ? data[0] : { applicant_code, name, email };
+    console.log(`Inserted into database: ID ${applicationRecord.id || 'N/A'} with code ${applicant_code}`);
     
-    // Send congratulatory email to applicant with sequential code
-    await sendEmail(
-      email,
-      `Congratulations! You are now a Volunteer at Prajaya Foundation [${applicant_code}]`,
-      `Hello ${name},\n\nCongratulations! You have been automatically selected as a volunteer at Prajaya Foundation.\nYour Volunteer Code: ${applicant_code}\n\nFurther information will be shared with you shortly.\n\nThank you,\nPrajaya Foundation`,
-      `<div style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f8fafc; padding: 40px 20px; margin: 0;">
-         <div style="max-width: 600px; margin: 0 auto; background-color: #ffffff; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);">
-            <div style="background-color: #1e293b; padding: 30px; text-align: center; border-bottom: 4px solid #c59d5f;">
-              <h1 style="color: #ffffff; margin: 0; font-size: 24px; font-weight: 600; letter-spacing: 1px;">PRAJAYA FOUNDATION</h1>
-            </div>
-            <div style="padding: 40px 30px;">
-              <h2 style="color: #0f172a; margin-top: 0; margin-bottom: 20px; font-size: 20px;">Congratulations!</h2>
-              <p style="color: #475569; font-size: 16px; line-height: 1.6; margin-bottom: 20px;">
-                Dear <strong style="color: #0f172a;">${name}</strong>,
-              </p>
-              <p style="color: #475569; font-size: 16px; line-height: 1.6; margin-bottom: 25px;">
-                Congratulations! You have been automatically selected as a volunteer at Prajaya Foundation.
-              </p>
-
-              <!-- Highlighted Volunteer ID / Applicant Code Box -->
-              <div style="background-color: #fdf8f0; border: 2px dashed #c59d5f; border-radius: 10px; padding: 20px; text-align: center; margin-bottom: 30px;">
-                <span style="font-size: 12px; font-weight: 700; color: #856404; text-transform: uppercase; letter-spacing: 1.5px; display: block; margin-bottom: 6px;">Your Volunteer ID / Applicant Code</span>
-                <span style="font-size: 26px; font-weight: 800; color: #1e293b; letter-spacing: 2px; font-family: monospace; display: block;">${applicant_code}</span>
-                <span style="font-size: 12px; color: #64748b; margin-top: 6px; display: block;">Please retain this code for all future communications.</span>
+    // Dispatch emails concurrently in background so slow SMTP doesn't delay or fail HTTP response
+    const adminEmail = process.env.ADMIN_EMAIL || 'admin@prajaya.org';
+    Promise.allSettled([
+      sendEmail(
+        email,
+        `Congratulations! You are now a Volunteer at Prajaya Foundation [${applicant_code}]`,
+        `Hello ${name},\n\nCongratulations! You have been automatically selected as a volunteer at Prajaya Foundation.\nYour Volunteer Code: ${applicant_code}\n\nFurther information will be shared with you shortly.\n\nThank you,\nPrajaya Foundation`,
+        `<div style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f8fafc; padding: 40px 20px; margin: 0;">
+           <div style="max-width: 600px; margin: 0 auto; background-color: #ffffff; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);">
+              <div style="background-color: #1e293b; padding: 30px; text-align: center; border-bottom: 4px solid #c59d5f;">
+                <h1 style="color: #ffffff; margin: 0; font-size: 24px; font-weight: 600; letter-spacing: 1px;">PRAJAYA FOUNDATION</h1>
               </div>
-              
-              <div style="background-color: #f1f5f9; border-left: 4px solid #10b981; padding: 18px 20px; margin-bottom: 35px; border-radius: 0 8px 8px 0;">
-                <p style="margin: 0; color: #334155; font-size: 15px; line-height: 1.6;">
-                  Further information regarding your roles, responsibilities, and next steps will be shared with you shortly.
+              <div style="padding: 40px 30px;">
+                <h2 style="color: #0f172a; margin-top: 0; margin-bottom: 20px; font-size: 20px;">Congratulations!</h2>
+                <p style="color: #475569; font-size: 16px; line-height: 1.6; margin-bottom: 20px;">
+                  Dear <strong style="color: #0f172a;">${name}</strong>,
+                </p>
+                <p style="color: #475569; font-size: 16px; line-height: 1.6; margin-bottom: 25px;">
+                  Congratulations! You have been automatically selected as a volunteer at Prajaya Foundation.
+                </p>
+
+                <!-- Highlighted Volunteer ID / Applicant Code Box -->
+                <div style="background-color: #fdf8f0; border: 2px dashed #c59d5f; border-radius: 10px; padding: 20px; text-align: center; margin-bottom: 30px;">
+                  <span style="font-size: 12px; font-weight: 700; color: #856404; text-transform: uppercase; letter-spacing: 1.5px; display: block; margin-bottom: 6px;">Your Volunteer ID / Applicant Code</span>
+                  <span style="font-size: 26px; font-weight: 800; color: #1e293b; letter-spacing: 2px; font-family: monospace; display: block;">${applicant_code}</span>
+                  <span style="font-size: 12px; color: #64748b; margin-top: 6px; display: block;">Please retain this code for all future communications.</span>
+                </div>
+                
+                <div style="background-color: #f1f5f9; border-left: 4px solid #10b981; padding: 18px 20px; margin-bottom: 35px; border-radius: 0 8px 8px 0;">
+                  <p style="margin: 0; color: #334155; font-size: 15px; line-height: 1.6;">
+                    Further information regarding your roles, responsibilities, and next steps will be shared with you shortly.
+                  </p>
+                </div>
+
+                <p style="color: #475569; font-size: 16px; line-height: 1.6;">
+                  Thank you for your dedication to serving the community!<br><br>Warm Regards,<br><strong>Prajaya Foundation Team</strong>
                 </p>
               </div>
+              <div style="background-color: #f8fafc; padding: 20px; text-align: center; border-top: 1px solid #e2e8f0;">
+                <p style="color: #94a3b8; font-size: 13px; margin: 0;">&copy; ${new Date().getFullYear()} Prajaya Foundation. All Rights Reserved.</p>
+              </div>
+           </div>
+         </div>`
+      ),
+      sendEmail(
+        adminEmail,
+        `New Volunteer Application [${applicant_code}] - Prajaya Foundation`,
+        `A new volunteer application has been submitted by ${name}.\n\nApplicant Code: ${applicant_code}\nName: ${name}\nEmail: ${email}\nPhone: ${phone}\nCity: ${current_city}\n\nPlease log in to the admin dashboard to view their full profile and resume.`,
+        `<div style="font-family: sans-serif; padding: 20px;">
+          <h2>New Volunteer Application</h2>
+          <p>A new volunteer has just submitted an application on the website.</p>
+          <div style="background-color: #f1f5f9; padding: 15px; border-radius: 8px; margin: 20px 0;">
+            <p><strong>Applicant Code:</strong> <span style="font-family: monospace; font-weight: bold; color: #c59d5f; font-size: 16px;">${applicant_code}</span></p>
+            <p><strong>Name:</strong> ${name}</p>
+            <p><strong>Email:</strong> ${email}</p>
+            <p><strong>Phone:</strong> ${phone}</p>
+            <p><strong>City:</strong> ${current_city}</p>
+            <p><strong>Category:</strong> ${category || 'N/A'}</p>
+          </div>
+          <p>Log in to your <a href="${process.env.FRONTEND_URL || 'http://localhost:3000'}/admin">admin dashboard</a> to view the complete details and downloaded attachments.</p>
+        </div>`
+      )
+    ]).catch(err => console.error('Background email notification error:', err));
 
-              <p style="color: #475569; font-size: 16px; line-height: 1.6;">
-                Thank you for your dedication to serving the community!<br><br>Warm Regards,<br><strong>Prajaya Foundation Team</strong>
-              </p>
-            </div>
-            <div style="background-color: #f8fafc; padding: 20px; text-align: center; border-top: 1px solid #e2e8f0;">
-              <p style="color: #94a3b8; font-size: 13px; margin: 0;">&copy; ${new Date().getFullYear()} Prajaya Foundation. All Rights Reserved.</p>
-            </div>
-         </div>
-       </div>`
-    );
-
-    // Notify the admin about the new application with applicant code
-    const adminEmail = process.env.ADMIN_EMAIL || 'admin@prajaya.org';
-    await sendEmail(
-      adminEmail,
-      `New Volunteer Application [${applicant_code}] - Prajaya Foundation`,
-      `A new volunteer application has been submitted by ${name}.\n\nApplicant Code: ${applicant_code}\nName: ${name}\nEmail: ${email}\nPhone: ${phone}\nCity: ${current_city}\n\nPlease log in to the admin dashboard to view their full profile and resume.`,
-      `<div style="font-family: sans-serif; padding: 20px;">
-        <h2>New Volunteer Application</h2>
-        <p>A new volunteer has just submitted an application on the website.</p>
-        <div style="background-color: #f1f5f9; padding: 15px; border-radius: 8px; margin: 20px 0;">
-          <p><strong>Applicant Code:</strong> <span style="font-family: monospace; font-weight: bold; color: #c59d5f; font-size: 16px;">${applicant_code}</span></p>
-          <p><strong>Name:</strong> ${name}</p>
-          <p><strong>Email:</strong> ${email}</p>
-          <p><strong>Phone:</strong> ${phone}</p>
-          <p><strong>City:</strong> ${current_city}</p>
-          <p><strong>Category:</strong> ${category || 'N/A'}</p>
-        </div>
-        <p>Log in to your <a href="${process.env.FRONTEND_URL || 'http://localhost:3000'}/admin">admin dashboard</a> to view the complete details and downloaded attachments.</p>
-      </div>`
-    );
-
-    res.status(200).json({ success: true, message: 'Application received', data: data[0] });
+    return res.status(200).json({ success: true, message: 'Application received', data: applicationRecord });
   } catch (error) {
     console.error('Submission error:', error);
-    res.status(500).json({ success: false, message: 'Server error processing application', error: error.message });
+    return res.status(500).json({ success: false, message: 'Server error processing application', error: error.message });
   }
 });
 

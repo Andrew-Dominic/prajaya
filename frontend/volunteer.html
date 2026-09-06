@@ -2295,11 +2295,20 @@
                 method: 'POST',
                 body: formData
             })
-            .then(res => res.json())
-            .then(data => {
-                if (!data.success) {
-                    throw new Error(data.message || 'Server error');
+            .then(async (res) => {
+                const text = await res.text();
+                let data = null;
+                try {
+                    data = JSON.parse(text);
+                } catch (e) {
+                    throw new Error(text && text.length < 150 ? text : `Server error (${res.status})`);
                 }
+                if (!res.ok || !data || !data.success) {
+                    throw new Error((data && (data.message || data.error)) || `Server error (${res.status})`);
+                }
+                return data;
+            })
+            .then(data => {
                 const appCode = (data.data && data.data.applicant_code) ? data.data.applicant_code : '';
                 const codeHtml = appCode ? `
                     <div style="background: rgba(197, 157, 95, 0.1); border: 2px dashed #c59d5f; border-radius: 12px; padding: 22px; margin: 25px auto; max-width: 420px; box-shadow: 0 4px 12px rgba(0,0,0,0.05);">
@@ -2323,6 +2332,8 @@
                 submitBtn.style.backgroundColor = '#ef4444';
                 submitBtn.style.color = '#fff';
                 
+                alert('Submission error: ' + (err.message || 'Please check your connection and try again.'));
+
                 setTimeout(() => {
                     submitBtn.innerHTML = originalText;
                     submitBtn.style = 'width: 100%; margin-top: 20px; padding: 18px; font-size: 1.1rem; border-radius: 8px;';
