@@ -17,19 +17,21 @@ const transporter = nodemailer.createTransport({
 const sendEmail = async (to, subject, text, html) => {
   try {
     if (!process.env.SMTP_USER || !process.env.SMTP_PASS) {
-      console.warn('⚠️ SMTP credentials not set. Email not sent to:', to, '| Subject:', subject);
+      console.warn('⚠️ SMTP credentials (SMTP_USER or SMTP_PASS) not configured in environment! Email not sent to:', to, '| Subject:', subject);
       return;
     }
-    await transporter.sendMail({
+    console.log(`Attempting to send email to ${to}...`);
+    const info = await transporter.sendMail({
       from: `"Prajaya Foundation" <${process.env.SMTP_USER}>`,
       to,
       subject,
       text,
       html
     });
-    console.log(`Email sent successfully to ${to}`);
+    console.log(`Email sent successfully to ${to}, messageId: ${info.messageId}`);
+    return info;
   } catch (error) {
-    console.error('Email sending failed:', error);
+    console.error(`Email sending to ${to} failed:`, error.message);
   }
 };
 

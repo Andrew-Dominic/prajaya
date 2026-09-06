@@ -204,69 +204,73 @@ app.post('/api/v1/applications', applicationLimiter, upload.fields([{ name: 'res
     const applicationRecord = (data && data.length > 0) ? data[0] : { applicant_code, name, email };
     console.log(`Inserted into database: ID ${applicationRecord.id || 'N/A'} with code ${applicant_code}`);
     
-    // Dispatch emails concurrently in background so slow SMTP doesn't delay or fail HTTP response
+    // Await email dispatching so serverless runtime (Vercel) does not freeze before SMTP delivers
     const adminEmail = process.env.ADMIN_EMAIL || 'admin@prajaya.org';
-    Promise.allSettled([
-      sendEmail(
-        email,
-        `Congratulations! You are now a Volunteer at Prajaya Foundation [${applicant_code}]`,
-        `Hello ${name},\n\nCongratulations! You have been automatically selected as a volunteer at Prajaya Foundation.\nYour Volunteer Code: ${applicant_code}\n\nFurther information will be shared with you shortly.\n\nThank you,\nPrajaya Foundation`,
-        `<div style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f8fafc; padding: 40px 20px; margin: 0;">
-           <div style="max-width: 600px; margin: 0 auto; background-color: #ffffff; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);">
-              <div style="background-color: #1e293b; padding: 30px; text-align: center; border-bottom: 4px solid #c59d5f;">
-                <h1 style="color: #ffffff; margin: 0; font-size: 24px; font-weight: 600; letter-spacing: 1px;">PRAJAYA FOUNDATION</h1>
-              </div>
-              <div style="padding: 40px 30px;">
-                <h2 style="color: #0f172a; margin-top: 0; margin-bottom: 20px; font-size: 20px;">Congratulations!</h2>
-                <p style="color: #475569; font-size: 16px; line-height: 1.6; margin-bottom: 20px;">
-                  Dear <strong style="color: #0f172a;">${name}</strong>,
-                </p>
-                <p style="color: #475569; font-size: 16px; line-height: 1.6; margin-bottom: 25px;">
-                  Congratulations! You have been automatically selected as a volunteer at Prajaya Foundation.
-                </p>
-
-                <!-- Highlighted Volunteer ID / Applicant Code Box -->
-                <div style="background-color: #fdf8f0; border: 2px dashed #c59d5f; border-radius: 10px; padding: 20px; text-align: center; margin-bottom: 30px;">
-                  <span style="font-size: 12px; font-weight: 700; color: #856404; text-transform: uppercase; letter-spacing: 1.5px; display: block; margin-bottom: 6px;">Your Volunteer ID / Applicant Code</span>
-                  <span style="font-size: 26px; font-weight: 800; color: #1e293b; letter-spacing: 2px; font-family: monospace; display: block;">${applicant_code}</span>
-                  <span style="font-size: 12px; color: #64748b; margin-top: 6px; display: block;">Please retain this code for all future communications.</span>
+    try {
+      await Promise.allSettled([
+        sendEmail(
+          email,
+          `Congratulations! You are now a Volunteer at Prajaya Foundation [${applicant_code}]`,
+          `Hello ${name},\n\nCongratulations! You have been automatically selected as a volunteer at Prajaya Foundation.\nYour Volunteer Code: ${applicant_code}\n\nFurther information will be shared with you shortly.\n\nThank you,\nPrajaya Foundation`,
+          `<div style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f8fafc; padding: 40px 20px; margin: 0;">
+             <div style="max-width: 600px; margin: 0 auto; background-color: #ffffff; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);">
+                <div style="background-color: #1e293b; padding: 30px; text-align: center; border-bottom: 4px solid #c59d5f;">
+                  <h1 style="color: #ffffff; margin: 0; font-size: 24px; font-weight: 600; letter-spacing: 1px;">PRAJAYA FOUNDATION</h1>
                 </div>
-                
-                <div style="background-color: #f1f5f9; border-left: 4px solid #10b981; padding: 18px 20px; margin-bottom: 35px; border-radius: 0 8px 8px 0;">
-                  <p style="margin: 0; color: #334155; font-size: 15px; line-height: 1.6;">
-                    Further information regarding your roles, responsibilities, and next steps will be shared with you shortly.
+                <div style="padding: 40px 30px;">
+                  <h2 style="color: #0f172a; margin-top: 0; margin-bottom: 20px; font-size: 20px;">Congratulations!</h2>
+                  <p style="color: #475569; font-size: 16px; line-height: 1.6; margin-bottom: 20px;">
+                    Dear <strong style="color: #0f172a;">${name}</strong>,
+                  </p>
+                  <p style="color: #475569; font-size: 16px; line-height: 1.6; margin-bottom: 25px;">
+                    Congratulations! You have been automatically selected as a volunteer at Prajaya Foundation.
+                  </p>
+
+                  <!-- Highlighted Volunteer ID / Applicant Code Box -->
+                  <div style="background-color: #fdf8f0; border: 2px dashed #c59d5f; border-radius: 10px; padding: 20px; text-align: center; margin-bottom: 30px;">
+                    <span style="font-size: 12px; font-weight: 700; color: #856404; text-transform: uppercase; letter-spacing: 1.5px; display: block; margin-bottom: 6px;">Your Volunteer ID / Applicant Code</span>
+                    <span style="font-size: 26px; font-weight: 800; color: #1e293b; letter-spacing: 2px; font-family: monospace; display: block;">${applicant_code}</span>
+                    <span style="font-size: 12px; color: #64748b; margin-top: 6px; display: block;">Please retain this code for all future communications.</span>
+                  </div>
+                  
+                  <div style="background-color: #f1f5f9; border-left: 4px solid #10b981; padding: 18px 20px; margin-bottom: 35px; border-radius: 0 8px 8px 0;">
+                    <p style="margin: 0; color: #334155; font-size: 15px; line-height: 1.6;">
+                      Further information regarding your roles, responsibilities, and next steps will be shared with you shortly.
+                    </p>
+                  </div>
+
+                  <p style="color: #475569; font-size: 16px; line-height: 1.6;">
+                    Thank you for your dedication to serving the community!<br><br>Warm Regards,<br><strong>Prajaya Foundation Team</strong>
                   </p>
                 </div>
-
-                <p style="color: #475569; font-size: 16px; line-height: 1.6;">
-                  Thank you for your dedication to serving the community!<br><br>Warm Regards,<br><strong>Prajaya Foundation Team</strong>
-                </p>
-              </div>
-              <div style="background-color: #f8fafc; padding: 20px; text-align: center; border-top: 1px solid #e2e8f0;">
-                <p style="color: #94a3b8; font-size: 13px; margin: 0;">&copy; ${new Date().getFullYear()} Prajaya Foundation. All Rights Reserved.</p>
-              </div>
-           </div>
-         </div>`
-      ),
-      sendEmail(
-        adminEmail,
-        `New Volunteer Application [${applicant_code}] - Prajaya Foundation`,
-        `A new volunteer application has been submitted by ${name}.\n\nApplicant Code: ${applicant_code}\nName: ${name}\nEmail: ${email}\nPhone: ${phone}\nCity: ${current_city}\n\nPlease log in to the admin dashboard to view their full profile and resume.`,
-        `<div style="font-family: sans-serif; padding: 20px;">
-          <h2>New Volunteer Application</h2>
-          <p>A new volunteer has just submitted an application on the website.</p>
-          <div style="background-color: #f1f5f9; padding: 15px; border-radius: 8px; margin: 20px 0;">
-            <p><strong>Applicant Code:</strong> <span style="font-family: monospace; font-weight: bold; color: #c59d5f; font-size: 16px;">${applicant_code}</span></p>
-            <p><strong>Name:</strong> ${name}</p>
-            <p><strong>Email:</strong> ${email}</p>
-            <p><strong>Phone:</strong> ${phone}</p>
-            <p><strong>City:</strong> ${current_city}</p>
-            <p><strong>Category:</strong> ${category || 'N/A'}</p>
-          </div>
-          <p>Log in to your <a href="${process.env.FRONTEND_URL || 'http://localhost:3000'}/admin">admin dashboard</a> to view the complete details and downloaded attachments.</p>
-        </div>`
-      )
-    ]).catch(err => console.error('Background email notification error:', err));
+                <div style="background-color: #f8fafc; padding: 20px; text-align: center; border-top: 1px solid #e2e8f0;">
+                  <p style="color: #94a3b8; font-size: 13px; margin: 0;">&copy; ${new Date().getFullYear()} Prajaya Foundation. All Rights Reserved.</p>
+                </div>
+             </div>
+           </div>`
+        ),
+        sendEmail(
+          adminEmail,
+          `New Volunteer Application [${applicant_code}] - Prajaya Foundation`,
+          `A new volunteer application has been submitted by ${name}.\n\nApplicant Code: ${applicant_code}\nName: ${name}\nEmail: ${email}\nPhone: ${phone}\nCity: ${current_city}\n\nPlease log in to the admin dashboard to view their full profile and resume.`,
+          `<div style="font-family: sans-serif; padding: 20px;">
+            <h2>New Volunteer Application</h2>
+            <p>A new volunteer has just submitted an application on the website.</p>
+            <div style="background-color: #f1f5f9; padding: 15px; border-radius: 8px; margin: 20px 0;">
+              <p><strong>Applicant Code:</strong> <span style="font-family: monospace; font-weight: bold; color: #c59d5f; font-size: 16px;">${applicant_code}</span></p>
+              <p><strong>Name:</strong> ${name}</p>
+              <p><strong>Email:</strong> ${email}</p>
+              <p><strong>Phone:</strong> ${phone}</p>
+              <p><strong>City:</strong> ${current_city}</p>
+              <p><strong>Category:</strong> ${category || 'N/A'}</p>
+            </div>
+            <p>Log in to your <a href="${process.env.FRONTEND_URL || 'http://localhost:3000'}/admin">admin dashboard</a> to view the complete details and downloaded attachments.</p>
+          </div>`
+        )
+      ]);
+    } catch (emailErr) {
+      console.error('Email dispatch error:', emailErr);
+    }
 
     return res.status(200).json({ success: true, message: 'Application received', data: applicationRecord });
   } catch (error) {
