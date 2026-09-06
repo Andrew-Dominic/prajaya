@@ -212,102 +212,42 @@ app.post('/api/v1/applications', applicationLimiter, upload.fields([{ name: 'res
           email,
           `Congratulations! You are now a Volunteer at Prajaya Foundation [${applicant_code}]`,
           `Hello ${name},\n\nCongratulations! You have been automatically selected as a volunteer at Prajaya Foundation.\nYour Volunteer Code: ${applicant_code}\n\nFurther information will be shared with you shortly.\n\nThank you,\nPrajaya Foundation`,
-          `<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Congratulations! Volunteer Selection</title>
-</head>
-<body style="margin: 0; padding: 0; background-color: #f4f3f8; font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; -webkit-font-smoothing: antialiased; color: #403d58;">
-  <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="background-color: #f4f3f8; padding: 40px 16px;">
-    <tr>
-      <td align="center">
-        <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="max-width: 580px; background-color: #ffffff; border-radius: 20px; overflow: hidden; box-shadow: 0 10px 35px rgba(44, 41, 70, 0.08); border: 1px solid #ebe9f2;">
-          <!-- Header Banner with Brand Colors (#2C2946 & #f2bb47) -->
-          <tr>
-            <td style="background-color: #2C2946; padding: 36px 32px; text-align: center;">
-              <table role="presentation" cellspacing="0" cellpadding="0" border="0" align="center">
-                <tr>
-                  <td style="background: rgba(242, 187, 71, 0.15); border: 1px solid rgba(242, 187, 71, 0.4); border-radius: 30px; padding: 5px 16px; display: inline-block;">
-                    <span style="color: #f2bb47; font-size: 11px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase;">Official Confirmation</span>
-                  </td>
-                </tr>
-                <tr>
-                  <td style="padding-top: 14px;">
-                    <h1 style="margin: 0; color: #ffffff; font-size: 22px; font-weight: 800; letter-spacing: 2px; text-transform: uppercase;">
-                      PRAJAYA FOUNDATION
-                    </h1>
-                  </td>
-                </tr>
-              </table>
-            </td>
-          </tr>
+          `<div style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f8fafc; padding: 40px 20px; margin: 0;">
+             <div style="max-width: 600px; margin: 0 auto; background-color: #ffffff; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);">
+                <div style="background-color: #1e293b; padding: 30px; text-align: center; border-bottom: 4px solid #c59d5f;">
+                  <h1 style="color: #ffffff; margin: 0; font-size: 24px; font-weight: 600; letter-spacing: 1px;">PRAJAYA FOUNDATION</h1>
+                </div>
+                <div style="padding: 40px 30px;">
+                  <h2 style="color: #0f172a; margin-top: 0; margin-bottom: 20px; font-size: 20px;">Congratulations!</h2>
+                  <p style="color: #475569; font-size: 16px; line-height: 1.6; margin-bottom: 20px;">
+                    Dear <strong style="color: #0f172a;">${name}</strong>,
+                  </p>
+                  <p style="color: #475569; font-size: 16px; line-height: 1.6; margin-bottom: 25px;">
+                    Congratulations! You have been automatically selected as a volunteer at Prajaya Foundation.
+                  </p>
 
-          <!-- Body Content -->
-          <tr>
-            <td style="padding: 40px 36px 32px 36px;">
-              <h2 style="margin: 0 0 18px 0; color: #2C2946; font-size: 24px; font-weight: 700;">
-                Congratulations!
-              </h2>
-              <p style="margin: 0 0 14px 0; font-size: 15px; line-height: 1.6; color: #403d58;">
-                Dear <strong style="color: #2C2946;">${name}</strong>,
-              </p>
-              <p style="margin: 0 0 28px 0; font-size: 15px; line-height: 1.6; color: #403d58;">
-                Congratulations! You have been automatically selected as a volunteer at <strong>Prajaya Foundation</strong>. We are delighted to welcome you to our community.
-              </p>
-
-              <!-- Highlighted Volunteer Code Box matching Website Accent -->
-              <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="background: #fcf9f2; border: 2px dashed #f2bb47; border-radius: 16px; margin: 0 0 28px 0;">
-                <tr>
-                  <td style="padding: 24px 20px; text-align: center;">
-                    <span style="font-size: 11px; font-weight: 700; color: #9c6c0c; text-transform: uppercase; letter-spacing: 1.5px; display: block; margin-bottom: 8px;">
-                      Your Volunteer ID / Applicant Code
-                    </span>
-                    <span style="font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace; font-size: 28px; font-weight: 800; color: #2C2946; letter-spacing: 2.5px; display: block;">
-                      ${applicant_code}
-                    </span>
-                    <span style="font-size: 12px; color: #7a7696; margin-top: 8px; display: block;">
-                      Please retain this code for all future communications.
-                    </span>
-                  </td>
-                </tr>
-              </table>
-
-              <!-- Next Steps Notice Box -->
-              <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="background: #f4f3f8; border-left: 4px solid #f2bb47; border-radius: 0 12px 12px 0; margin: 0 0 28px 0;">
-                <tr>
-                  <td style="padding: 18px 20px;">
-                    <p style="margin: 0; font-size: 14px; line-height: 1.6; color: #403d58;">
+                  <!-- Highlighted Volunteer ID / Applicant Code Box -->
+                  <div style="background-color: #fdf8f0; border: 2px dashed #c59d5f; border-radius: 10px; padding: 20px; text-align: center; margin-bottom: 30px;">
+                    <span style="font-size: 12px; font-weight: 700; color: #856404; text-transform: uppercase; letter-spacing: 1.5px; display: block; margin-bottom: 6px;">Your Volunteer ID / Applicant Code</span>
+                    <span style="font-size: 26px; font-weight: 800; color: #1e293b; letter-spacing: 2px; font-family: monospace; display: block;">${applicant_code}</span>
+                    <span style="font-size: 12px; color: #64748b; margin-top: 6px; display: block;">Please retain this code for all future communications.</span>
+                  </div>
+                  
+                  <div style="background-color: #f1f5f9; border-left: 4px solid #10b981; padding: 18px 20px; margin-bottom: 35px; border-radius: 0 8px 8px 0;">
+                    <p style="margin: 0; color: #334155; font-size: 15px; line-height: 1.6;">
                       Further information regarding your roles, responsibilities, and next steps will be shared with you shortly.
                     </p>
-                  </td>
-                </tr>
-              </table>
+                  </div>
 
-              <p style="margin: 0; font-size: 15px; color: #403d58; line-height: 1.6;">
-                Thank you for your dedication to serving the community!<br><br>
-                Warm regards,<br>
-                <strong style="color: #2C2946;">Prajaya Foundation Team</strong>
-              </p>
-            </td>
-          </tr>
-
-          <!-- Footer -->
-          <tr>
-            <td style="background-color: #f4f3f8; border-top: 1px solid #ebe9f2; padding: 22px 32px; text-align: center;">
-              <p style="margin: 0; font-size: 12px; color: #7a7696; line-height: 1.6;">
-                &copy; ${new Date().getFullYear()} Prajaya Foundation. All Rights Reserved.<br>
-                Empowering communities & creating sustainable impact.
-              </p>
-            </td>
-          </tr>
-        </table>
-      </td>
-    </tr>
-  </table>
-</body>
-</html>`
+                  <p style="color: #475569; font-size: 16px; line-height: 1.6;">
+                    Thank you for your dedication to serving the community!<br><br>Warm Regards,<br><strong>Prajaya Foundation Team</strong>
+                  </p>
+                </div>
+                <div style="background-color: #f8fafc; padding: 20px; text-align: center; border-top: 1px solid #e2e8f0;">
+                  <p style="color: #94a3b8; font-size: 13px; margin: 0;">&copy; ${new Date().getFullYear()} Prajaya Foundation. All Rights Reserved.</p>
+                </div>
+             </div>
+           </div>`
         ),
         sendEmail(
           adminEmail,
