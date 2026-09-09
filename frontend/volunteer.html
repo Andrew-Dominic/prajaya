@@ -2309,7 +2309,17 @@
                 return data;
             })
             .then(data => {
-                const appCode = (data.data && data.data.applicant_code) ? data.data.applicant_code : '';
+                const escapeHtml = (str) => {
+                    if (str === null || str === undefined) return '';
+                    return String(str)
+                        .replace(/&/g, '&amp;')
+                        .replace(/</g, '&lt;')
+                        .replace(/>/g, '&gt;')
+                        .replace(/"/g, '&quot;')
+                        .replace(/'/g, '&#39;');
+                };
+                const rawCode = (data.data && data.data.applicant_code) ? data.data.applicant_code : '';
+                const appCode = escapeHtml(rawCode);
                 const codeHtml = appCode ? `
                     <div style="background: rgba(197, 157, 95, 0.1); border: 2px dashed #c59d5f; border-radius: 12px; padding: 22px; margin: 25px auto; max-width: 420px; box-shadow: 0 4px 12px rgba(0,0,0,0.05);">
                         <div style="font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1.5px; color: #856404; font-weight: 700; margin-bottom: 6px;">Your Volunteer ID / Code</div>

@@ -50,21 +50,49 @@ if (supabaseUrl && supabaseKey) {
 }
 
 // ──────────────────────────────────────────────
-// 1. SECURITY MIDDLEWARE
+// 1. SECURITY MIDDLEWARE & OUTPUT ENCODING
 // ──────────────────────────────────────────────
+// Dynamic Cryptographic Nonce Generation for Content-Security-Policy
+app.use((req, res, next) => {
+  res.locals.cspNonce = crypto.randomBytes(16).toString('base64');
+  next();
+});
+
+// Context-Aware Output Encoding Utility (XSS & Email Injection Defense)
+const escapeHtml = (str) => {
+  if (str === null || str === undefined) return '';
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+};
+
 app.use(
   helmet({
     contentSecurityPolicy: {
       directives: {
         defaultSrc: ["'self'"],
-        scriptSrc: ["'self'", "'unsafe-inline'", "https://unpkg.com", "https://cdnjs.cloudflare.com"],
-        "script-src-attr": ["'unsafe-inline'"],
+        scriptSrc: [
+          "'self'",
+          (req, res) => `'nonce-${res.locals.cspNonce}'`,
+          "'unsafe-inline'", // Kept for backwards-compatibility; CSP2/3 browsers prioritize nonces
+          "https://unpkg.com",
+          "https://cdnjs.cloudflare.com",
+        ],
+        scriptSrcAttr: ["'unsafe-inline'"],
         styleSrc: ["'self'", "'unsafe-inline'", "https://fonts.googleapis.com", "https://cdnjs.cloudflare.com"],
         fontSrc: ["'self'", "https://fonts.gstatic.com", "https://cdnjs.cloudflare.com"],
         imgSrc: ["'self'", "data:", "blob:", "https://bnmgzrskfwuuhlnxavan.supabase.co"],
-        connectSrc: ["'self'"],
+        connectSrc: ["'self'", "https://bnmgzrskfwuuhlnxavan.supabase.co"],
+        objectSrc: ["'none'"],
+        baseUri: ["'self'"],
+        formAction: ["'self'"],
+        frameAncestors: ["'none'"],
       },
     },
+    crossOriginEmbedderPolicy: false,
   })
 );
 
@@ -107,8 +135,56 @@ app.use('/admin', express.static(config.adminPath));
 const storage = multer.memoryStorage();
 const upload = multer({ 
   storage: storage,
-  limits: { fileSize: 5 * 1024 * 1024 } // 5MB limit
+  limits: { fileSize: 5 * 1024 * 1024 }, // 5MB limit
+  fileFilter: (req, file, cb) => {
+    const allowedMimes = {
+      resume: [
+        'application/pdf',
+        'application/msword',
+        'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+      ],
+      photo: [
+        'image/jpeg',
+        'image/png',
+        'image/webp',
+        'image/jpg'
+      ]
+    };
+    const allowedExts = {
+      resume: ['.pdf', '.doc', '.docx'],
+      photo: ['.jpg', '.jpeg', '.png', '.webp']
+    };
+    const ext = path.extname(file.originalname || '').toLowerCase();
+
+    if (file.fieldname === 'resume') {
+      if (allowedMimes.resume.includes(file.mimetype) && allowedExts.resume.includes(ext)) {
+        return cb(null, true);
+      }
+      return cb(new Error('Invalid resume file format. Only PDF, DOC, and DOCX documents are accepted.'));
+    }
+
+    if (file.fieldname === 'photo') {
+      if (allowedMimes.photo.includes(file.mimetype) && allowedExts.photo.includes(ext)) {
+        return cb(null, true);
+      }
+      return cb(new Error('Invalid photo format. Only JPG, JPEG, PNG, and WebP images are accepted.'));
+    }
+
+    cb(new Error('Unexpected file field uploaded.'));
+  }
 });
+
+const uploadVolunteerFiles = (req, res, next) => {
+  upload.fields([{ name: 'resume', maxCount: 1 }, { name: 'photo', maxCount: 1 }])(req, res, (err) => {
+    if (err) {
+      if (err.code === 'LIMIT_FILE_SIZE') {
+        return res.status(400).json({ success: false, message: 'Uploaded file exceeds 5MB size limit.' });
+      }
+      return res.status(400).json({ success: false, message: err.message || 'File upload error.' });
+    }
+    next();
+  });
+};
 
 async function uploadToSupabase(file, folder) {
   if (!supabase) throw new Error('Supabase client not initialized. Check SUPABASE_KEY.');
@@ -129,7 +205,7 @@ async function uploadToSupabase(file, folder) {
 }
 
 // Submit volunteer application
-app.post('/api/v1/applications', applicationLimiter, upload.fields([{ name: 'resume', maxCount: 1 }, { name: 'photo', maxCount: 1 }]), async (req, res) => {
+app.post('/api/v1/applications', applicationLimiter, uploadVolunteerFiles, async (req, res) => {
   console.log('--- NEW APPLICATION RECEIVED ---');
   try {
     const { 
@@ -138,6 +214,19 @@ app.post('/api/v1/applications', applicationLimiter, upload.fields([{ name: 'res
       current_status, education_level, degree, interest, hobbies, languages, motivation, experience
     } = req.body;
     
+    // Strict input validation
+    if (!email || typeof email !== 'string' || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())) {
+      return res.status(400).json({ success: false, message: 'A valid email address is required.' });
+    }
+    if (!name || typeof name !== 'string' || name.trim().length === 0) {
+      return res.status(400).json({ success: false, message: 'Full name is required.' });
+    }
+
+    const cleanStr = (val, maxLen = 5000) => {
+      if (!val || typeof val !== 'string') return null;
+      return val.trim().slice(0, maxLen);
+    };
+
     let resume_path = null;
     let photo_path = null;
 
@@ -165,34 +254,34 @@ app.post('/api/v1/applications', applicationLimiter, upload.fields([{ name: 'res
     }
 
     const parsedAge = (age && !isNaN(parseInt(age, 10))) ? parseInt(age, 10) : null;
-    const cleanDob = (dob && typeof dob === 'string' && dob.trim().length > 0) ? dob.trim() : null;
+    const cleanDob = (dob && typeof dob === 'string' && dob.trim().length > 0) ? dob.trim().slice(0, 50) : null;
 
     const { data, error } = await supabase
       .from('applications')
       .insert([{
         applicant_code,
-        category: category || null,
-        name: name || '',
+        category: cleanStr(category, 100),
+        name: cleanStr(name, 200) || '',
         age: parsedAge,
         dob: cleanDob,
-        blood_group: blood_group || null,
-        phone: phone || '',
-        alt_phone: alt_phone || null, 
-        email: email || '',
-        alt_email: alt_email || null,
-        hometown: hometown || null,
-        current_city: current_city || null,
-        state: state || null,
-        temp_address: temp_address || null,
-        perm_address: perm_address || null, 
-        current_status: current_status || null,
-        education_level: education_level || null,
-        degree: degree || null,
-        interest: interest || null,
-        hobbies: hobbies || null,
-        languages: languages || null,
-        motivation: motivation || null,
-        experience: experience || null, 
+        blood_group: cleanStr(blood_group, 20),
+        phone: cleanStr(phone, 50) || '',
+        alt_phone: cleanStr(alt_phone, 50), 
+        email: cleanStr(email, 200) || '',
+        alt_email: cleanStr(alt_email, 200),
+        hometown: cleanStr(hometown, 200),
+        current_city: cleanStr(current_city, 200),
+        state: cleanStr(state, 100),
+        temp_address: cleanStr(temp_address, 2000),
+        perm_address: cleanStr(perm_address, 2000), 
+        current_status: cleanStr(current_status, 200),
+        education_level: cleanStr(education_level, 200),
+        degree: cleanStr(degree, 200),
+        interest: cleanStr(interest, 500),
+        hobbies: cleanStr(hobbies, 2000),
+        languages: cleanStr(languages, 500),
+        motivation: cleanStr(motivation, 5000),
+        experience: cleanStr(experience, 5000), 
         resume_path,
         photo_path,
         status: 'approved'
@@ -251,7 +340,7 @@ app.post('/api/v1/applications', applicationLimiter, upload.fields([{ name: 'res
                 Congratulations!
               </h2>
               <p style="margin: 0 0 14px 0; font-size: 15px; line-height: 1.6; color: #403d58;">
-                Dear <strong style="color: #2C2946;">${name}</strong>,
+                Dear <strong style="color: #2C2946;">${escapeHtml(name)}</strong>,
               </p>
               <p style="margin: 0 0 28px 0; font-size: 15px; line-height: 1.6; color: #403d58;">
                 Congratulations! You have been automatically selected as a volunteer at <strong>Prajaya Foundation</strong>. We are delighted to welcome you to our community.
@@ -265,7 +354,7 @@ app.post('/api/v1/applications', applicationLimiter, upload.fields([{ name: 'res
                       Your Volunteer ID / Applicant Code
                     </span>
                     <span style="font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace; font-size: 28px; font-weight: 800; color: #2C2946; letter-spacing: 2.5px; display: block;">
-                      ${applicant_code}
+                      ${escapeHtml(applicant_code)}
                     </span>
                     <span style="font-size: 12px; color: #7a7696; margin-top: 8px; display: block;">
                       Please retain this code for all future communications.
@@ -317,12 +406,12 @@ app.post('/api/v1/applications', applicationLimiter, upload.fields([{ name: 'res
             <h2>New Volunteer Application</h2>
             <p>A new volunteer has just submitted an application on the website.</p>
             <div style="background-color: #f1f5f9; padding: 15px; border-radius: 8px; margin: 20px 0;">
-              <p><strong>Applicant Code:</strong> <span style="font-family: monospace; font-weight: bold; color: #c59d5f; font-size: 16px;">${applicant_code}</span></p>
-              <p><strong>Name:</strong> ${name}</p>
-              <p><strong>Email:</strong> ${email}</p>
-              <p><strong>Phone:</strong> ${phone}</p>
-              <p><strong>City:</strong> ${current_city}</p>
-              <p><strong>Category:</strong> ${category || 'N/A'}</p>
+              <p><strong>Applicant Code:</strong> <span style="font-family: monospace; font-weight: bold; color: #c59d5f; font-size: 16px;">${escapeHtml(applicant_code)}</span></p>
+              <p><strong>Name:</strong> ${escapeHtml(name)}</p>
+              <p><strong>Email:</strong> ${escapeHtml(email)}</p>
+              <p><strong>Phone:</strong> ${escapeHtml(phone)}</p>
+              <p><strong>City:</strong> ${escapeHtml(current_city)}</p>
+              <p><strong>Category:</strong> ${escapeHtml(category || 'N/A')}</p>
             </div>
             <p>Log in to your <a href="${process.env.FRONTEND_URL || 'http://localhost:3000'}/admin">admin dashboard</a> to view the complete details and downloaded attachments.</p>
           </div>`
@@ -380,9 +469,11 @@ app.patch('/api/v1/applications/:id/status', requireAuth, async (req, res) => {
       return res.status(400).json({ success: false, message: 'Invalid status' });
     }
 
+    const cleanReason = (reason && typeof reason === 'string') ? reason.trim().slice(0, 2000) : '';
+
     const { data, error } = await supabase
       .from('applications')
-      .update({ status, admin_reason: reason })
+      .update({ status, admin_reason: cleanReason })
       .eq('id', id)
       .select();
 
@@ -399,7 +490,7 @@ app.patch('/api/v1/applications/:id/status', requireAuth, async (req, res) => {
     await sendEmail(
       appData.email,
       `Update on Your Prajaya Foundation Application${codeTag}`,
-      `Hello ${appData.name},\n\nYour application${appData.applicant_code ? ` (${appData.applicant_code})` : ''} has been ${decision}.\nReason: ${reason}\n\nThank you,\nPrajaya Foundation`,
+      `Hello ${appData.name},\n\nYour application${appData.applicant_code ? ` (${appData.applicant_code})` : ''} has been ${decision}.\nReason: ${cleanReason}\n\nThank you,\nPrajaya Foundation`,
       `<div style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f8fafc; padding: 40px 20px; margin: 0;">
          <div style="max-width: 600px; margin: 0 auto; background-color: #ffffff; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);">
             <div style="background-color: #1e293b; padding: 30px; text-align: center; border-bottom: 4px solid #c59d5f;">
@@ -408,11 +499,11 @@ app.patch('/api/v1/applications/:id/status', requireAuth, async (req, res) => {
             <div style="padding: 40px 30px;">
               <h2 style="color: #0f172a; margin-top: 0; margin-bottom: 20px; font-size: 20px;">Application Status Update</h2>
               <p style="color: #475569; font-size: 16px; line-height: 1.6; margin-bottom: 20px;">
-                Dear <strong style="color: #0f172a;">${appData.name}</strong>,
+                Dear <strong style="color: #0f172a;">${escapeHtml(appData.name)}</strong>,
               </p>
               ${appData.applicant_code ? `
               <div style="display: inline-block; background-color: #f1f5f9; padding: 6px 12px; border-radius: 6px; font-family: monospace; font-size: 14px; font-weight: bold; color: #1e293b; margin-bottom: 20px;">
-                Applicant Code: ${appData.applicant_code}
+                Applicant Code: ${escapeHtml(appData.applicant_code)}
               </div>` : ''}
               <p style="color: #475569; font-size: 16px; line-height: 1.6; margin-bottom: 30px;">
                 We have reviewed your volunteer application. We are writing to inform you that your application has been <strong style="color: ${status === 'approved' ? '#10b981' : '#ef4444'};">${status === 'approved' ? 'SELECTED' : 'NOT SELECTED'}</strong>.
@@ -421,7 +512,7 @@ app.patch('/api/v1/applications/:id/status', requireAuth, async (req, res) => {
               <div style="background-color: #f1f5f9; border-left: 4px solid ${status === 'approved' ? '#10b981' : '#ef4444'}; padding: 18px 20px; margin-bottom: 35px; border-radius: 0 8px 8px 0;">
                 <p style="margin: 0; color: #334155; font-size: 15px; line-height: 1.8;">
                   <strong style="color: #0f172a;">Message from Admin:</strong><br>
-                  ${reason}
+                  ${escapeHtml(cleanReason)}
                 </p>
               </div>
 
@@ -553,9 +644,22 @@ app.post('/api/v1/suggestions', suggestionLimiter, async (req, res) => {
   try {
     const { name, email, subject, suggestion } = req.body;
     
+    // Strict input validation
+    if (!email || typeof email !== 'string' || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())) {
+      return res.status(400).json({ success: false, message: 'A valid email address is required.' });
+    }
+    if (!suggestion || typeof suggestion !== 'string' || suggestion.trim().length === 0) {
+      return res.status(400).json({ success: false, message: 'Message content cannot be empty.' });
+    }
+
+    const cleanName = (name && typeof name === 'string') ? name.trim().slice(0, 200) : 'Anonymous';
+    const cleanEmail = email.trim().slice(0, 200);
+    const cleanSubject = (subject && typeof subject === 'string') ? subject.trim().slice(0, 300) : 'General';
+    const cleanSuggestion = suggestion.trim().slice(0, 5000);
+
     const { data, error } = await supabase
       .from('suggestions')
-      .insert([{ name, email, subject, suggestion }])
+      .insert([{ name: cleanName, email: cleanEmail, subject: cleanSubject, suggestion: cleanSuggestion }])
       .select();
 
     if (error) throw error;
@@ -563,15 +667,15 @@ app.post('/api/v1/suggestions', suggestionLimiter, async (req, res) => {
     await sendEmail(
       process.env.ADMIN_EMAIL || 'admin@prajaya.org',
       'New Suggestion Received - Prajaya Foundation',
-      `New message from ${name} (${email}):\nSubject: ${subject || 'N/A'}\n\n${suggestion}`,
+      `New message from ${cleanName} (${cleanEmail}):\nSubject: ${cleanSubject}\n\n${cleanSuggestion}`,
       `<div style="font-family: sans-serif; padding: 20px;">
         <h2>New Message via Suggestion Space</h2>
         <div style="background-color: #f1f5f9; padding: 15px; border-radius: 8px; margin: 20px 0;">
-          <p><strong>Name:</strong> ${name}</p>
-          <p><strong>Email:</strong> ${email}</p>
-          <p><strong>Subject:</strong> ${subject || 'N/A'}</p>
+          <p><strong>Name:</strong> ${escapeHtml(cleanName)}</p>
+          <p><strong>Email:</strong> ${escapeHtml(cleanEmail)}</p>
+          <p><strong>Subject:</strong> ${escapeHtml(cleanSubject)}</p>
           <p><strong>Message:</strong></p>
-          <p style="white-space: pre-wrap; background: white; padding: 10px; border-radius: 5px;">${suggestion}</p>
+          <p style="white-space: pre-wrap; background: white; padding: 10px; border-radius: 5px;">${escapeHtml(cleanSuggestion)}</p>
         </div>
       </div>`
     );

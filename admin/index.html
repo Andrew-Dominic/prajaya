@@ -972,10 +972,29 @@
                 <button id="dialogConfirmBtn" class="refresh-btn" style="flex: 1; justify-content: center; border: none; color: white;">OK</button>
             </div>
         </div>
-    </div>
-
     <script>
-        function showCustomDialog({ title, message, type = 'alert', icon = '<i class="fas fa-info-circle" style="color: var(--color-accent);"></i>', inputPlaceholder = '', inputType = 'text', confirmText = 'OK', cancelText = 'Cancel', confirmColor = 'var(--color-accent)' }) {
+        // ── Security: Context-Aware Output Encoding & Sanitization Helpers ──
+        function escapeHtml(str) {
+            if (str === null || str === undefined) return '';
+            return String(str)
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#39;');
+        }
+
+        function sanitizeUrl(url) {
+            if (!url) return '';
+            const clean = String(url).trim();
+            // Disallow javascript:, data:, vbscript: pseudo-protocols
+            if (/^(https?:\/\/|\/uploads\/|\/assets\/)/i.test(clean)) {
+                return clean.replace(/[<>"'\s]/g, encodeURIComponent);
+            }
+            return '';
+        }
+
+        function showCustomDialog({ title, message, type = 'alert', icon = '<i class="fas fa-info-circle" style="color: var(--color-accent);"></i>', inputPlaceholder = '', inputType = 'text', defaultValue = '', confirmText = 'OK', cancelText = 'Cancel', confirmColor = 'var(--color-accent)' }) {
             return new Promise((resolve) => {
                 const modal = document.getElementById('customDialogModal');
                 const titleEl = document.getElementById('dialogTitle');
@@ -997,7 +1016,7 @@
                     inputCont.style.display = 'block';
                     inputEl.type = inputType;
                     inputEl.placeholder = inputPlaceholder;
-                    inputEl.value = '';
+                    inputEl.value = defaultValue || '';
                 } else {
                     inputCont.style.display = 'none';
                 }
@@ -1028,7 +1047,7 @@
 
         async function uiAlert(message) { return showCustomDialog({ title: 'Notice', message, type: 'alert' }); }
         async function uiConfirm(message) { return showCustomDialog({ title: 'Please Confirm', message, type: 'confirm', icon: '<i class="fas fa-question-circle" style="color: #f59e0b;"></i>' }); }
-        async function uiPrompt(message, type = 'text') { return showCustomDialog({ title: 'Input Required', message, type: 'prompt', inputType: type, icon: '<i class="fas fa-lock" style="color: var(--color-accent);"></i>' }); }
+        async function uiPrompt(message, type = 'text', defaultValue = '') { return showCustomDialog({ title: 'Input Required', message, type: 'prompt', inputType: type, defaultValue, icon: '<i class="fas fa-lock" style="color: var(--color-accent);"></i>' }); }
 
         let currentApplications = [];
         let currentQuotes = [];
@@ -1209,13 +1228,13 @@
             
             tbody.innerHTML = currentQuotes.map(q => `
                 <tr>
-                    <td class="truncate-td" style="max-width: 300px;" title="${q.text}">${q.text}</td>
-                    <td>${q.author || 'Admin'}</td>
+                    <td class="truncate-td" style="max-width: 300px;" title="${escapeHtml(q.text)}">${escapeHtml(q.text)}</td>
+                    <td>${escapeHtml(q.author || 'Admin')}</td>
                     <td class="sticky-actions">
-                        <button class="action-btn" title="Edit" onclick="editQuote('${q.id}', \`${q.text.replace(/`/g, "\\`")}\`, \`${(q.author || '').replace(/`/g, "\\`")}\`)">
+                        <button class="action-btn" title="Edit" onclick="editQuote('${escapeHtml(q.id)}')">
                             <i class="fas fa-edit"></i>
                         </button>
-                        <button class="action-btn" title="Delete" onclick="deleteQuote('${q.id}')" style="color: var(--color-danger);">
+                        <button class="action-btn" title="Delete" onclick="deleteQuote('${escapeHtml(q.id)}')" style="color: var(--color-danger);">
                             <i class="fas fa-trash"></i>
                         </button>
                     </td>
@@ -1259,7 +1278,7 @@
         async function deleteQuote(id) {
             if (!(await uiConfirm('Are you sure you want to delete this quote?'))) return;
             try {
-                const res = await fetch('/api/v1/quotes/' + id, { method: 'DELETE' });
+                const res = await fetch('/api/v1/quotes/' + encodeURIComponent(id), { method: 'DELETE' });
                 if (handleUnauthorized(res)) return;
                 
                 const result = await res.json();
@@ -1273,10 +1292,14 @@
             }
         }
 
-        async function editQuote(id, text, author) {
-            const newText = await uiPrompt("Edit quote text:");
+        async function editQuote(id) {
+            const quote = currentQuotes.find(q => String(q.id) === String(id));
+            const defaultText = quote ? (quote.text || '') : '';
+            const defaultAuthor = quote ? (quote.author || '') : '';
+            
+            const newText = await uiPrompt("Edit quote text:", 'text', defaultText);
             if (newText === null) return;
-            const newAuthor = await uiPrompt("Edit quote author:");
+            const newAuthor = await uiPrompt("Edit quote author:", 'text', defaultAuthor);
             if (newAuthor === null) return;
             
             updateQuote(id, newText, newAuthor);
@@ -1332,15 +1355,14 @@
                 const date = new Date(s.created_at).toLocaleDateString('en-US', {
                     year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute:'2-digit'
                 });
-                const esc = (str) => String(str || '').replace(/[&<>'"]/g, tag => ({'&': '&amp;','<': '&lt;','>': '&gt;',"'": '&#39;','"': '&quot;'}[tag]));
                 
                 return `
                 <tr>
                     <td style="white-space: nowrap;">${date}</td>
-                    <td><strong>${esc(s.name)}</strong></td>
-                    <td><a href="mailto:${esc(s.email)}" style="color: var(--color-accent); text-decoration: underline;">${esc(s.email)}</a></td>
-                    <td><span class="status-badge" style="background: rgba(16, 185, 129, 0.1); color: var(--color-success); border: 1px solid var(--color-success);">${esc(s.subject) || 'N/A'}</span></td>
-                    <td style="white-space: normal; line-height: 1.5;">${esc(s.suggestion)}</td>
+                    <td><strong>${escapeHtml(s.name)}</strong></td>
+                    <td><a href="mailto:${escapeHtml(s.email)}" style="color: var(--color-accent); text-decoration: underline;">${escapeHtml(s.email)}</a></td>
+                    <td><span class="status-badge" style="background: rgba(16, 185, 129, 0.1); color: var(--color-success); border: 1px solid var(--color-success);">${escapeHtml(s.subject) || 'N/A'}</span></td>
+                    <td style="white-space: normal; line-height: 1.5;">${escapeHtml(s.suggestion)}</td>
                 </tr>
                 `;
             }).join('');
@@ -1363,64 +1385,53 @@
                 });
                 
                 const dob = app.dob ? new Date(app.dob).toLocaleDateString('en-US') : 'N/A';
-                const getFileUrl = (path) => path.startsWith('http') ? path : `/uploads/${path}`;
-                const photoLink = app.photo_path ? `<a href="${getFileUrl(app.photo_path)}" target="_blank" style="color:var(--color-accent); text-decoration: underline;"><i class="fas fa-image"></i> View</a>` : '<span style="color: #666;">N/A</span>';
-                const resumeLink = app.resume_path ? `<a href="${getFileUrl(app.resume_path)}" target="_blank" style="color:var(--color-accent); text-decoration: underline;"><i class="fas fa-file-pdf"></i> View</a>` : '<span style="color: #666;">N/A</span>';
+                
+                const cleanPhoto = app.photo_path ? sanitizeUrl(app.photo_path.startsWith('http') ? app.photo_path : `/uploads/${app.photo_path}`) : '';
+                const photoLink = cleanPhoto ? `<a href="${cleanPhoto}" target="_blank" rel="noopener noreferrer" style="color:var(--color-accent); text-decoration: underline;"><i class="fas fa-image"></i> View</a>` : '<span style="color: #666;">N/A</span>';
+                
+                const cleanResume = app.resume_path ? sanitizeUrl(app.resume_path.startsWith('http') ? app.resume_path : `/uploads/${app.resume_path}`) : '';
+                const resumeLink = cleanResume ? `<a href="${cleanResume}" target="_blank" rel="noopener noreferrer" style="color:var(--color-accent); text-decoration: underline;"><i class="fas fa-file-pdf"></i> View</a>` : '<span style="color: #666;">N/A</span>';
                 
                 let statusBadge = '<span class="status-badge" style="background: rgba(16, 185, 129, 0.1); color: var(--color-success); border: 1px solid var(--color-success);">New</span>';
                 if(app.status === 'approved') statusBadge = '<span class="status-badge" style="background: rgba(16, 185, 129, 0.2); color: var(--color-success); border: 1px solid var(--color-success);">Selected</span>';
                 else if(app.status === 'rejected') statusBadge = '<span class="status-badge" style="background: rgba(239, 68, 68, 0.2); color: var(--color-danger); border: 1px solid var(--color-danger);">Not Selected</span>';
                 else statusBadge = '<span class="status-badge" style="background: rgba(245, 158, 11, 0.1); color: #f59e0b; border: 1px solid #f59e0b;">Pending</span>';
-                
-                // Sanitize to prevent HTML injection breaks
-                const escapeHTML = (str) => {
-                    if (!str) return '';
-                    return String(str).replace(/[&<>'"]/g, 
-                        tag => ({
-                            '&': '&amp;',
-                            '<': '&lt;',
-                            '>': '&gt;',
-                            "'": '&#39;',
-                            '"': '&quot;'
-                        }[tag] || tag)
-                    );
-                };
 
                 html += `
                     <tr>
-                        <td style="padding-left: 20px;"><input type="checkbox" class="app-checkbox" value="${app.id}" onchange="updateBulkDeleteBtn()" style="cursor: pointer; width: 16px; height: 16px;"></td>
-                        <td style="white-space: nowrap; font-family: monospace; font-weight: 700; color: var(--color-accent);">${escapeHTML(app.applicant_code || 'N/A')}</td>
-                        <td class="name-col">${escapeHTML(app.name)}</td>
-                        <td>${escapeHTML(app.category || 'N/A')}</td>
-                        <td>${escapeHTML(app.age || 'N/A')}</td>
-                        <td>${dob}</td>
-                        <td>${escapeHTML(app.blood_group || 'N/A')}</td>
-                        <td>${escapeHTML(app.email)}</td>
-                        <td>${escapeHTML(app.alt_email || 'N/A')}</td>
-                        <td>${escapeHTML(app.phone)}</td>
-                        <td>${escapeHTML(app.alt_phone || 'N/A')}</td>
-                        <td>${escapeHTML(app.hometown || 'N/A')}</td>
-                        <td>${escapeHTML(app.current_city || 'N/A')}</td>
-                        <td>${escapeHTML(app.state || 'N/A')}</td>
-                        <td class="truncate-td" title="${escapeHTML(app.temp_address || '')}">${escapeHTML(app.temp_address || 'N/A')}</td>
-                        <td class="truncate-td" title="${escapeHTML(app.perm_address || '')}">${escapeHTML(app.perm_address || 'N/A')}</td>
-                        <td>${escapeHTML(app.education_level || 'N/A')}</td>
-                        <td class="truncate-td" title="${escapeHTML(app.degree || '')}">${escapeHTML(app.degree || 'N/A')}</td>
-                        <td>${escapeHTML(app.current_status || 'N/A')}</td>
-                        <td>${escapeHTML(app.languages || 'N/A')}</td>
-                        <td>${escapeHTML(app.interest || 'N/A')}</td>
-                        <td class="truncate-td" title="${escapeHTML(app.hobbies || '')}">${escapeHTML(app.hobbies || 'N/A')}</td>
-                        <td class="truncate-td" title="${escapeHTML(app.motivation || '')}">${escapeHTML(app.motivation || 'N/A')}</td>
-                        <td class="truncate-td" title="${escapeHTML(app.experience || '')}">${escapeHTML(app.experience || 'N/A')}</td>
+                        <td style="padding-left: 20px;"><input type="checkbox" class="app-checkbox" value="${escapeHtml(app.id)}" onchange="updateBulkDeleteBtn()" style="cursor: pointer; width: 16px; height: 16px;"></td>
+                        <td style="white-space: nowrap; font-family: monospace; font-weight: 700; color: var(--color-accent);">${escapeHtml(app.applicant_code || 'N/A')}</td>
+                        <td class="name-col">${escapeHtml(app.name)}</td>
+                        <td>${escapeHtml(app.category || 'N/A')}</td>
+                        <td>${escapeHtml(app.age || 'N/A')}</td>
+                        <td>${escapeHtml(dob)}</td>
+                        <td>${escapeHtml(app.blood_group || 'N/A')}</td>
+                        <td>${escapeHtml(app.email)}</td>
+                        <td>${escapeHtml(app.alt_email || 'N/A')}</td>
+                        <td>${escapeHtml(app.phone)}</td>
+                        <td>${escapeHtml(app.alt_phone || 'N/A')}</td>
+                        <td>${escapeHtml(app.hometown || 'N/A')}</td>
+                        <td>${escapeHtml(app.current_city || 'N/A')}</td>
+                        <td>${escapeHtml(app.state || 'N/A')}</td>
+                        <td class="truncate-td" title="${escapeHtml(app.temp_address || '')}">${escapeHtml(app.temp_address || 'N/A')}</td>
+                        <td class="truncate-td" title="${escapeHtml(app.perm_address || '')}">${escapeHtml(app.perm_address || 'N/A')}</td>
+                        <td>${escapeHtml(app.education_level || 'N/A')}</td>
+                        <td class="truncate-td" title="${escapeHtml(app.degree || '')}">${escapeHtml(app.degree || 'N/A')}</td>
+                        <td>${escapeHtml(app.current_status || 'N/A')}</td>
+                        <td>${escapeHtml(app.languages || 'N/A')}</td>
+                        <td>${escapeHtml(app.interest || 'N/A')}</td>
+                        <td class="truncate-td" title="${escapeHtml(app.hobbies || '')}">${escapeHtml(app.hobbies || 'N/A')}</td>
+                        <td class="truncate-td" title="${escapeHtml(app.motivation || '')}">${escapeHtml(app.motivation || 'N/A')}</td>
+                        <td class="truncate-td" title="${escapeHtml(app.experience || '')}">${escapeHtml(app.experience || 'N/A')}</td>
                         <td>${photoLink}</td>
                         <td>${resumeLink}</td>
                         <td class="date">${date}</td>
                         <td>${statusBadge}</td>
                         <td class="sticky-actions">
-                            <button class="action-btn" title="View Details" onclick="viewDetails('${app.id}')">
+                            <button class="action-btn" title="View Details" onclick="viewDetails('${escapeHtml(app.id)}')">
                                 <i class="fas fa-eye"></i>
                             </button>
-                            <button class="action-btn" title="Delete Application" onclick="deleteApplication('${app.id}')" style="color: var(--color-danger);">
+                            <button class="action-btn" title="Delete Application" onclick="deleteApplication('${escapeHtml(app.id)}')" style="color: var(--color-danger);">
                                 <i class="fas fa-trash-alt"></i>
                             </button>
                         </td>
@@ -1560,20 +1571,21 @@
             
             const dob = app.dob ? new Date(app.dob).toLocaleDateString('en-US') : 'N/A';
             
-            const getFileUrl = (path) => path.startsWith('http') ? path : `/uploads/${path}`;
+            const cleanResume = app.resume_path ? sanitizeUrl(app.resume_path.startsWith('http') ? app.resume_path : `/uploads/${app.resume_path}`) : '';
+            const cleanPhoto = app.photo_path ? sanitizeUrl(app.photo_path.startsWith('http') ? app.photo_path : `/uploads/${app.photo_path}`) : '';
             
-            const resumeLink = app.resume_path 
-                ? `<a href="${getFileUrl(app.resume_path)}" target="_blank" style="color: var(--color-accent); text-decoration: underline;">View Resume <i class="fas fa-external-link-alt"></i></a>` 
+            const resumeLink = cleanResume 
+                ? `<a href="${cleanResume}" target="_blank" rel="noopener noreferrer" style="color: var(--color-accent); text-decoration: underline;">View Resume <i class="fas fa-external-link-alt"></i></a>` 
                 : 'Not provided';
                 
-            const photoLink = app.photo_path 
-                ? `<a href="${getFileUrl(app.photo_path)}" target="_blank" style="color: var(--color-accent); text-decoration: underline;">View Photo <i class="fas fa-external-link-alt"></i></a>` 
+            const photoLink = cleanPhoto 
+                ? `<a href="${cleanPhoto}" target="_blank" rel="noopener noreferrer" style="color: var(--color-accent); text-decoration: underline;">View Photo <i class="fas fa-external-link-alt"></i></a>` 
                 : 'Not provided';
                 
-            const photoPreview = app.photo_path 
+            const photoPreview = cleanPhoto 
                 ? `<div style="text-align: center; margin-bottom: 25px;">
-                       <a href="${getFileUrl(app.photo_path)}" target="_blank">
-                           <img src="${getFileUrl(app.photo_path)}" alt="Applicant Photo" style="width: 120px; height: 120px; object-fit: cover; border-radius: 50%; border: 3px solid var(--color-accent); box-shadow: 0 4px 15px rgba(0,0,0,0.3); cursor: pointer; transition: transform 0.2s;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
+                       <a href="${cleanPhoto}" target="_blank" rel="noopener noreferrer">
+                           <img src="${cleanPhoto}" alt="Applicant Photo" style="width: 120px; height: 120px; object-fit: cover; border-radius: 50%; border: 3px solid var(--color-accent); box-shadow: 0 4px 15px rgba(0,0,0,0.3); cursor: pointer; transition: transform 0.2s;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
                        </a>
                    </div>`
                 : '';
@@ -1582,11 +1594,11 @@
                 <div style="background: rgba(197, 157, 95, 0.12); border: 1px solid var(--color-accent); border-radius: 8px; padding: 12px 18px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center;">
                     <div>
                         <span style="font-size: 0.75rem; font-weight: 700; color: var(--color-accent); text-transform: uppercase; letter-spacing: 1px; display: block;">Applicant Code</span>
-                        <span style="font-size: 1.3rem; font-weight: 800; font-family: monospace; color: var(--color-text);">${app.applicant_code || 'N/A'}</span>
+                        <span style="font-size: 1.3rem; font-weight: 800; font-family: monospace; color: var(--color-text);">${escapeHtml(app.applicant_code || 'N/A')}</span>
                     </div>
                     <div style="text-align: right;">
                         <span style="font-size: 0.75rem; font-weight: 700; color: var(--color-text-light); text-transform: uppercase; letter-spacing: 1px; display: block;">Status</span>
-                        <span style="font-size: 0.9rem; font-weight: 600; text-transform: capitalize; color: ${app.status === 'approved' ? 'var(--color-success)' : app.status === 'rejected' ? 'var(--color-danger)' : '#f59e0b'};">${app.status || 'pending'}</span>
+                        <span style="font-size: 0.9rem; font-weight: 600; text-transform: capitalize; color: ${app.status === 'approved' ? 'var(--color-success)' : app.status === 'rejected' ? 'var(--color-danger)' : '#f59e0b'};">${escapeHtml(app.status || 'pending')}</span>
                     </div>
                 </div>
             `;
@@ -1597,78 +1609,78 @@
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
                     <div class="detail-group">
                         <span class="detail-label">Full Name</span>
-                        <div class="detail-value">${app.name}</div>
+                        <div class="detail-value">${escapeHtml(app.name)}</div>
                     </div>
                     <div class="detail-group">
                         <span class="detail-label">Category</span>
-                        <div class="detail-value">${app.category || 'N/A'}</div>
+                        <div class="detail-value">${escapeHtml(app.category || 'N/A')}</div>
                     </div>
                     
                     <div class="detail-group">
                         <span class="detail-label">Age & DOB</span>
-                        <div class="detail-value">${app.age || 'N/A'} yrs (${dob})</div>
+                        <div class="detail-value">${escapeHtml(app.age || 'N/A')} yrs (${escapeHtml(dob)})</div>
                     </div>
                     <div class="detail-group">
                         <span class="detail-label">Blood Group</span>
-                        <div class="detail-value">${app.blood_group || 'N/A'}</div>
+                        <div class="detail-value">${escapeHtml(app.blood_group || 'N/A')}</div>
                     </div>
                     
                     <div class="detail-group">
                         <span class="detail-label">Email Address</span>
-                        <div class="detail-value">${app.email}<br><small style="color: #666;">Alt: ${app.alt_email || 'None'}</small></div>
+                        <div class="detail-value">${escapeHtml(app.email)}<br><small style="color: #666;">Alt: ${escapeHtml(app.alt_email || 'None')}</small></div>
                     </div>
                     <div class="detail-group">
                         <span class="detail-label">Phone Number</span>
-                        <div class="detail-value">${app.phone}<br><small style="color: #666;">Alt: ${app.alt_phone || 'None'}</small></div>
+                        <div class="detail-value">${escapeHtml(app.phone)}<br><small style="color: #666;">Alt: ${escapeHtml(app.alt_phone || 'None')}</small></div>
                     </div>
                     
                     <div class="detail-group">
                         <span class="detail-label">Location (City, State)</span>
-                        <div class="detail-value">${app.current_city || 'N/A'}, ${app.state || 'N/A'}</div>
+                        <div class="detail-value">${escapeHtml(app.current_city || 'N/A')}, ${escapeHtml(app.state || 'N/A')}</div>
                     </div>
                     <div class="detail-group">
                         <span class="detail-label">Education / Degree</span>
-                        <div class="detail-value">${app.education_level || 'N/A'} - ${app.degree || 'N/A'}</div>
+                        <div class="detail-value">${escapeHtml(app.education_level || 'N/A')} - ${escapeHtml(app.degree || 'N/A')}</div>
                     </div>
                     
                     <div class="detail-group">
                         <span class="detail-label">Current Status</span>
-                        <div class="detail-value">${app.current_status || 'N/A'}</div>
+                        <div class="detail-value">${escapeHtml(app.current_status || 'N/A')}</div>
                     </div>
                     <div class="detail-group">
                         <span class="detail-label">Languages Known</span>
-                        <div class="detail-value">${app.languages || 'N/A'}</div>
+                        <div class="detail-value">${escapeHtml(app.languages || 'N/A')}</div>
                     </div>
                 </div>
                 
                 <div class="detail-group" style="margin-top: 20px;">
                     <span class="detail-label">Area of Interest</span>
-                    <div class="detail-value">${app.interest || 'N/A'}</div>
+                    <div class="detail-value">${escapeHtml(app.interest || 'N/A')}</div>
                 </div>
                 
                 <div class="detail-group" style="margin-top: 10px;">
                     <span class="detail-label">Hobbies / Skills</span>
-                    <div class="detail-value" style="white-space: pre-wrap;">${app.hobbies || 'N/A'}</div>
+                    <div class="detail-value" style="white-space: pre-wrap;">${escapeHtml(app.hobbies || 'N/A')}</div>
                 </div>
                 
                 <div class="detail-group" style="margin-top: 10px;">
                     <span class="detail-label">Temporary Address</span>
-                    <div class="detail-value" style="white-space: pre-wrap;">${app.temp_address || 'N/A'}</div>
+                    <div class="detail-value" style="white-space: pre-wrap;">${escapeHtml(app.temp_address || 'N/A')}</div>
                 </div>
                 
                 <div class="detail-group" style="margin-top: 10px;">
                     <span class="detail-label">Permanent Address</span>
-                    <div class="detail-value" style="white-space: pre-wrap;">${app.perm_address || 'N/A'}</div>
+                    <div class="detail-value" style="white-space: pre-wrap;">${escapeHtml(app.perm_address || 'N/A')}</div>
                 </div>
                 
                 <div class="detail-group" style="margin-top: 10px;">
                     <span class="detail-label">Motivation</span>
-                    <div class="detail-value" style="white-space: pre-wrap;">${app.motivation || 'N/A'}</div>
+                    <div class="detail-value" style="white-space: pre-wrap;">${escapeHtml(app.motivation || 'N/A')}</div>
                 </div>
                 
                 <div class="detail-group" style="margin-top: 10px;">
                     <span class="detail-label">Experience</span>
-                    <div class="detail-value" style="white-space: pre-wrap;">${app.experience || 'N/A'}</div>
+                    <div class="detail-value" style="white-space: pre-wrap;">${escapeHtml(app.experience || 'N/A')}</div>
                 </div>
                 
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 20px;">
@@ -1683,11 +1695,11 @@
                 </div>
                 
                 <div style="margin-top: 30px; border-top: 1px solid var(--color-border); padding-top: 20px; display: flex; gap: 15px;">
-                    <button onclick="updateStatus('${app.id}', 'approved')" style="flex: 1; padding: 12px; border-radius: 8px; background: rgba(16, 185, 129, 0.1); color: var(--color-success); border: 1px solid var(--color-success); cursor: pointer; font-weight: 500; transition: all 0.2s;">Approve Application</button>
-                    <button onclick="updateStatus('${app.id}', 'rejected')" style="flex: 1; padding: 12px; border-radius: 8px; background: rgba(239, 68, 68, 0.1); color: var(--color-danger); border: 1px solid var(--color-danger); cursor: pointer; font-weight: 500; transition: all 0.2s;">Reject Application</button>
+                    <button onclick="updateStatus('${escapeHtml(app.id)}', 'approved')" style="flex: 1; padding: 12px; border-radius: 8px; background: rgba(16, 185, 129, 0.1); color: var(--color-success); border: 1px solid var(--color-success); cursor: pointer; font-weight: 500; transition: all 0.2s;">Approve Application</button>
+                    <button onclick="updateStatus('${escapeHtml(app.id)}', 'rejected')" style="flex: 1; padding: 12px; border-radius: 8px; background: rgba(239, 68, 68, 0.1); color: var(--color-danger); border: 1px solid var(--color-danger); cursor: pointer; font-weight: 500; transition: all 0.2s;">Reject Application</button>
                 </div>
                 <div style="margin-top: 15px; display: flex;">
-                    <button onclick="deleteApplication('${app.id}')" style="flex: 1; padding: 12px; border-radius: 8px; background: transparent; color: var(--color-text-light); border: 1px solid var(--color-border); cursor: pointer; font-weight: 500; transition: all 0.2s; font-size: 0.9rem;" onmouseover="this.style.color='var(--color-danger)'; this.style.borderColor='var(--color-danger)';" onmouseout="this.style.color='var(--color-text-light)'; this.style.borderColor='var(--color-border)';"><i class="fas fa-trash-alt"></i> Delete Permanently</button>
+                    <button onclick="deleteApplication('${escapeHtml(app.id)}')" style="flex: 1; padding: 12px; border-radius: 8px; background: transparent; color: var(--color-text-light); border: 1px solid var(--color-border); cursor: pointer; font-weight: 500; transition: all 0.2s; font-size: 0.9rem;" onmouseover="this.style.color='var(--color-danger)'; this.style.borderColor='var(--color-danger)';" onmouseout="this.style.color='var(--color-text-light)'; this.style.borderColor='var(--color-border)';"><i class="fas fa-trash-alt"></i> Delete Permanently</button>
                 </div>
             `;
 
@@ -1783,7 +1795,7 @@
                         type: 'application',
                         date: new Date(app.created_at),
                         title: 'New Volunteer Application',
-                        desc: `${app.name} applied as a volunteer (${app.category || 'General'}).`,
+                        desc: `${escapeHtml(app.name)} applied as a volunteer (${escapeHtml(app.category || 'General')}).`,
                         icon: 'fa-user-plus',
                         color: 'var(--color-accent)',
                         linkView: 'volunteers'
@@ -1795,7 +1807,7 @@
                         type: 'message',
                         date: new Date(msg.created_at),
                         title: 'New Suggestion / Message',
-                        desc: `${msg.name} sent a message regarding: ${msg.subject || 'General'}.`,
+                        desc: `${escapeHtml(msg.name)} sent a message regarding: ${escapeHtml(msg.subject || 'General')}.`,
                         icon: 'fa-envelope',
                         color: 'var(--color-success)',
                         linkView: 'messages'
@@ -1807,7 +1819,7 @@
                         type: 'quote',
                         date: new Date(quote.created_at),
                         title: 'New Quote Added',
-                        desc: `"${quote.text}" - ${quote.author || 'Admin'}`,
+                        desc: `"${escapeHtml(quote.text)}" - ${escapeHtml(quote.author || 'Admin')}`,
                         icon: 'fa-quote-left',
                         color: '#f59e0b',
                         linkView: 'quotes'
@@ -1827,9 +1839,9 @@
                             <i class="fas ${item.icon}"></i>
                         </div>
                         <div style="flex: 1;">
-                            <h4 style="margin-bottom: 4px; font-size: 0.95rem; color: var(--color-heading);">${item.title}</h4>
+                            <h4 style="margin-bottom: 4px; font-size: 0.95rem; color: var(--color-heading);">${escapeHtml(item.title)}</h4>
                             <p style="color: var(--color-text); font-size: 0.85rem; line-height: 1.4; margin-bottom: 8px;">${item.desc}</p>
-                            <button onclick="switchView('${item.linkView}')" style="background: transparent; border: 1px solid var(--color-border); padding: 4px 12px; border-radius: 4px; font-size: 0.75rem; cursor: pointer; color: var(--color-text); transition: var(--transition);" onmouseover="this.style.borderColor='var(--color-accent)'; this.style.color='var(--color-accent)';" onmouseout="this.style.borderColor='var(--color-border)'; this.style.color='var(--color-text)';">View Section <i class="fas fa-arrow-right" style="font-size: 0.7rem; margin-left: 4px;"></i></button>
+                            <button onclick="switchView('${escapeHtml(item.linkView)}')" style="background: transparent; border: 1px solid var(--color-border); padding: 4px 12px; border-radius: 4px; font-size: 0.75rem; cursor: pointer; color: var(--color-text); transition: var(--transition);" onmouseover="this.style.borderColor='var(--color-accent)'; this.style.color='var(--color-accent)';" onmouseout="this.style.borderColor='var(--color-border)'; this.style.color='var(--color-text)';">View Section <i class="fas fa-arrow-right" style="font-size: 0.7rem; margin-left: 4px;"></i></button>
                         </div>
                         <div style="color: var(--color-text-light); font-size: 0.75rem; white-space: nowrap;">
                             ${item.date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })}
