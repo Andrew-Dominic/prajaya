@@ -272,11 +272,7 @@
             justify-content: center;
             padding-top: 100px; /* Account for navbar */
             padding-bottom: 100px;
-            background-color: var(--color-heading);
-            background-image: 
-
-                url('data:image/svg+xml,%3Csvg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"%3E%3Cfilter id="noiseFilter"%3E%3CfeTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="3" stitchTiles="stitch"/%3E%3C/filter%3E%3Crect width="100%25" height="100%25" filter="url(%23noiseFilter)" opacity="0.03"/%3E%3C/svg%3E'),
-                radial-gradient(circle at 50% 0%, rgba(212, 166, 90, 0.1) 0%, transparent 70%);
+            background: #2C2946;
             position: relative;
         }
 
@@ -322,7 +318,7 @@
             font-weight: 300;
             letter-spacing: -1.5px;
             color: #ffffff;
-            text-shadow: 0 4px 24px rgba(0, 0, 0, 0.5);
+            text-shadow: none;
         }
         
         .hero h1 span {
@@ -338,7 +334,7 @@
             color: rgba(255, 255, 255, 0.8);
             font-weight: 300;
             line-height: 1.85;
-            text-shadow: 0 2px 12px rgba(0, 0, 0, 0.5);
+            text-shadow: none;
         }
 
         .hero-actions {
@@ -386,16 +382,7 @@
         }
 
         .hero-glow {
-            position: absolute;
-            width: 520px;
-            height: 520px;
-            background: radial-gradient(circle, rgba(212, 166, 90, 0.12) 0%, transparent 70%);
-            top: 45%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            filter: blur(40px);
-            z-index: 0;
-            pointer-events: none;
+            display: none;
         }
 
         .hero-logo-container {
@@ -419,14 +406,14 @@
             height: auto;
             object-fit: contain;
             transition: all 0.3s ease;
-            filter: drop-shadow(0 20px 40px rgba(0,0,0,0.3));
+            filter: none;
             animation: floatLogo 6s ease-in-out infinite;
         }
 
         .hero-logo-img:hover {
             animation-play-state: paused;
             transform: scale(1.02) rotate(2deg);
-            filter: drop-shadow(0 25px 45px rgba(212, 166, 90, 0.25));
+            filter: none;
         }
 
         .mission-card {
