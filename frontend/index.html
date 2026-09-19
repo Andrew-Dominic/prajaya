@@ -1708,10 +1708,11 @@
             z-index: 2;
         }
         .founder-card .founder-image img { 
-            width: 100%; height: 100%; object-fit: cover; object-position: center 10%; 
+            width: 100%; height: 100%; object-fit: cover; object-position: var(--obj-pos, center 10%); 
+            transform: scale(var(--img-scale, 1));
             transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
         }
-        .founder-card:hover .founder-image img { transform: scale(1.08); }
+        .founder-card:hover .founder-image img { transform: scale(calc(var(--img-scale, 1) * 1.08)); }
         
         .founder-card .founder-name { 
             font-size: 1.35rem; margin-bottom: 12px; color: var(--color-heading); font-weight: 600; line-height: 1.3; 
@@ -1833,7 +1834,7 @@
                         <div class="founder-card">
                             <div class="founder-image">
                                 <!-- Placeholder for Indira M -->
-                                <img src="https://ui-avatars.com/api/?name=Indira+M&background=f3f4f6&color=333&size=150" alt="Secretary">
+                                <img src="assets/images/indra.jfif" alt="Secretary">
                             </div>
                             <h3 class="founder-name">MRS. INDIRA M</h3>
                             <span class="founder-role">Secretary</span>
@@ -1866,7 +1867,7 @@
                     <div class="carousel-slide">
                         <div class="founder-card">
                             <div class="founder-image">
-                                <img src="assets/images/volunteer coordinator.jpeg" alt="Volunteer Coordinator">
+                                <img src="assets/images/volunteer coordinator.jpeg" alt="Volunteer Coordinator" style="--img-scale: 1.65; --obj-pos: center 25%;">
                             </div>
                             <h3 class="founder-name">MS. VIJAYA SRI. G</h3>
                             <span class="founder-role">Volunteer Coordinator</span>

@@ -18,3 +18,5 @@ npm-debug.log*
 
 # Uploads (production — managed outside git)
 uploads/
+.env.*  
+ 
