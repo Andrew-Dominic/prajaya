@@ -1296,6 +1296,14 @@
     <div id="preloader" class="preloader">
         <img src="assets/images/logo.png" alt="PRAJAYA Foundation Loading" class="preloader-logo">
     </div>
+    <script>
+        const hidePreloader = () => {
+            const preloader = document.getElementById('preloader');
+            if (preloader) preloader.classList.add('fade-out');
+        };
+        window.addEventListener('load', () => setTimeout(hidePreloader, 150));
+        setTimeout(hidePreloader, 2500); // Failsafe
+    </script>
 
     <!-- Header -->
     <header class="header" id="header">
@@ -2159,13 +2167,7 @@
             }
         });
 
-        // Preloader Logic
-        const hidePreloader = () => {
-            const preloader = document.getElementById('preloader');
-            if (preloader) preloader.classList.add('fade-out');
-        };
-        window.addEventListener('load', () => setTimeout(hidePreloader, 150));
-        setTimeout(hidePreloader, 800);
+
     </script>
 
 

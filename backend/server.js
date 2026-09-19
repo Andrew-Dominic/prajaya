@@ -76,8 +76,7 @@ app.use(
         defaultSrc: ["'self'"],
         scriptSrc: [
           "'self'",
-          (req, res) => `'nonce-${res.locals.cspNonce}'`,
-          "'unsafe-inline'", // Kept for backwards-compatibility; CSP2/3 browsers prioritize nonces
+          "'unsafe-inline'", // Allowed for inline scripts (GSAP, etc) in static html
           "https://unpkg.com",
           "https://cdnjs.cloudflare.com",
         ],
@@ -111,23 +110,23 @@ app.use(
 app.use(morgan(config.isDev ? 'dev' : 'combined'));
 
 // ──────────────────────────────────────────────
-// 3. RATE LIMITING
-// ──────────────────────────────────────────────
-app.use(globalLimiter);
-
-// ──────────────────────────────────────────────
-// 4. BODY PARSING
-// ──────────────────────────────────────────────
-app.use(express.json({ limit: '1mb' }));
-app.use(express.urlencoded({ extended: true, limit: '10mb' }));
-app.use(cookieParser());
-
-// ──────────────────────────────────────────────
-// 5. STATIC FILE SERVING
+// 3. STATIC FILE SERVING
 // ──────────────────────────────────────────────
 app.use(express.static(config.frontendPath));
 app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
 app.use('/admin', express.static(config.adminPath));
+
+// ──────────────────────────────────────────────
+// 4. RATE LIMITING
+// ──────────────────────────────────────────────
+app.use(globalLimiter);
+
+// ──────────────────────────────────────────────
+// 5. BODY PARSING
+// ──────────────────────────────────────────────
+app.use(express.json({ limit: '1mb' }));
+app.use(express.urlencoded({ extended: true, limit: '10mb' }));
+app.use(cookieParser());
 
 // ──────────────────────────────────────────────
 // 6. API ROUTES
