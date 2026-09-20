@@ -1371,10 +1371,10 @@
             
             <nav class="nav-links" id="nav-links">
                 <a href="#home">Home</a>
-                <a href="/about">About</a>
-                <a href="/programs">Objectives</a>
-                <a href="/about#founder">Founder</a>
-                <a href="/events">Events</a>
+                <a href="/#vision">About</a>
+                <a href="/#programs">Objectives</a>
+                <a href="/#founder">Founder</a>
+                <a href="/#events">Events</a>
                 <a href="/news">News</a>
                 <a href="/contact">Contact</a>
                 <a href="/volunteer" class="btn btn-primary volunteer-trigger nav-volunteer-btn">Join as Volunteer</a>
@@ -1406,7 +1406,7 @@
                     </p>
                     
                     <div class="hero-actions">
-                        <a href="/programs" class="btn btn-primary">Objectives</a>
+                        <a href="/#programs" class="btn btn-primary">Objectives</a>
                         <a href="/volunteer" class="btn btn-outline volunteer-trigger">Join as Volunteer</a>
                     </div>
                 </div>
@@ -1486,25 +1486,463 @@
     </script>
 
     
-    <!-- Vision & Mission Teaser -->
+    <!-- Vision & Mission -->
     <section class="section" id="vision">
-        <div class="container" style="text-align: center;">
-            <div class="section-label" style="justify-content: center;">Who We Are</div>
-            <h2 class="section-title" style="margin-bottom: 20px;">About Prajaya Foundation</h2>
-            <p style="max-width: 800px; margin: 0 auto 40px; font-size: 1.15rem;">We are dedicated to empowering individuals and transforming communities through education, leadership, health, fitness, social responsibility, and sustainable development.</p>
-            <a href="/about" class="btn btn-primary">Read More About Us</a>
+        <div class="container">
+            <div class="section-header reveal">
+                <div class="section-label">Our Purpose</div>
+                <h2 class="section-title">Guiding Principles</h2>
+            </div>
+            
+            <div class="vm-grid">
+                <div class="vm-item reveal">
+                    <h3><i class="fas fa-eye"></i> Vision</h3>
+                    <p>To build a healthy, happy, responsible, educated, compassionate, self-reliant, and empowered society through education, fitness, leadership, service, and sustainable development.</p>
+                </div>
+                
+                <div class="vm-item reveal delay-1">
+                    <h3><i class="fas fa-compass"></i> Mission</h3>
+                    <p>To educate, empower, inspire, and serve individuals and communities by promoting education, health, fitness, leadership, ethical values, social responsibility, environmental stewardship, and humanitarian service.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+<!-- Approach & Values -->
+    <section class="section" id="methodology">
+        <div class="container">
+            <div class="approach-values-grid">
+                
+                <div class="reveal">
+                    <div class="section-label">Methodology</div>
+                    <h2 class="section-title" style="margin-bottom: 40px;">How We Work</h2>
+                    
+                    <div class="list-container">
+                        <div class="list-item"><i class="fas fa-check"></i> <span>Awareness Campaigns & Outreach</span></div>
+                        <div class="list-item"><i class="fas fa-check"></i> <span>Workshops & Seminars</span></div>
+                        <div class="list-item"><i class="fas fa-check"></i> <span>Training Programs & Partnerships</span></div>
+                        <div class="list-item"><i class="fas fa-check"></i> <span>Sports & Fitness Activities</span></div>
+                        <div class="list-item"><i class="fas fa-check"></i> <span>Volunteer Networks & Sponsorships</span></div>
+                    </div>
+                </div>
+
+                <div class="reveal delay-1">
+                    <div class="section-label">Guiding Principles</div>
+                    <h2 class="section-title" style="margin-bottom: 40px;">Core Values</h2>
+                    
+                    <div class="list-container">
+                        <div class="list-item"><i class="fas fa-star"></i> <span>Humanity & Compassion</span></div>
+                        <div class="list-item"><i class="fas fa-star"></i> <span>Integrity & Responsibility</span></div>
+                        <div class="list-item"><i class="fas fa-star"></i> <span>Leadership & Excellence</span></div>
+                        <div class="list-item"><i class="fas fa-star"></i> <span>Service & Inclusion</span></div>
+                        <div class="list-item"><i class="fas fa-star"></i> <span>Sustainability & Innovation</span></div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+<!-- Leadership Carousel -->
+    <style>
+        .carousel-container { position: relative; max-width: 1200px; margin: 0 auto; overflow: hidden; padding: 20px 0; }
+        .carousel-track { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; scroll-behavior: smooth; -ms-overflow-style: none; scrollbar-width: none; gap: 24px; padding: 20px 10px; }
+        .carousel-track::-webkit-scrollbar { display: none; }
+        .carousel-slide { min-width: 320px; flex: 0 0 calc(33.333% - 16px); scroll-snap-align: center; display: flex; justify-content: center; }
+        
+        .founders-showcase {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 40px;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px 10px;
+        }
+
+        .showcase-card {
+            background: #ffffff;
+            border-radius: 24px;
+            padding: 45px 30px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            transition: all 0.4s ease;
+            position: relative;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.02);
+            border: 1px solid rgba(0,0,0,0.03);
+            flex: 1;
+            max-width: 340px;
+        }
+
+        .showcase-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.05);
+            border-color: rgba(212, 166, 90, 0.15);
+        }
+
+        .showcase-image {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 4px solid #ffffff;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+            transition: transform 0.4s ease;
+            margin: 0 auto 24px;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .showcase-card:hover .showcase-image {
+            transform: scale(1.05);
+        }
+
+        .showcase-name {
+            font-size: 1.3rem;
+            color: var(--color-heading);
+            font-weight: 700;
+            margin-bottom: 8px;
+            letter-spacing: -0.3px;
+        }
+
+        .showcase-role {
+            font-size: 0.7rem;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            font-weight: 600;
+            color: var(--color-accent);
+            background: rgba(212, 166, 90, 0.05);
+            padding: 6px 16px;
+            border-radius: 20px;
+            display: inline-block;
+        }
+
+        /* Main Founder Card - Minimal & Elegant */
+        .showcase-card.main {
+            transform: scale(1.03);
+            z-index: 10;
+            border: 1px solid rgba(212, 166, 90, 0.15);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.04);
+            padding: 55px 30px;
+        }
+
+        .showcase-card.main::before {
+            content: '';
+            position: absolute;
+            top: -1px; left: 30px; right: 30px;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, var(--color-accent), transparent);
+            opacity: 0.6;
+        }
+
+        .showcase-card.main:hover {
+            transform: scale(1.03) translateY(-10px);
+            box-shadow: 0 25px 50px rgba(212, 166, 90, 0.08);
+        }
+
+        .showcase-card.main .showcase-name {
+            color: var(--color-heading);
+        }
+
+        .showcase-card.main .showcase-image {
+            width: 170px;
+            height: 170px;
+            box-shadow: 0 0 0 2px rgba(212, 166, 90, 0.1), 0 15px 30px rgba(0,0,0,0.08);
+        }
+
+        /* Card Positioning */
+        .card-left { order: 1; }
+        .card-center { order: 2; }
+        .card-right { order: 3; }
+
+        .founder-card { 
+            display: flex; flex-direction: column; align-items: center; justify-content: flex-start; text-align: center; 
+            background: linear-gradient(145deg, #ffffff, #fcfbfe); 
+            padding: 45px 30px; border-radius: 24px; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.03); 
+            width: 100%; transition: var(--transition); 
+            border: 1px solid rgba(0,0,0,0.04); 
+            position: relative; overflow: hidden;
+            height: 100%;
+        }
+        .founder-card::after {
+            content: '';
+            position: absolute; top: 0; left: 0; right: 0; height: 4px;
+            background: linear-gradient(90deg, var(--color-heading), var(--color-accent));
+            opacity: 0; transition: all 0.4s ease;
+        }
+        .founder-card:hover { 
+            transform: translateY(-10px); 
+            box-shadow: 0 20px 40px rgba(44,41,70,0.08); 
+            border-color: rgba(212, 166, 90, 0.3); 
+        }
+        .founder-card:hover::after { opacity: 1; }
+        
+        .founder-card .founder-image { 
+            width: 160px; height: 160px; margin: 0 auto 28px; 
+            border-radius: 50%; overflow: hidden; 
+            border: 6px solid #fff; 
+            box-shadow: 0 10px 25px rgba(0,0,0,0.08); 
+            position: relative;
+            background: var(--color-surface);
+            z-index: 2;
+        }
+        .founder-card .founder-image img { 
+            width: 100%; height: 100%; object-fit: cover; object-position: var(--obj-pos, center 10%); 
+            transform: scale(var(--img-scale, 1));
+            transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .founder-card:hover .founder-image img { transform: scale(calc(var(--img-scale, 1) * 1.08)); }
+        
+        .founder-card .founder-name { 
+            font-size: 1.35rem; margin-bottom: 12px; color: var(--color-heading); font-weight: 600; line-height: 1.3; 
+        }
+        .founder-card .founder-role { 
+            font-size: 0.75rem; letter-spacing: 1.5px; text-transform: uppercase; color: var(--color-accent); font-weight: 600; 
+            background: rgba(212, 166, 90, 0.08); padding: 6px 16px; border-radius: 20px; display: inline-block;
+        }
+
+        .carousel-controls { display: flex; justify-content: center; gap: 20px; margin-top: 30px; }
+        .carousel-btn { width: 48px; height: 48px; border-radius: 50%; border: 1px solid rgba(0,0,0,0.08); background: var(--color-bg); color: var(--color-heading); cursor: pointer; transition: var(--transition); display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 12px rgba(0,0,0,0.04); }
+        .carousel-btn:hover { background: var(--color-heading); color: var(--color-bg); border-color: var(--color-heading); transform: scale(1.05); }
+        
+        @media (max-width: 1024px) { 
+            .founders-showcase { gap: 20px; }
+            .showcase-card.main { transform: scale(1.05); }
+            .showcase-card.main:hover { transform: scale(1.05) translateY(-10px); }
+            .showcase-card { padding: 40px 20px; }
+            .carousel-slide { flex: 0 0 calc(50% - 12px); } 
+        }
+        @media (max-width: 850px) { 
+            .founders-showcase { flex-direction: column; gap: 40px; }
+            .showcase-card.main { transform: scale(1); }
+            .showcase-card.main:hover { transform: translateY(-10px); }
+            .card-left { order: 2; }
+            .card-center { order: 1; margin-bottom: 20px; }
+            .card-right { order: 3; }
+            .showcase-card { max-width: 400px; width: 100%; }
+        }
+        @media (max-width: 650px) { 
+            .carousel-slide { flex: 0 0 100%; } 
+        }
+    </style>
+    <section class="section section-alt" id="founder">
+        <div class="container">
+            <div class="section-header reveal" style="text-align: center; margin: 0 auto 60px;">
+                <div class="section-label" style="justify-content: center;">Leadership</div>
+                <h2 class="section-title">Trustees</h2>
+            </div>
+            
+            <div class="carousel-container reveal">
+                <div class="carousel-track">
+                    <!-- Main Founder (Center) -->
+                    <div class="carousel-slide">
+                        <div class="founder-card">
+                            <div class="founder-image">
+                                <img src="assets/images/founder.jpeg" alt="Mr. Pradeep Babu M - Founder of Prajaya Foundation" loading="lazy">
+                            </div>
+                            <h3 class="founder-name">MR. PRADEEP BABU M</h3>
+                            <span class="founder-role">Founder & Managing Trustee</span>
+                        </div>
+                    </div>
+                    
+                    <!-- Trustee 1 -->
+                    <div class="carousel-slide">
+                        <div class="founder-card">
+                            <div class="founder-image">
+                                <img src="assets/images/Mr Murali C  co founder.png" alt="Trustee of Prajaya Foundation" loading="lazy">
+                            </div>
+                            <h3 class="founder-name">MR. MURALI C</h3>
+                            <span class="founder-role">Trustee</span>
+                        </div>
+                    </div>
+
+                    <!-- Trustee 2 -->
+                    <div class="carousel-slide">
+                        <div class="founder-card">
+                            <div class="founder-image">
+                                <img src="assets/images/jagadeesan co founder.png" alt="Trustee of Prajaya Foundation" loading="lazy">
+                            </div>
+                            <h3 class="founder-name">MR. JAGADEESAN M</h3>
+                            <span class="founder-role">Trustee</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="carousel-controls">
+                    <button class="carousel-btn prev-btn"><i class="fas fa-chevron-left"></i></button>
+                    <button class="carousel-btn next-btn"><i class="fas fa-chevron-right"></i></button>
+                </div>
+            </div>
+            
+            <div class="founder-description reveal" style="text-align: center; margin-top: 60px; margin-bottom: 80px;">
+                <p class="founder-quote">"Creating responsible individuals. Building stronger communities. Inspiring a better tomorrow."</p>
+                <p style="max-width: 600px; margin: 0 auto;">Under their visionary leadership, PRAJAYA FOUNDATION was established with a singular mission: to create a generation of responsible, empowered individuals who drive positive societal change.</p>
+            </div>
+
+            <div class="section-header reveal" style="text-align: center; margin: 0 auto 60px;">
+                <div class="section-label" style="justify-content: center;">Administration</div>
+                <h2 class="section-title">Office Bearers</h2>
+            </div>
+            
+            <div class="carousel-container reveal">
+                <div class="carousel-track">
+                    <!-- President -->
+                    <div class="carousel-slide">
+                        <div class="founder-card">
+                            <div class="founder-image">
+                                <img src="assets/images/Mr CHITTIBABU_page-0001.jpg" alt="President" loading="lazy">
+                            </div>
+                            <h3 class="founder-name">MR. CHITTIBABU E</h3>
+                            <span class="founder-role">President</span>
+                        </div>
+                    </div>
+
+                    <!-- Vice President -->
+                    <div class="carousel-slide">
+                        <div class="founder-card">
+                            <div class="founder-image">
+                                <img src="assets/images/vp.jpeg" alt="Vice President" loading="lazy">
+                            </div>
+                            <h3 class="founder-name">MR. GIRI C</h3>
+                            <span class="founder-role">Vice President</span>
+                        </div>
+                    </div>
+                    
+                    <!-- Secretary -->
+                    <div class="carousel-slide">
+                        <div class="founder-card">
+                            <div class="founder-image">
+                                <!-- Placeholder for Indira M -->
+                                <img src="assets/images/indra.jfif" alt="Secretary" loading="lazy">
+                            </div>
+                            <h3 class="founder-name">MRS. INDIRA M</h3>
+                            <span class="founder-role">Secretary</span>
+                        </div>
+                    </div>
+                    
+                    <!-- Treasurer -->
+                    <div class="carousel-slide">
+                        <div class="founder-card">
+                            <div class="founder-image">
+                                <img src="assets/images/tressurer.jpeg" alt="Treasurer" loading="lazy">
+                            </div>
+                            <h3 class="founder-name">MRS. BHANUPRIYA P</h3>
+                            <span class="founder-role">Treasurer</span>
+                        </div>
+                    </div>
+
+                    <!-- Joint Secretary -->
+                    <div class="carousel-slide">
+                        <div class="founder-card">
+                            <div class="founder-image">
+                                <img src="assets/images/joinsec.jpeg" alt="Joint Secretary" loading="lazy">
+                            </div>
+                            <h3 class="founder-name">MRS. SHALINI P</h3>
+                            <span class="founder-role">Joint Secretary</span>
+                        </div>
+                    </div>
+
+                    <!-- Volunteer Coordinator -->
+                    <div class="carousel-slide">
+                        <div class="founder-card">
+                            <div class="founder-image">
+                                <img src="assets/images/volunteer coordinator.jpeg" alt="Volunteer Coordinator" style="--img-scale: 1.65; --obj-pos: center 25%;" loading="lazy">
+                            </div>
+                            <h3 class="founder-name">MS. VIJAYA SRI. G</h3>
+                            <span class="founder-role">Volunteer Coordinator</span>
+                        </div>
+                    </div>
+
+                </div>
+                
+                <div class="carousel-controls">
+                    <button class="carousel-btn prev-btn"><i class="fas fa-chevron-left"></i></button>
+                    <button class="carousel-btn next-btn"><i class="fas fa-chevron-right"></i></button>
+                </div>
+            </div>
         </div>
     </section>
 
 
     
-    <!-- Programs Teaser -->
+    <!-- Programs -->
     <section class="section section-alt" id="programs">
-        <div class="container" style="text-align: center;">
-            <div class="section-label" style="justify-content: center;">What We Do</div>
-            <h2 class="section-title" style="margin-bottom: 20px;">Our Focus Areas</h2>
-            <p style="max-width: 800px; margin: 0 auto 40px; font-size: 1.15rem;">We operate across multiple domains including Education, Health, Leadership, Environment, and Social Welfare.</p>
-            <a href="/programs" class="btn btn-outline">Explore Our Programs</a>
+        <div class="container">
+            <div class="section-header reveal">
+                <div class="section-label">What We Do</div>
+                <h2 class="section-title">Our Focus Areas</h2>
+            </div>
+
+            <div class="programs-grid">
+                
+                <div class="program-card reveal">
+                    <div class="program-icon"><i class="fas fa-book-open"></i></div>
+                    <h4>Education & Learning</h4>
+                    <ul class="program-list">
+                        <li><i class="fas fa-circle"></i> Student mentoring</li>
+                        <li><i class="fas fa-circle"></i> Competitive exam guidance</li>
+                        <li><i class="fas fa-circle"></i> Scholarships & support</li>
+                        <li><i class="fas fa-circle"></i> Digital & financial literacy</li>
+                    </ul>
+                </div>
+
+                <div class="program-card reveal delay-1">
+                    <div class="program-icon"><i class="fas fa-heart"></i></div>
+                    <h4>Health & Fitness</h4>
+                    <ul class="program-list">
+                        <li><i class="fas fa-circle"></i> Health awareness programs</li>
+                        <li><i class="fas fa-circle"></i> Fitness initiatives</li>
+                        <li><i class="fas fa-circle"></i> Mental health awareness</li>
+                        <li><i class="fas fa-circle"></i> Community health campaigns</li>
+                    </ul>
+                </div>
+
+                <div class="program-card reveal delay-2">
+                    <div class="program-icon"><i class="fas fa-users"></i></div>
+                    <h4>Leadership Development</h4>
+                    <ul class="program-list">
+                        <li><i class="fas fa-circle"></i> Youth leadership programs</li>
+                        <li><i class="fas fa-circle"></i> Character building</li>
+                        <li><i class="fas fa-circle"></i> Life skills training</li>
+                        <li><i class="fas fa-circle"></i> Volunteer development</li>
+                    </ul>
+                </div>
+
+                <div class="program-card reveal">
+                    <div class="program-icon"><i class="fas fa-seedling"></i></div>
+                    <h4>Environment & Sustainability</h4>
+                    <ul class="program-list">
+                        <li><i class="fas fa-circle"></i> Tree plantation drives</li>
+                        <li><i class="fas fa-circle"></i> Environmental awareness</li>
+                        <li><i class="fas fa-circle"></i> Water conservation</li>
+                        <li><i class="fas fa-circle"></i> Sustainable initiatives</li>
+                    </ul>
+                </div>
+                
+                <div class="program-card reveal delay-1">
+                    <div class="program-icon"><i class="fas fa-hands-holding-child"></i></div>
+                    <h4>Social Welfare</h4>
+                    <ul class="program-list">
+                        <li><i class="fas fa-circle"></i> Community service</li>
+                        <li><i class="fas fa-circle"></i> Humanitarian relief</li>
+                        <li><i class="fas fa-circle"></i> Senior citizen welfare</li>
+                        <li><i class="fas fa-circle"></i> Child development</li>
+                    </ul>
+                </div>
+
+                <div class="program-card reveal delay-2">
+                    <div class="program-icon"><i class="fas fa-scale-balanced"></i></div>
+                    <h4>Legal & Civic Awareness</h4>
+                    <ul class="program-list">
+                        <li><i class="fas fa-circle"></i> Constitutional awareness</li>
+                        <li><i class="fas fa-circle"></i> Legal literacy</li>
+                        <li><i class="fas fa-circle"></i> Civic responsibility</li>
+                        <li><i class="fas fa-circle"></i> Public policy education</li>
+                    </ul>
+                </div>
+
+            </div>
         </div>
     </section>
 
@@ -1515,13 +1953,33 @@
     
 
     
-    <!-- Events Teaser -->
+    <!-- Upcoming Events -->
     <section class="section" id="events">
-        <div class="container" style="text-align: center;">
-            <div class="section-label" style="justify-content: center;">Join Us</div>
-            <h2 class="section-title" style="margin-bottom: 20px;">Upcoming Events</h2>
-            <p style="max-width: 800px; margin: 0 auto 40px; font-size: 1.15rem;">Stay updated with our latest campaigns, community outreach programs, and volunteer drives.</p>
-            <a href="/events" class="btn btn-primary">View All Events</a>
+        <div class="container">
+            <div class="section-header reveal">
+                <div class="section-label">Join Us</div>
+                <h2 class="section-title">Upcoming Events</h2>
+            </div>
+            <div class="programs-grid">
+                <div class="program-card reveal">
+                    <div class="program-icon"><i class="fas fa-laptop"></i></div>
+                    <h4>Digital Literacy</h4>
+                    <p>Digital Literacy training for school students.</p>
+                    <span style="font-size: 0.85rem; color: var(--color-accent); font-weight: 500; display: block; margin-top: 15px;">Coming Soon</span>
+                </div>
+                <div class="program-card reveal delay-1">
+                    <div class="program-icon"><i class="fas fa-shield-heart"></i></div>
+                    <h4>Drug Free Society Awareness</h4>
+                    <p>Awareness campaign event to build a drug-free society and healthy communities.</p>
+                    <span style="font-size: 0.85rem; color: var(--color-accent); font-weight: 500; display: block; margin-top: 15px;">Coming Soon</span>
+                </div>
+                <div class="program-card reveal delay-2">
+                    <div class="program-icon"><i class="fas fa-calendar-alt"></i></div>
+                    <h4>Community Health Camp</h4>
+                    <p>Free health checkups and awareness sessions in local communities.</p>
+                    <span style="font-size: 0.85rem; color: var(--color-accent); font-weight: 500; display: block; margin-top: 15px;">Coming Soon</span>
+                </div>
+            </div>
         </div>
     </section>
 
@@ -1636,10 +2094,10 @@
                 <div>
                     <h4 class="footer-heading">Navigation</h4>
                     <ul class="footer-links">
-                        <li><a href="/about">About Us</a></li>
-                        <li><a href="/programs">Objectives</a></li>
-                        <li><a href="/about#founder">Founder</a></li>
-                        <li><a href="/events">Events</a></li>
+                        <li><a href="/#vision">About Us</a></li>
+                        <li><a href="/#programs">Objectives</a></li>
+                        <li><a href="/#founder">Founder</a></li>
+                        <li><a href="/#events">Events</a></li>
                         <li><a href="/news">News & Impact</a></li>
                         <li><a href="/transparency">Transparency</a></li>
                     </ul>
