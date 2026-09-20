@@ -139,7 +139,7 @@ const termsBoxStr = `
 `;
 
 // Find where to insert it: Just before the Terms checkbox group.
-const checkboxGroupIdx = lines.findIndex(l => l.includes('Please review our <a href="volunteer-terms.html"'));
+const checkboxGroupIdx = lines.findIndex(l => l.includes('Please review our <a href="/volunteer-terms"'));
 if (checkboxGroupIdx !== -1) {
     let insertIdx = checkboxGroupIdx;
     while(insertIdx > 0 && !lines[insertIdx].includes('<div class="form-group" style="margin-top: 35px;">')) {

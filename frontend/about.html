@@ -3,21 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Prajaya Foundation | Nonprofit Organization in Chennai</title>
+    <title>About Us | Prajaya Foundation</title>
     <meta name="description" content="Prajaya Foundation is a nonprofit organization working on education, health, leadership, and sustainability in Chennai, India. Empowering individuals and transforming communities.">
     <link rel="canonical" href="https://prajayafoundation.org/">
     
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://prajayafoundation.org/">
-    <meta property="og:title" content="Prajaya Foundation | Nonprofit Organization in Chennai">
+    <meta property="og:title" content="About Us | Prajaya Foundation">
     <meta property="og:description" content="Prajaya Foundation is a nonprofit organization working on education, health, leadership, and sustainability in Chennai, India.">
     <meta property="og:image" content="https://prajayafoundation.org/assets/images/logo.png">
     
     <!-- Twitter -->
     <meta property="twitter:card" content="summary_large_image">
     <meta property="twitter:url" content="https://prajayafoundation.org/">
-    <meta property="twitter:title" content="Prajaya Foundation | Nonprofit Organization in Chennai">
+    <meta property="twitter:title" content="About Us | Prajaya Foundation">
     <meta property="twitter:description" content="Prajaya Foundation is a nonprofit organization working on education, health, leadership, and sustainability in Chennai, India.">
     <meta property="twitter:image" content="https://prajayafoundation.org/assets/images/logo.png">
 
@@ -1385,228 +1385,391 @@
         </div>
     </header>
 
-    <!-- Hero -->
-    <section class="hero" id="home">
+    <div style="height: 120px; background-color: var(--color-heading);"></div>
+
+<!-- Vision & Mission -->
+    <section class="section" id="vision">
         <div class="container">
-            <div class="hero-wrapper">
-                
-                <!-- Content (Left Side) -->
-                <div class="hero-content reveal delay-1">
-                    
-                    <div class="hero-label" style="margin-bottom: 20px;">A PUBLIC CHARITABLE TRUST</div>
-                    
-                    <h1>
-                        Building Better People.<br>
-                        Building a <span>Better</span> Society.
-                    </h1>
-                    
-                    <p>
-                        We are dedicated to empowering individuals and transforming communities through education, leadership, health, fitness, social responsibility, and sustainable development.
-                    </p>
-                    
-                    <div class="hero-actions">
-                        <a href="/programs" class="btn btn-primary">Objectives</a>
-                        <a href="/volunteer" class="btn btn-outline volunteer-trigger">Join as Volunteer</a>
-                    </div>
-                </div>
-
-                <!-- Hero Logo Emblem (Right Side) -->
-                <div class="hero-emblem reveal">
-                    <div class="hero-glow"></div>
-                    <div class="hero-logo-container">
-                        <img src="assets/images/logo.png" alt="PRAJAYA Foundation Logo" class="hero-logo-img">
-                    </div>
-                </div>
+            <div class="section-header reveal">
+                <div class="section-label">Our Purpose</div>
+                <h2 class="section-title">Guiding Principles</h2>
+            </div>
             
-            </div> <!-- End layout wrapper -->
-
+            <div class="vm-grid">
+                <div class="vm-item reveal">
+                    <h3><i class="fas fa-eye"></i> Vision</h3>
+                    <p>To build a healthy, happy, responsible, educated, compassionate, self-reliant, and empowered society through education, fitness, leadership, service, and sustainable development.</p>
+                </div>
+                
+                <div class="vm-item reveal delay-1">
+                    <h3><i class="fas fa-compass"></i> Mission</h3>
+                    <p>To educate, empower, inspire, and serve individuals and communities by promoting education, health, fitness, leadership, ethical values, social responsibility, environmental stewardship, and humanitarian service.</p>
+                </div>
+            </div>
         </div>
-
     </section>
+<!-- Approach & Values -->
+    <section class="section" id="methodology">
+        <div class="container">
+            <div class="approach-values-grid">
+                
+                <div class="reveal">
+                    <div class="section-label">Methodology</div>
+                    <h2 class="section-title" style="margin-bottom: 40px;">How We Work</h2>
+                    
+                    <div class="list-container">
+                        <div class="list-item"><i class="fas fa-check"></i> <span>Awareness Campaigns & Outreach</span></div>
+                        <div class="list-item"><i class="fas fa-check"></i> <span>Workshops & Seminars</span></div>
+                        <div class="list-item"><i class="fas fa-check"></i> <span>Training Programs & Partnerships</span></div>
+                        <div class="list-item"><i class="fas fa-check"></i> <span>Sports & Fitness Activities</span></div>
+                        <div class="list-item"><i class="fas fa-check"></i> <span>Volunteer Networks & Sponsorships</span></div>
+                    </div>
+                </div>
 
-    <!-- Dynamic Quote Section -->
+                <div class="reveal delay-1">
+                    <div class="section-label">Guiding Principles</div>
+                    <h2 class="section-title" style="margin-bottom: 40px;">Core Values</h2>
+                    
+                    <div class="list-container">
+                        <div class="list-item"><i class="fas fa-star"></i> <span>Humanity & Compassion</span></div>
+                        <div class="list-item"><i class="fas fa-star"></i> <span>Integrity & Responsibility</span></div>
+                        <div class="list-item"><i class="fas fa-star"></i> <span>Leadership & Excellence</span></div>
+                        <div class="list-item"><i class="fas fa-star"></i> <span>Service & Inclusion</span></div>
+                        <div class="list-item"><i class="fas fa-star"></i> <span>Sustainability & Innovation</span></div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+<!-- Leadership Carousel -->
     <style>
-        .quote-section-wrapper { padding: 80px 0; border-bottom: 1px solid rgba(0,0,0,0.05); }
-        .quote-container-box { 
-            text-align: center; max-width: 900px; margin: 0 auto; 
-            position: relative; padding: 40px 80px;
+        .carousel-container { position: relative; max-width: 1200px; margin: 0 auto; overflow: hidden; padding: 20px 0; }
+        .carousel-track { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; scroll-behavior: smooth; -ms-overflow-style: none; scrollbar-width: none; gap: 24px; padding: 20px 10px; }
+        .carousel-track::-webkit-scrollbar { display: none; }
+        .carousel-slide { min-width: 320px; flex: 0 0 calc(33.333% - 16px); scroll-snap-align: center; display: flex; justify-content: center; }
+        
+        .founders-showcase {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 40px;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px 10px;
         }
-        .quote-icon-left {
-            font-size: clamp(3rem, 6vw, 5rem); color: var(--color-accent); opacity: 0.15; 
-            position: absolute; top: 0; left: 10px;
+
+        .showcase-card {
+            background: #ffffff;
+            border-radius: 24px;
+            padding: 45px 30px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            transition: all 0.4s ease;
+            position: relative;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.02);
+            border: 1px solid rgba(0,0,0,0.03);
+            flex: 1;
+            max-width: 340px;
         }
-        .quote-icon-right {
-            font-size: clamp(3rem, 6vw, 5rem); color: var(--color-accent); opacity: 0.15; 
-            position: absolute; bottom: 0; right: 10px;
+
+        .showcase-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.05);
+            border-color: rgba(212, 166, 90, 0.15);
         }
-        .quote-text {
-            font-size: clamp(1.35rem, 4vw, 2.2rem); font-family: var(--font-heading); 
-            font-weight: 400; line-height: 1.6; font-style: italic; 
-            color: var(--color-heading); margin-bottom: 25px; position: relative; z-index: 1;
-        }
-        .quote-author {
-            font-size: clamp(0.85rem, 2vw, 1.05rem); color: var(--color-accent); 
-            text-transform: uppercase; letter-spacing: 3px; font-weight: 600;
+
+        .showcase-image {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 4px solid #ffffff;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+            transition: transform 0.4s ease;
+            margin: 0 auto 24px;
+            position: relative;
+            z-index: 2;
         }
         
-        @media (max-width: 768px) {
-            .quote-section-wrapper { padding: 50px 0; }
-            .quote-container-box { padding: 40px 20px; }
-            .quote-icon-left { top: 0px; left: 0px; opacity: 0.12; }
-            .quote-icon-right { bottom: 0px; right: 0px; opacity: 0.12; }
+        .showcase-card:hover .showcase-image {
+            transform: scale(1.05);
+        }
+
+        .showcase-name {
+            font-size: 1.3rem;
+            color: var(--color-heading);
+            font-weight: 700;
+            margin-bottom: 8px;
+            letter-spacing: -0.3px;
+        }
+
+        .showcase-role {
+            font-size: 0.7rem;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            font-weight: 600;
+            color: var(--color-accent);
+            background: rgba(212, 166, 90, 0.05);
+            padding: 6px 16px;
+            border-radius: 20px;
+            display: inline-block;
+        }
+
+        /* Main Founder Card - Minimal & Elegant */
+        .showcase-card.main {
+            transform: scale(1.03);
+            z-index: 10;
+            border: 1px solid rgba(212, 166, 90, 0.15);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.04);
+            padding: 55px 30px;
+        }
+
+        .showcase-card.main::before {
+            content: '';
+            position: absolute;
+            top: -1px; left: 30px; right: 30px;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, var(--color-accent), transparent);
+            opacity: 0.6;
+        }
+
+        .showcase-card.main:hover {
+            transform: scale(1.03) translateY(-10px);
+            box-shadow: 0 25px 50px rgba(212, 166, 90, 0.08);
+        }
+
+        .showcase-card.main .showcase-name {
+            color: var(--color-heading);
+        }
+
+        .showcase-card.main .showcase-image {
+            width: 170px;
+            height: 170px;
+            box-shadow: 0 0 0 2px rgba(212, 166, 90, 0.1), 0 15px 30px rgba(0,0,0,0.08);
+        }
+
+        /* Card Positioning */
+        .card-left { order: 1; }
+        .card-center { order: 2; }
+        .card-right { order: 3; }
+
+        .founder-card { 
+            display: flex; flex-direction: column; align-items: center; justify-content: flex-start; text-align: center; 
+            background: linear-gradient(145deg, #ffffff, #fcfbfe); 
+            padding: 45px 30px; border-radius: 24px; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.03); 
+            width: 100%; transition: var(--transition); 
+            border: 1px solid rgba(0,0,0,0.04); 
+            position: relative; overflow: hidden;
+            height: 100%;
+        }
+        .founder-card::after {
+            content: '';
+            position: absolute; top: 0; left: 0; right: 0; height: 4px;
+            background: linear-gradient(90deg, var(--color-heading), var(--color-accent));
+            opacity: 0; transition: all 0.4s ease;
+        }
+        .founder-card:hover { 
+            transform: translateY(-10px); 
+            box-shadow: 0 20px 40px rgba(44,41,70,0.08); 
+            border-color: rgba(212, 166, 90, 0.3); 
+        }
+        .founder-card:hover::after { opacity: 1; }
+        
+        .founder-card .founder-image { 
+            width: 160px; height: 160px; margin: 0 auto 28px; 
+            border-radius: 50%; overflow: hidden; 
+            border: 6px solid #fff; 
+            box-shadow: 0 10px 25px rgba(0,0,0,0.08); 
+            position: relative;
+            background: var(--color-surface);
+            z-index: 2;
+        }
+        .founder-card .founder-image img { 
+            width: 100%; height: 100%; object-fit: cover; object-position: var(--obj-pos, center 10%); 
+            transform: scale(var(--img-scale, 1));
+            transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .founder-card:hover .founder-image img { transform: scale(calc(var(--img-scale, 1) * 1.08)); }
+        
+        .founder-card .founder-name { 
+            font-size: 1.35rem; margin-bottom: 12px; color: var(--color-heading); font-weight: 600; line-height: 1.3; 
+        }
+        .founder-card .founder-role { 
+            font-size: 0.75rem; letter-spacing: 1.5px; text-transform: uppercase; color: var(--color-accent); font-weight: 600; 
+            background: rgba(212, 166, 90, 0.08); padding: 6px 16px; border-radius: 20px; display: inline-block;
+        }
+
+        .carousel-controls { display: flex; justify-content: center; gap: 20px; margin-top: 30px; }
+        .carousel-btn { width: 48px; height: 48px; border-radius: 50%; border: 1px solid rgba(0,0,0,0.08); background: var(--color-bg); color: var(--color-heading); cursor: pointer; transition: var(--transition); display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 12px rgba(0,0,0,0.04); }
+        .carousel-btn:hover { background: var(--color-heading); color: var(--color-bg); border-color: var(--color-heading); transform: scale(1.05); }
+        
+        @media (max-width: 1024px) { 
+            .founders-showcase { gap: 20px; }
+            .showcase-card.main { transform: scale(1.05); }
+            .showcase-card.main:hover { transform: scale(1.05) translateY(-10px); }
+            .showcase-card { padding: 40px 20px; }
+            .carousel-slide { flex: 0 0 calc(50% - 12px); } 
+        }
+        @media (max-width: 850px) { 
+            .founders-showcase { flex-direction: column; gap: 40px; }
+            .showcase-card.main { transform: scale(1); }
+            .showcase-card.main:hover { transform: translateY(-10px); }
+            .card-left { order: 2; }
+            .card-center { order: 1; margin-bottom: 20px; }
+            .card-right { order: 3; }
+            .showcase-card { max-width: 400px; width: 100%; }
+        }
+        @media (max-width: 650px) { 
+            .carousel-slide { flex: 0 0 100%; } 
         }
     </style>
-    <section class="section section-alt quote-section-wrapper" id="quote-section" style="display: none;">
+    <section class="section section-alt" id="founder">
         <div class="container">
-            <div class="quote-container-box reveal">
-                <i class="fas fa-quote-left quote-icon-left"></i>
-                <h3 id="dynamic-quote-text" class="quote-text"></h3>
-                <p id="dynamic-quote-author" class="quote-author"></p>
-                <i class="fas fa-quote-right quote-icon-right"></i>
+            <div class="section-header reveal" style="text-align: center; margin: 0 auto 60px;">
+                <div class="section-label" style="justify-content: center;">Leadership</div>
+                <h2 class="section-title">Trustees</h2>
             </div>
-        </div>
-    </section>
+            
+            <div class="carousel-container reveal">
+                <div class="carousel-track">
+                    <!-- Main Founder (Center) -->
+                    <div class="carousel-slide">
+                        <div class="founder-card">
+                            <div class="founder-image">
+                                <img src="assets/images/founder.jpeg" alt="Mr. Pradeep Babu M - Founder of Prajaya Foundation" loading="lazy">
+                            </div>
+                            <h3 class="founder-name">MR. PRADEEP BABU M</h3>
+                            <span class="founder-role">Founder & Managing Trustee</span>
+                        </div>
+                    </div>
+                    
+                    <!-- Trustee 1 -->
+                    <div class="carousel-slide">
+                        <div class="founder-card">
+                            <div class="founder-image">
+                                <img src="assets/images/Mr Murali C  co founder.png" alt="Trustee of Prajaya Foundation" loading="lazy">
+                            </div>
+                            <h3 class="founder-name">MR. MURALI C</h3>
+                            <span class="founder-role">Trustee</span>
+                        </div>
+                    </div>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', async () => {
-            try {
-                const res = await fetch('/api/v1/quotes');
-                const data = await res.json();
-                if (data.success && data.data && data.data.length > 0) {
-                    const latestQuote = data.data[0]; // Gets the most recent quote
-                    document.getElementById('dynamic-quote-text').innerText = `"${latestQuote.text}"`;
-                    document.getElementById('dynamic-quote-author').innerText = `- ${latestQuote.author}`;
-                    document.getElementById('quote-section').style.display = 'block';
-                }
-            } catch (err) {
-                console.error('Error fetching quote:', err);
-            }
-        });
-    </script>
-
-    
-    <!-- Vision & Mission Teaser -->
-    <section class="section" id="vision">
-        <div class="container" style="text-align: center;">
-            <div class="section-label" style="justify-content: center;">Who We Are</div>
-            <h2 class="section-title" style="margin-bottom: 20px;">About Prajaya Foundation</h2>
-            <p style="max-width: 800px; margin: 0 auto 40px; font-size: 1.15rem;">We are dedicated to empowering individuals and transforming communities through education, leadership, health, fitness, social responsibility, and sustainable development.</p>
-            <a href="/about" class="btn btn-primary">Read More About Us</a>
-        </div>
-    </section>
-
-
-    
-    <!-- Programs Teaser -->
-    <section class="section section-alt" id="programs">
-        <div class="container" style="text-align: center;">
-            <div class="section-label" style="justify-content: center;">What We Do</div>
-            <h2 class="section-title" style="margin-bottom: 20px;">Our Focus Areas</h2>
-            <p style="max-width: 800px; margin: 0 auto 40px; font-size: 1.15rem;">We operate across multiple domains including Education, Health, Leadership, Environment, and Social Welfare.</p>
-            <a href="/programs" class="btn btn-outline">Explore Our Programs</a>
-        </div>
-    </section>
-
-
-    
-
-
-    
-
-    
-    <!-- Events Teaser -->
-    <section class="section" id="events">
-        <div class="container" style="text-align: center;">
-            <div class="section-label" style="justify-content: center;">Join Us</div>
-            <h2 class="section-title" style="margin-bottom: 20px;">Upcoming Events</h2>
-            <p style="max-width: 800px; margin: 0 auto 40px; font-size: 1.15rem;">Stay updated with our latest campaigns, community outreach programs, and volunteer drives.</p>
-            <a href="/events" class="btn btn-primary">View All Events</a>
-        </div>
-    </section>
-
-
-    <!-- Suggestion Space & Donate -->
-    <section class="section section-alt" id="suggestions">
-        <div class="container" style="max-width: 700px; margin: 0 auto;">
-            <div class="reveal">
-                <div class="section-label" style="justify-content: center;">Your Voice Matters</div>
-                <h2 class="section-title" style="margin-bottom: 30px; text-align: center;">Suggestion Space</h2>
-                <p style="margin-bottom: 30px; text-align: center;">Have an idea, query, or suggestion? We value your input. Share your thoughts directly with our founder.</p>
+                    <!-- Trustee 2 -->
+                    <div class="carousel-slide">
+                        <div class="founder-card">
+                            <div class="founder-image">
+                                <img src="assets/images/jagadeesan co founder.png" alt="Trustee of Prajaya Foundation" loading="lazy">
+                            </div>
+                            <h3 class="founder-name">MR. JAGADEESAN M</h3>
+                            <span class="founder-role">Trustee</span>
+                        </div>
+                    </div>
+                </div>
                 
-                <form id="suggestionForm">
-                    <div class="form-group">
-                        <input type="text" class="form-control" name="name" placeholder="Your Name" required>
-                    </div>
-                    <div class="form-group">
-                        <input type="email" class="form-control" name="email" placeholder="Your Email" required>
-                    </div>
-                    <div class="form-group">
-                        <select class="form-control" name="subject" required style="appearance: none; cursor: pointer;">
-                            <option value="" disabled selected>What is this regarding?</option>
-                            <option value="Suggest a Project">Suggest a Project</option>
-                            <option value="Event Idea">Event Idea</option>
-                            <option value="Partnership / Sponsorship">Partnership / Sponsorship</option>
-                            <option value="General Feedback">General Feedback</option>
-                            <option value="Other">Other Query</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <textarea class="form-control" name="suggestion" rows="4" placeholder="Elaborate on your project idea or suggestion..." required></textarea>
-                    </div>
-                    <button type="submit" class="btn btn-outline" style="width: 100%;">Send Message</button>
-                    <div id="suggestionFormResult" style="margin-top: 15px; text-align: center; display: none;"></div>
-                </form>
+                <div class="carousel-controls">
+                    <button class="carousel-btn prev-btn"><i class="fas fa-chevron-left"></i></button>
+                    <button class="carousel-btn next-btn"><i class="fas fa-chevron-right"></i></button>
+                </div>
+            </div>
+            
+            <div class="founder-description reveal" style="text-align: center; margin-top: 60px; margin-bottom: 80px;">
+                <p class="founder-quote">"Creating responsible individuals. Building stronger communities. Inspiring a better tomorrow."</p>
+                <p style="max-width: 600px; margin: 0 auto;">Under their visionary leadership, PRAJAYA FOUNDATION was established with a singular mission: to create a generation of responsible, empowered individuals who drive positive societal change.</p>
+            </div>
 
-                <script>
-                    document.getElementById('suggestionForm').addEventListener('submit', async function(e) {
-                        e.preventDefault();
-                        const btn = this.querySelector('button[type="submit"]');
-                        const resultDiv = document.getElementById('suggestionFormResult');
-                        
-                        btn.textContent = 'Sending...';
-                        btn.disabled = true;
-                        
-                        const formData = new FormData(this);
-                        const subject = formData.get('subject');
-                        const suggestionText = formData.get('suggestion');
-                        
-                        const payload = {
-                            name: formData.get('name'),
-                            email: formData.get('email'),
-                            suggestion: `[${subject}] ${suggestionText}`
-                        };
-                        
-                        try {
-                            const res = await fetch('/api/v1/suggestions', {
-                                method: 'POST',
-                                headers: { 'Content-Type': 'application/json' },
-                                body: JSON.stringify(payload)
-                            });
-                            
-                            const data = await res.json();
-                            if(data.success) {
-                                resultDiv.style.display = 'block';
-                                resultDiv.style.color = '#10b981';
-                                resultDiv.textContent = 'Thank you for your suggestion!';
-                                this.reset();
-                            } else {
-                                throw new Error(data.message || 'Error submitting suggestion.');
-                            }
-                        } catch (err) {
-                            resultDiv.style.display = 'block';
-                            resultDiv.style.color = '#ef4444';
-                            resultDiv.textContent = err.message;
-                        } finally {
-                            btn.textContent = 'Send Message';
-                            btn.disabled = false;
-                        }
-                    });
-                </script>
+            <div class="section-header reveal" style="text-align: center; margin: 0 auto 60px;">
+                <div class="section-label" style="justify-content: center;">Administration</div>
+                <h2 class="section-title">Office Bearers</h2>
+            </div>
+            
+            <div class="carousel-container reveal">
+                <div class="carousel-track">
+                    <!-- President -->
+                    <div class="carousel-slide">
+                        <div class="founder-card">
+                            <div class="founder-image">
+                                <img src="assets/images/Mr CHITTIBABU_page-0001.jpg" alt="President" loading="lazy">
+                            </div>
+                            <h3 class="founder-name">MR. CHITTIBABU E</h3>
+                            <span class="founder-role">President</span>
+                        </div>
+                    </div>
+
+                    <!-- Vice President -->
+                    <div class="carousel-slide">
+                        <div class="founder-card">
+                            <div class="founder-image">
+                                <img src="assets/images/vp.jpeg" alt="Vice President" loading="lazy">
+                            </div>
+                            <h3 class="founder-name">MR. GIRI C</h3>
+                            <span class="founder-role">Vice President</span>
+                        </div>
+                    </div>
+                    
+                    <!-- Secretary -->
+                    <div class="carousel-slide">
+                        <div class="founder-card">
+                            <div class="founder-image">
+                                <!-- Placeholder for Indira M -->
+                                <img src="assets/images/indra.jfif" alt="Secretary" loading="lazy">
+                            </div>
+                            <h3 class="founder-name">MRS. INDIRA M</h3>
+                            <span class="founder-role">Secretary</span>
+                        </div>
+                    </div>
+                    
+                    <!-- Treasurer -->
+                    <div class="carousel-slide">
+                        <div class="founder-card">
+                            <div class="founder-image">
+                                <img src="assets/images/tressurer.jpeg" alt="Treasurer" loading="lazy">
+                            </div>
+                            <h3 class="founder-name">MRS. BHANUPRIYA P</h3>
+                            <span class="founder-role">Treasurer</span>
+                        </div>
+                    </div>
+
+                    <!-- Joint Secretary -->
+                    <div class="carousel-slide">
+                        <div class="founder-card">
+                            <div class="founder-image">
+                                <img src="assets/images/joinsec.jpeg" alt="Joint Secretary" loading="lazy">
+                            </div>
+                            <h3 class="founder-name">MRS. SHALINI P</h3>
+                            <span class="founder-role">Joint Secretary</span>
+                        </div>
+                    </div>
+
+                    <!-- Volunteer Coordinator -->
+                    <div class="carousel-slide">
+                        <div class="founder-card">
+                            <div class="founder-image">
+                                <img src="assets/images/volunteer coordinator.jpeg" alt="Volunteer Coordinator" style="--img-scale: 1.65; --obj-pos: center 25%;" loading="lazy">
+                            </div>
+                            <h3 class="founder-name">MS. VIJAYA SRI. G</h3>
+                            <span class="founder-role">Volunteer Coordinator</span>
+                        </div>
+                    </div>
+
+                </div>
+                
+                <div class="carousel-controls">
+                    <button class="carousel-btn prev-btn"><i class="fas fa-chevron-left"></i></button>
+                    <button class="carousel-btn next-btn"><i class="fas fa-chevron-right"></i></button>
+                </div>
             </div>
         </div>
     </section>
 
-    <!-- Footer -->
+
+
+
+
+<!-- Footer -->
     <footer class="footer" id="contact">
         <div class="container">
             <div class="footer-grid">

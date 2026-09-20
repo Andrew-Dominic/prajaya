@@ -112,7 +112,7 @@ app.use(morgan(config.isDev ? 'dev' : 'combined'));
 // ──────────────────────────────────────────────
 // 3. STATIC FILE SERVING
 // ──────────────────────────────────────────────
-app.use(express.static(config.frontendPath));
+app.use(express.static(config.frontendPath, { extensions: ['html'] }));
 app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
 app.use('/admin', express.static(config.adminPath));
 

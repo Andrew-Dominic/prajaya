@@ -6,7 +6,7 @@ let content = fs.readFileSync(file, 'utf8');
 const oldBanner = `                <div class="form-group" style="margin-top: 35px;">
                     <label class="form-label">Terms and Conditions</label>
                     <div style="font-size: 0.95rem; background: var(--color-bg); padding: 24px; border-radius: 8px; margin-bottom: 20px; color: var(--color-text); line-height: 1.6; border: 1px solid rgba(0,0,0,0.08);">
-    Please review our <a href="volunteer-terms.html" target="_blank" style="color: var(--color-accent); text-decoration: underline; font-weight: 500;">Volunteer Terms & Conditions</a> and Code of Conduct before applying.
+    Please review our <a href="/volunteer-terms" target="_blank" style="color: var(--color-accent); text-decoration: underline; font-weight: 500;">Volunteer Terms & Conditions</a> and Code of Conduct before applying.
 </div>`;
 
 content = content.replace(oldBanner, `                <div class="form-group" style="margin-top: 35px;">`);

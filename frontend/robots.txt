@@ -1,0 +1,9 @@
+User-agent: *
+Allow: /
+
+# Prevent crawling of backend/API endpoints just in case
+Disallow: /api/
+Disallow: /admin/
+
+# Sitemap location
+Sitemap: https://prajayafoundation.org/sitemap.xml
