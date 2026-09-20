@@ -2222,6 +2222,7 @@
             const nextBtn = container.querySelector('.next-btn');
             const prevBtn = container.querySelector('.prev-btn');
             if (track && nextBtn && prevBtn) {
+
                 nextBtn.addEventListener('click', () => {
                     track.scrollBy({ left: track.offsetWidth > 600 ? track.offsetWidth / 2 : track.offsetWidth, behavior: 'smooth' });
                 });
@@ -2230,6 +2231,52 @@
                 });
             }
         });
+
+        // Dynamic Upcoming Events Fetch
+        async function fetchUpcomingEvents() {
+            try {
+                const eventsContainer = document.querySelector('#events .programs-grid');
+                if (!eventsContainer) return;
+                
+                const res = await fetch('/api/v1/events');
+                const result = await res.json();
+                
+                if (result.success && result.data.length > 0) {
+                    const upcomingEvents = result.data
+                        .filter(e => ['upcoming', 'ongoing'].includes(e.status.toLowerCase()))
+                        .slice(0, 3);
+                        
+                    if (upcomingEvents.length > 0) {
+                        eventsContainer.innerHTML = ''; // clear static
+                        upcomingEvents.forEach((ev, index) => {
+                            const dateObj = new Date(ev.event_date);
+                            const dateStr = dateObj.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+                            
+                            // Map icon based on category or default
+                            let iconClass = 'fa-calendar-alt';
+                            if (ev.category === 'Education') iconClass = 'fa-laptop';
+                            if (ev.category === 'Health') iconClass = 'fa-shield-heart';
+                            
+                            eventsContainer.innerHTML += `
+                                <a href="/events/${ev.slug}" class="program-card reveal delay-${index}" style="display: block; text-decoration: none; color: inherit;">
+                                    <div class="program-icon"><i class="fas ${iconClass}"></i></div>
+                                    <h4>${ev.title}</h4>
+                                    <p>${ev.short_description || ''}</p>
+                                    <span style="font-size: 0.85rem; color: var(--color-accent); font-weight: 500; display: block; margin-top: 15px;">
+                                        <i class="far fa-calendar"></i> ${dateStr} - ${ev.status}
+                                    </span>
+                                </a>
+                            `;
+                        });
+                    }
+                }
+            } catch (err) {
+                console.error("Error fetching upcoming events", err);
+            }
+        }
+        
+        // Call it after load
+        window.addEventListener('DOMContentLoaded', fetchUpcomingEvents);
 
 
     </script>

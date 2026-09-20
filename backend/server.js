@@ -830,6 +830,8 @@ app.use((req, res, next) => {
 // ──────────────────────────────────────────────
 // 9. GLOBAL ERROR HANDLER
 // ──────────────────────────────────────────────
+require('./routes/events.routes')(app, supabase, requireAuth);
+
 app.use(errorHandler);
 
 // ──────────────────────────────────────────────

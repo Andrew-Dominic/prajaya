@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{TITLE}}</title>
+    <meta name="description" content="{{DESC}}">
+    <link rel="canonical" href="{{URL}}">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="{{URL}}">
+    <meta property="og:title" content="{{TITLE}}">
+    <meta property="og:description" content="{{DESC}}">
+    <meta property="og:image" content="{{OG_IMAGE}}">
+    
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="{{URL}}">
+    <meta property="twitter:title" content="{{TITLE}}">
+    <meta property="twitter:description" content="{{DESC}}">
+    <meta property="twitter:image" content="{{OG_IMAGE}}">
+
+    <link rel="icon" type="image/png" href="/assets/images/logo.png">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Quill Snow CSS for rendering rich text -->
+    <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+
+    <style>
+        :root {
+            --color-bg: #ffffff;
+            --color-surface: #f4f3f8;
+            --color-text: #403d58;
+            --color-heading: #2C2946;
+            --color-accent: #f2bb47;
+            --transition: all 0.3s ease;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--color-bg);
+            color: var(--color-text);
+            margin: 0;
+            padding: 0;
+        }
+
+        .header-nav {
+            padding: 20px 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #eee;
+            background: white;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo-link {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--color-heading);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .event-hero {
+            position: relative;
+            height: 60vh;
+            min-height: 400px;
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            align-items: flex-end;
+            padding: 5% 10%;
+        }
+
+        .event-hero::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: linear-gradient(to bottom, rgba(0,0,0,0.1), rgba(0,0,0,0.8));
+        }
+
+        .hero-content {
+            position: relative;
+            color: white;
+            z-index: 1;
+            max-width: 800px;
+        }
+
+        .hero-content h1 {
+            font-size: 3.5rem;
+            margin-bottom: 15px;
+            line-height: 1.2;
+        }
+
+        .hero-meta {
+            display: flex;
+            gap: 20px;
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .event-body {
+            max-width: 800px;
+            margin: 60px auto;
+            padding: 0 5%;
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: var(--color-text);
+        }
+
+        /* Override quill container borders since it's read-only here */
+        .ql-container.ql-snow {
+            border: none !important;
+            font-family: 'Inter', sans-serif;
+            font-size: 1.1rem;
+        }
+        .ql-editor {
+            padding: 0;
+        }
+        .ql-editor h2 {
+            color: var(--color-heading);
+            margin-top: 40px;
+            margin-bottom: 20px;
+        }
+        .ql-editor p {
+            margin-bottom: 20px;
+        }
+
+        .gallery {
+            margin-top: 60px;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .gallery img {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            border-radius: 8px;
+            transition: var(--transition);
+        }
+
+        .gallery img:hover {
+            transform: scale(1.02);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+    </style>
+
+    <script type="application/ld+json" id="structured-data"></script>
+
+</head>
+<body>
+
+    <header class="header-nav">
+        <a href="/" class="logo-link">
+            <img src="/assets/images/logo.png" alt="Prajaya Logo" style="height: 40px; border-radius: 8px;">
+            Prajaya Foundation
+        </a>
+        <a href="/events" style="color: var(--color-heading); text-decoration: none; font-weight: 500;"><i class="fas fa-arrow-left"></i> All Events</a>
+    </header>
+
+    <div id="eventHero" class="event-hero" style="background-image: url('{{OG_IMAGE}}');">
+        <div class="hero-content">
+            <h1 id="eventTitle">Loading...</h1>
+            <div class="hero-meta">
+                <span id="eventDate"><i class="far fa-calendar"></i> </span>
+                <span id="eventLocation"><i class="fas fa-map-marker-alt"></i> </span>
+            </div>
+        </div>
+    </div>
+
+    <div class="event-body">
+        <div class="ql-container ql-snow">
+            <div class="ql-editor" id="eventStory"></div>
+        </div>
+        
+        <div class="ql-container ql-snow" style="margin-top: 40px;">
+            <div class="ql-editor" id="eventReport"></div>
+        </div>
+
+        <div id="eventGallery" class="gallery"></div>
+    </div>
+
+    <!-- Inject data payload from SSR -->
+    <script id="eventData" type="application/json">
+        {{EVENT_DATA_JSON}}
+    </script>
+
+    <!-- Include Quill for rendering rich text formats safely -->
+    <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const rawData = document.getElementById('eventData').textContent;
+            try {
+                const event = JSON.parse(rawData);
+                renderEvent(event);
+            } catch (e) {
+                console.error("Error parsing event data", e);
+            }
+        });
+
+        function renderEvent(ev) {
+            document.getElementById('eventTitle').textContent = ev.title;
+            const d = new Date(ev.event_date);
+            document.getElementById('eventDate').innerHTML = `<i class="far fa-calendar"></i> ${d.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}`;
+            if (ev.location) {
+                document.getElementById('eventLocation').innerHTML = `<i class="fas fa-map-marker-alt"></i> ${ev.location}`;
+            }
+
+            // Quill expects a container to instantiate or we can just inject HTML.
+            // Since we stored delta JSON in supabase, we need to convert it to HTML.
+            // A simple trick is to instantiate a hidden quill editor, set contents, and get HTML.
+            // Or just use the editor div directly.
+            
+            if (ev.content) {
+                const quillStory = new Quill(document.createElement('div'));
+                quillStory.setContents(ev.content);
+                document.getElementById('eventStory').innerHTML = quillStory.root.innerHTML;
+            } else {
+                document.getElementById('eventStory').innerHTML = `<p>${ev.short_description || ''}</p>`;
+            }
+
+            if (ev.report_content) {
+                const quillRep = new Quill(document.createElement('div'));
+                quillRep.setContents(ev.report_content);
+                document.getElementById('eventReport').innerHTML = `<h2>Event Report</h2>` + quillRep.root.innerHTML;
+            }
+
+            // Render Gallery
+            if (ev.images && ev.images.length > 0) {
+                const gal = document.getElementById('eventGallery');
+                ev.images.forEach(img => {
+                    const imgEl = document.createElement('img');
+                    imgEl.src = img.image_url;
+                    imgEl.alt = ev.title;
+                    gal.appendChild(imgEl);
+                });
+            }
+
+            // Inject Structured Data (Phase 11)
+            const sd = {
+                "@context": "https://schema.org",
+                "@type": "Event",
+                "name": ev.title,
+                "startDate": ev.event_date,
+                "endDate": ev.end_date || ev.event_date,
+                "eventStatus": "https://schema.org/EventScheduled",
+                "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode",
+                "location": {
+                    "@type": "Place",
+                    "name": ev.location || "Chennai",
+                    "address": {
+                        "@type": "PostalAddress",
+                        "addressLocality": "Chennai",
+                        "addressRegion": "TN",
+                        "addressCountry": "IN"
+                    }
+                },
+                "image": [
+                    "{{OG_IMAGE}}"
+                ],
+                "description": ev.seo_description || ev.short_description,
+                "organizer": {
+                    "@type": "Organization",
+                    "name": "Prajaya Foundation",
+                    "url": "https://prajayafoundation.org"
+                }
+            };
+
+            document.getElementById('structured-data').textContent = JSON.stringify(sd);
+        }
+    </script>
+</body>
+</html>
