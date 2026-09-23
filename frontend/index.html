@@ -1346,7 +1346,7 @@
     </script>
 
     <!-- Header -->
-    <header class="header" id="header">
+        <header class="header" id="header">
         <div class="container nav-container">
             <a href="/#home" class="brand">
                 <img src="assets/images/logo.png" alt="PRAJAYA Foundation Logo" class="brand-logo">
@@ -1357,7 +1357,7 @@
             </a>
             
             <nav class="nav-links" id="nav-links">
-                <a href="#home">Home</a>
+                <a href="/#home">Home</a>
                 <a href="/#vision">About</a>
                 <a href="/#programs">Objectives</a>
                 <a href="/#founder">Founder</a>
@@ -1945,27 +1945,10 @@
         <div class="container">
             <div class="section-header reveal">
                 <div class="section-label">Join Us</div>
-                <h2 class="section-title">Upcoming Events</h2>
+                <h2 class="section-title">Latest Events</h2>
             </div>
-            <div class="programs-grid">
-                <div class="program-card reveal">
-                    <div class="program-icon"><i class="fas fa-laptop"></i></div>
-                    <h4>Digital Literacy</h4>
-                    <p>Digital Literacy training for school students.</p>
-                    <span style="font-size: 0.85rem; color: var(--color-accent); font-weight: 500; display: block; margin-top: 15px;">Coming Soon</span>
-                </div>
-                <div class="program-card reveal delay-1">
-                    <div class="program-icon"><i class="fas fa-shield-heart"></i></div>
-                    <h4>Drug Free Society Awareness</h4>
-                    <p>Awareness campaign event to build a drug-free society and healthy communities.</p>
-                    <span style="font-size: 0.85rem; color: var(--color-accent); font-weight: 500; display: block; margin-top: 15px;">Coming Soon</span>
-                </div>
-                <div class="program-card reveal delay-2">
-                    <div class="program-icon"><i class="fas fa-calendar-alt"></i></div>
-                    <h4>Community Health Camp</h4>
-                    <p>Free health checkups and awareness sessions in local communities.</p>
-                    <span style="font-size: 0.85rem; color: var(--color-accent); font-weight: 500; display: block; margin-top: 15px;">Coming Soon</span>
-                </div>
+            <div class="programs-grid" id="dynamicEventsGrid" style="grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));">
+                <div style="grid-column: 1 / -1; text-align: center; color: #666;"><i class="fas fa-spinner fa-spin"></i> Loading latest events...</div>
             </div>
         </div>
     </section>
@@ -2070,11 +2053,11 @@
                     </p>
                     <p style="color: rgba(255,255,255,0.8); margin-bottom: 15px; font-size: 0.95rem; display: flex; align-items: center; gap: 12px;">
                         <i class="fas fa-phone" style="color: var(--color-accent);"></i> 
-                        <span>+91 9176077710</span>
+                        <span>+91 96558 11133</span>
                     </p>
                     <p style="color: rgba(255,255,255,0.8); font-size: 0.95rem; display: flex; align-items: center; gap: 12px;">
                         <i class="fas fa-envelope" style="color: var(--color-accent);"></i> 
-                        <span>prajayafoundation@gmail.com</span>
+                        <span>info@prajafoundation.org</span>
                     </p>
                 </div>
                 
@@ -2222,43 +2205,98 @@
         // Dynamic Upcoming Events Fetch
         async function fetchUpcomingEvents() {
             try {
-                const eventsContainer = document.querySelector('#events .programs-grid');
+                const eventsContainer = document.getElementById('dynamicEventsGrid');
                 if (!eventsContainer) return;
                 
-                const res = await fetch('/api/v1/events');
+                const res = await fetch('/api/v1/events?_t=' + new Date().getTime());
                 const result = await res.json();
                 
                 if (result.success && result.data.length > 0) {
                     const upcomingEvents = result.data
-                        .filter(e => ['upcoming', 'ongoing'].includes(e.status.toLowerCase()))
+                        .sort((a, b) => {
+                            const dateA = new Date(a.updated_at || a.created_at || a.event_date || 0);
+                            const dateB = new Date(b.updated_at || b.created_at || b.event_date || 0);
+                            return dateB - dateA;
+                        })
                         .slice(0, 3);
                         
                     if (upcomingEvents.length > 0) {
-                        eventsContainer.innerHTML = ''; // clear static
+                        eventsContainer.innerHTML = ''; // clear loading state
                         upcomingEvents.forEach((ev, index) => {
-                            const dateObj = new Date(ev.event_date);
-                            const dateStr = dateObj.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+                            let dateStr = 'TBA';
+                            if (ev.event_date) {
+                                const dateObj = new Date(ev.event_date);
+                                if (!isNaN(dateObj.getTime())) {
+                                    dateStr = dateObj.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+                                }
+                            }
                             
-                            // Map icon based on category or default
-                            let iconClass = 'fa-calendar-alt';
-                            if (ev.category === 'Education') iconClass = 'fa-laptop';
-                            if (ev.category === 'Health') iconClass = 'fa-shield-heart';
-                            
+                            let imageUrl = '/assets/images/logo.png';
+                            if (ev.event_images) {
+                                if (Array.isArray(ev.event_images) && ev.event_images.length > 0) {
+                                    imageUrl = ev.event_images[0].image_url || imageUrl;
+                                } else if (ev.event_images.image_url) {
+                                    imageUrl = ev.event_images.image_url;
+                                }
+                            }
+
+                            // Check if event has actual content or is a CONTENT_PAGE
+                            let hasContent = false;
+                            if ((Array.isArray(ev.content) && ev.content.length > 0) || ev.page_type === 'CONTENT_PAGE') {
+                                hasContent = true;
+                            }
+
+                            const cardStyle = `background: white; border-radius: 16px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.03); display: flex; flex-direction: column; border: 1px solid rgba(0,0,0,0.05); text-decoration: none; color: inherit; transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); height: 100%;`;
+                            const cardHoverStyle = `this.style.transform='translateY(-8px)'; this.style.boxShadow='0 20px 40px rgba(0,0,0,0.08)'; this.style.borderColor='var(--color-accent)';`;
+                            const cardLeaveStyle = `this.style.transform='translateY(0)'; this.style.boxShadow='0 10px 30px rgba(0,0,0,0.03)'; this.style.borderColor='rgba(0,0,0,0.05)';`;
+
+                            const wrapperTag = hasContent ? 'a' : 'div';
+                            const hrefAttr = hasContent ? `href="/events/${ev.slug}"` : '';
+                            const cursorStyle = hasContent ? 'cursor: pointer;' : 'cursor: default;';
+
                             eventsContainer.innerHTML += `
-                                <a href="/events/${ev.slug}" class="program-card reveal delay-${index}" style="display: block; text-decoration: none; color: inherit;">
-                                    <div class="program-icon"><i class="fas ${iconClass}"></i></div>
-                                    <h4>${ev.title}</h4>
-                                    <p>${ev.short_description || ''}</p>
-                                    <span style="font-size: 0.85rem; color: var(--color-accent); font-weight: 500; display: block; margin-top: 15px;">
-                                        <i class="far fa-calendar"></i> ${dateStr} - ${ev.status}
-                                    </span>
-                                </a>
+                                <${wrapperTag} ${hrefAttr} style="${cardStyle} ${cursorStyle}" onmouseover="${hasContent ? cardHoverStyle : ''}" onmouseout="${hasContent ? cardLeaveStyle : ''}">
+                                    <div style="position: relative; overflow: hidden; padding-top: 60%;">
+                                        <img src="${imageUrl}" alt="${ev.title}" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; transition: transform 0.6s ease;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
+                                        ${hasContent ? '<div style="position: absolute; top: 12px; right: 12px; background: rgba(255,255,255,0.95); padding: 5px 12px; border-radius: 20px; font-size: 0.75rem; font-weight: 700; color: var(--color-accent); box-shadow: 0 2px 10px rgba(0,0,0,0.1); backdrop-filter: blur(4px);">Details Available</div>' : ''}
+                                    </div>
+                                    <div style="padding: 24px; flex: 1; display: flex; flex-direction: column;">
+                                        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 16px;">
+                                            <span style="font-size: 0.75rem; font-weight: 700; color: var(--color-accent); text-transform: uppercase; letter-spacing: 0.5px; background: #fff3e0; padding: 6px 12px; border-radius: 6px;">
+                                                <i class="far fa-calendar-alt" style="margin-right: 4px;"></i> ${dateStr}
+                                            </span>
+                                            <span style="font-size: 0.7rem; font-weight: 600; color: #64748b; background: #f1f5f9; padding: 6px 10px; border-radius: 6px; text-transform: uppercase;">
+                                                ${(ev.event_lifecycle_status || 'upcoming').replace('_', ' ')}
+                                            </span>
+                                        </div>
+                                        <h3 style="font-size: 1.25rem; font-weight: 700; color: var(--color-heading); margin-bottom: 12px; line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; transition: color 0.2s ease;">
+                                            ${ev.title}
+                                        </h3>
+                                        <p style="font-size: 0.95rem; color: #64748b; margin-bottom: 24px; line-height: 1.6; flex: 1; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;">
+                                            ${ev.short_description || ''}
+                                        </p>
+                                        <div style="display: flex; justify-content: space-between; align-items: center; padding-top: 16px; border-top: 1px solid #f1f5f9; font-size: 0.85rem; color: #64748b;">
+                                            <span style="display: flex; align-items: center; gap: 6px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 65%;">
+                                                <i class="fas fa-map-marker-alt" style="color: #94a3b8;"></i> ${ev.location || 'TBA'}
+                                            </span>
+                                            ${hasContent ? `<span style="color: var(--color-accent); font-weight: 700; display: flex; align-items: center; gap: 4px; transition: transform 0.2s ease;">Read More <i class="fas fa-arrow-right" style="font-size: 0.75rem;"></i></span>` : ''}
+                                        </div>
+                                    </div>
+                                </${wrapperTag}>
                             `;
                         });
+                    } else {
+                        eventsContainer.innerHTML = '<div style="grid-column: 1 / -1; text-align: center; color: #666; padding: 40px 0;">No upcoming events at the moment. Stay tuned!</div>';
                     }
+                } else {
+                    eventsContainer.innerHTML = '<div style="grid-column: 1 / -1; text-align: center; color: #666; padding: 40px 0;">No upcoming events at the moment. Stay tuned!</div>';
                 }
             } catch (err) {
                 console.error("Error fetching upcoming events", err);
+                const eventsContainer = document.getElementById('dynamicEventsGrid');
+                if (eventsContainer) {
+                    eventsContainer.innerHTML = '<div style="grid-column: 1 / -1; text-align: center; color: #ef4444; padding: 40px 0;">Failed to load events.</div>';
+                }
             }
         }
         

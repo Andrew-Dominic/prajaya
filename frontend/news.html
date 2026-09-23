@@ -1331,7 +1331,7 @@
     </script>
 
     <!-- Header -->
-    <header class="header" id="header">
+        <header class="header" id="header">
         <div class="container nav-container">
             <a href="/#home" class="brand">
                 <img src="assets/images/logo.png" alt="PRAJAYA Foundation Logo" class="brand-logo">
@@ -1342,7 +1342,7 @@
             </a>
             
             <nav class="nav-links" id="nav-links">
-                <a href="#home">Home</a>
+                <a href="/#home">Home</a>
                 <a href="/#vision">About</a>
                 <a href="/#programs">Objectives</a>
                 <a href="/#founder">Founder</a>
@@ -1366,33 +1366,52 @@
         <div class="section-label" style="justify-content: center;">Latest Updates</div>
         <h2 class="section-title" style="text-align: center; margin-bottom: 40px;">News & Impact Stories</h2>
         
-        <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 30px;">
-            
-            <!-- Article Card 1 -->
-            <div style="background: white; border-radius: 15px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.05); transition: transform 0.3s ease;">
-                <div style="height: 200px; background-color: #eee; background-image: url('assets/images/programs/education.jpg'); background-size: cover; background-position: center;"></div>
-                <div style="padding: 25px;">
-                    <div style="font-size: 0.85rem; color: var(--color-accent); font-weight: 600; margin-bottom: 10px;">Sep 20, 2026 &bull; Education</div>
-                    <h3 style="margin-bottom: 15px; font-size: 1.3rem;">Transforming Lives Through Digital Literacy</h3>
-                    <p style="color: #666; margin-bottom: 20px; font-size: 0.95rem; line-height: 1.6;">Discover how our recent digital literacy drive empowered 500 students in rural Tamil Nadu with essential computer skills.</p>
-                    <a href="/impact-education" class="btn btn-outline" style="padding: 8px 20px; font-size: 0.9rem;">Read Full Story</a>
-                </div>
+        <div id="news-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 30px; margin-top: 40px; margin-bottom: 60px;">
+            <div style="text-align: center; grid-column: 1 / -1; padding: 40px; color: #666;">
+                <i class="fas fa-spinner fa-spin" style="font-size: 2rem; margin-bottom: 15px;"></i>
+                <p>Loading latest news...</p>
             </div>
-
-            <!-- Article Card 2 -->
-            <div style="background: white; border-radius: 15px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.05); transition: transform 0.3s ease;">
-                <div style="height: 200px; background-color: #eee; background-image: url('assets/images/programs/health.jpg'); background-size: cover; background-position: center;"></div>
-                <div style="padding: 25px;">
-                    <div style="font-size: 0.85rem; color: var(--color-accent); font-weight: 600; margin-bottom: 10px;">Aug 15, 2026 &bull; Health</div>
-                    <h3 style="margin-bottom: 15px; font-size: 1.3rem;">Mega Health Camp Reaches 1,000 Families</h3>
-                    <p style="color: #666; margin-bottom: 20px; font-size: 0.95rem; line-height: 1.6;">Our annual health camp provided free checkups, eye tests, and medicines to underprivileged communities in Chennai.</p>
-                    <a href="/impact-health" class="btn btn-outline" style="padding: 8px 20px; font-size: 0.9rem;">Read Full Story</a>
-                </div>
-            </div>
-
         </div>
     </div>
 </section>
+
+<script>
+document.addEventListener("DOMContentLoaded", async () => {
+    try {
+        const response = await fetch("/api/v1/news");
+        const json = await response.json();
+        const grid = document.getElementById("news-grid");
+        
+        if (json.success && json.data.length > 0) {
+            grid.innerHTML = "";
+            json.data.forEach(item => {
+                const dateStr = item.published_at ? new Date(item.published_at).toLocaleDateString(undefined, {year: "numeric", month: "short", day: "numeric"}) : "Recently";
+                let defaultImage = "https://prajayafoundation.org/assets/images/logo.png";
+                let imageUrl = (item.news_images && item.news_images.length > 0) ? item.news_images[0].image_url : defaultImage;
+                
+                grid.innerHTML += `
+                    <div style="background: white; border-radius: 15px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.05); transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1); display: flex; flex-direction: column;">
+                        <a href="/news/${item.slug}" style="display: block; position: relative; padding-top: 60%; background-color: #f3f4f6; overflow: hidden;">
+                            <img src="${imageUrl}" alt="${item.title}" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s ease;">
+                            <div style="position: absolute; top: 15px; right: 15px; background: rgba(255,255,255,0.9); padding: 5px 12px; border-radius: 20px; font-size: 0.75rem; font-weight: 600; color: var(--color-heading); backdrop-filter: blur(4px);">News</div>
+                        </a>
+                        <div style="padding: 25px; display: flex; flex-direction: column; flex: 1;">
+                            <div style="font-size: 0.85rem; color: var(--color-accent); font-weight: 600; margin-bottom: 10px;">${dateStr}</div>
+                            <h3 style="margin-bottom: 15px; font-size: 1.2rem; line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;"><a href="/news/${item.slug}" style="text-decoration: none; color: inherit;">${item.title}</a></h3>
+                            <p style="color: #666; margin-bottom: 25px; font-size: 0.95rem; line-height: 1.6; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; flex: 1;">${item.short_description || ""}</p>
+                            <a href="/news/${item.slug}" class="btn-text" style="align-self: flex-start; text-decoration: none; font-size: 0.95rem; font-weight: 500;">Read Full Story <i class="fas fa-arrow-right" style="font-size: 0.8rem; margin-left: 5px;"></i></a>
+                        </div>
+                    </div>
+                `;
+            });
+        } else {
+            grid.innerHTML = "<div style=\"text-align: center; grid-column: 1 / -1; padding: 40px; color: #666;\">No news articles found. Please check back later.</div>";
+        }
+    } catch (error) {
+        console.error("Error loading news:", error);
+    }
+});
+</script>
 
 
 <!-- Footer -->
@@ -1413,11 +1432,11 @@
                     </p>
                     <p style="color: rgba(255,255,255,0.8); margin-bottom: 15px; font-size: 0.95rem; display: flex; align-items: center; gap: 12px;">
                         <i class="fas fa-phone" style="color: var(--color-accent);"></i> 
-                        <span>+91 9176077710</span>
+                        <span>+91 96558 11133</span>
                     </p>
                     <p style="color: rgba(255,255,255,0.8); font-size: 0.95rem; display: flex; align-items: center; gap: 12px;">
                         <i class="fas fa-envelope" style="color: var(--color-accent);"></i> 
-                        <span>prajayafoundation@gmail.com</span>
+                        <span>info@prajafoundation.org</span>
                     </p>
                 </div>
                 
@@ -1567,3 +1586,4 @@
 
 </body>
 </html>
+

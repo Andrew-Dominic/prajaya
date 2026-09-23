@@ -79,9 +79,11 @@ app.use(
           "'unsafe-inline'", // Allowed for inline scripts (GSAP, etc) in static html
           "https://unpkg.com",
           "https://cdnjs.cloudflare.com",
+          "https://cdn.quilljs.com",
+          "https://cdn.jsdelivr.net"
         ],
         scriptSrcAttr: ["'unsafe-inline'"],
-        styleSrc: ["'self'", "'unsafe-inline'", "https://fonts.googleapis.com", "https://cdnjs.cloudflare.com"],
+        styleSrc: ["'self'", "'unsafe-inline'", "https://fonts.googleapis.com", "https://cdnjs.cloudflare.com", "https://cdn.quilljs.com", "https://cdn.jsdelivr.net"],
         fontSrc: ["'self'", "https://fonts.gstatic.com", "https://cdnjs.cloudflare.com"],
         imgSrc: ["'self'", "data:", "blob:", "https://bnmgzrskfwuuhlnxavan.supabase.co"],
         connectSrc: ["'self'", "https://bnmgzrskfwuuhlnxavan.supabase.co"],
@@ -817,6 +819,9 @@ app.get('/api/health', (req, res) => {
   });
 });
 
+require('./routes/events.routes')(app, supabase, requireAuth);
+require('./routes/news.routes')(app, supabase, requireAuth);
+
 // ──────────────────────────────────────────────
 // 8. 404 HANDLER
 // ──────────────────────────────────────────────
@@ -830,8 +835,6 @@ app.use((req, res, next) => {
 // ──────────────────────────────────────────────
 // 9. GLOBAL ERROR HANDLER
 // ──────────────────────────────────────────────
-require('./routes/events.routes')(app, supabase, requireAuth);
-
 app.use(errorHandler);
 
 // ──────────────────────────────────────────────

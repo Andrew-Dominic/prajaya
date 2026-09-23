@@ -700,6 +700,16 @@
             border-color: var(--color-accent);
             box-shadow: 0 0 0 3px var(--color-accent-glow);
         }
+        
+        /* Auto-expand Quill editor */
+        .ql-container {
+            height: auto !important;
+            min-height: 150px;
+        }
+        .ql-editor {
+            height: auto !important;
+            min-height: 150px;
+        }
     </style>
     <!-- Quill Editor -->
     <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
@@ -799,7 +809,10 @@
                 <i class="fas fa-users"></i> Volunteers
             </a>
                         <a href="#" class="nav-link" onclick="switchView('events')">
-                <i class="fas fa-calendar-alt"></i> Events
+                            <i class="fas fa-calendar-alt"></i> Events
+                        </a>
+            <a href="#" class="nav-link" onclick="switchView('news')">
+                <i class="fas fa-newspaper"></i> News & Blogs
             </a>
             <a href="#" class="nav-link" onclick="switchView('quotes')">
                 <i class="fas fa-quote-right"></i> Quotes
@@ -1018,142 +1031,553 @@
         </div>
         <!-- Events View -->
         <div id="eventsView" class="view-panel" style="display: none;">
-            <div class="header">
-                <h1 style="font-size: 1.75rem; font-weight: 700;">Event Management</h1>
-                <button class="btn btn-primary" onclick="showEventForm()">
-                    <i class="fas fa-plus"></i> Create New Event
-                </button>
+            
+            <!-- STAGE 1: EVENT LIBRARY -->
+            <div id="eventsListSection">
+                <div class="header">
+                    <div>
+                        <h1 style="font-size: 1.75rem; font-weight: 700; margin-bottom: 5px;">Events</h1>
+                        <p style="color: var(--color-text-light); margin: 0;">Create, manage and publish your organization's events.</p>
+                    </div>
+                    <button class="btn btn-primary" onclick="showEventBasicForm()">
+                        <i class="fas fa-plus"></i> Create Event
+                    </button>
+                </div>
+                
+                <div class="table-container" style="background: transparent; box-shadow: none; padding: 0;">
+                    <div style="padding: 15px 0; display: flex; gap: 15px;">
+                        <input type="text" id="eventSearchInput" placeholder="Search events..." class="form-control" style="max-width: 300px;" onkeyup="filterEvents()">
+                        <select id="eventStatusFilter" class="form-control" style="max-width: 200px;" onchange="filterEvents()">
+                            <option value="all">All Statuses</option>
+                            <option value="PUBLISHED">Published</option>
+                            <option value="DRAFT">Draft</option>
+                            <option value="COMING_SOON">Coming Soon</option>
+                            <option value="UPCOMING">Upcoming</option>
+                            <option value="COMPLETED">Completed</option>
+                        </select>
+                    </div>
+                    <div class="table-wrapper" style="background: white; border-radius: 12px; box-shadow: var(--shadow-sm); border: 1px solid var(--color-border);">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Cover</th>
+                                    <th>Title</th>
+                                    <th>Date</th>
+                                    <th>Event Status</th>
+                                    <th>Page Type</th>
+                                    <th>Publishing</th>
+                                    <th class="sticky-actions">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="eventsTableBody">
+                                <!-- Populated dynamically -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
 
-            <!-- Event List Table -->
-            <div id="eventsListSection" class="table-container">
-                <div style="padding: 20px; display: flex; gap: 15px; border-bottom: 1px solid var(--color-border); background: #fafafa;">
-                    <input type="text" id="eventSearchInput" placeholder="Search events..." class="form-control" style="max-width: 300px;" onkeyup="filterEvents()">
-                    <select id="eventStatusFilter" class="form-control" style="max-width: 200px;" onchange="filterEvents()">
-                        <option value="all">All Statuses</option>
-                        <option value="published">Published</option>
-                        <option value="draft">Draft</option>
-                    </select>
-                </div>
-                <div class="table-wrapper">
-                    <table class="data-table">
-                        <thead>
-                            <tr>
-                                <th>Cover</th>
-                                <th>Title</th>
-                                <th>Date</th>
-                                <th>Status</th>
-                                <th>Visibility</th>
-                                <th class="sticky-actions">Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody id="eventsTableBody">
-                            <!-- Populated dynamically -->
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-
-            <!-- Create/Edit Event Form -->
-            <div id="eventFormSection" style="display: none; background: white; padding: 30px; border-radius: 12px; box-shadow: var(--shadow-sm); border: 1px solid var(--color-border);">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
-                    <h2 id="eventFormTitle">Create Event</h2>
-                    <button class="btn btn-outline" onclick="hideEventForm()">Back to List</button>
+            <!-- STAGE 2: CREATE EVENT (BASIC INFO) -->
+            <div id="eventBasicFormSection" style="display: none;">
+                <div class="header" style="border-bottom: 1px solid var(--color-border); padding-bottom: 20px; margin-bottom: 30px;">
+                    <div>
+                        <h1 style="font-size: 1.75rem; font-weight: 700; margin-bottom: 5px;">Create New Event</h1>
+                        <p style="color: var(--color-text-light); margin: 0;">Start with the basic information. You can add the full story after saving.</p>
+                    </div>
+                    <button class="btn btn-outline" onclick="showEventsList()">Cancel</button>
                 </div>
 
-                <form id="eventForm" onsubmit="handleEventSubmit(event)">
-                    <input type="hidden" id="eventId">
+                <div style="background: white; padding: 40px; border-radius: 12px; box-shadow: var(--shadow-sm); border: 1px solid var(--color-border); max-width: 800px; margin: 0 auto;">
+                    <h3 style="margin-top: 0; margin-bottom: 25px; color: var(--color-heading); font-size: 1.1rem; border-bottom: 2px solid #eee; padding-bottom: 10px;">BASIC INFORMATION</h3>
+                    
+                    <form id="eventBasicForm" onsubmit="handleBasicEventSubmit(event)">
+                        <input type="hidden" id="basicEventId">
+                        
+                        <div class="form-group" style="margin-bottom: 25px;">
+                            <label style="font-weight: 600; margin-bottom: 8px; display: block;">EVENT TITLE *</label>
+                            <input type="text" id="basicEventTitle" class="form-control" placeholder="e.g. Operation Mo-Si-Dau" required style="font-size: 1.1rem; padding: 12px;">
+                        </div>
 
-                    <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 30px;">
-                        <!-- Left Column (Main Content) -->
-                        <div>
-                            <div class="form-group">
-                                <label>Event Title *</label>
-                                <input type="text" id="eventTitle" class="form-control" required>
+                        <div class="form-group" style="margin-bottom: 25px;">
+                            <label style="font-weight: 600; margin-bottom: 8px; display: block;">EVENT DATE</label>
+                            <p style="font-size: 0.85rem; color: #666; margin-top: -5px; margin-bottom: 10px;">Optional — leave blank if the date hasn't been decided yet.</p>
+                            <input type="datetime-local" id="basicEventDate" class="form-control" style="max-width: 300px;">
+                        </div>
+                        
+                        <div class="form-group" style="margin-bottom: 25px;">
+                            <label style="font-weight: 600; margin-bottom: 8px; display: block;">LOCATION</label>
+                            <input type="text" id="basicEventLocation" class="form-control" placeholder="e.g. SRMC, Porur, Chennai (Optional)" style="max-width: 400px;">
+                        </div>
+
+                        <div class="form-group" style="margin-bottom: 30px;">
+                            <label style="font-weight: 600; margin-bottom: 8px; display: block;">SHORT DESCRIPTION *</label>
+                            <p style="font-size: 0.85rem; color: #666; margin-top: -5px; margin-bottom: 10px;">This is the short text shown on event cards and search results.</p>
+                            <textarea id="basicEventShortDesc" class="form-control" rows="3" required placeholder="A world record mission for a drug-free generation..."></textarea>
+                        </div>
+
+                        <div class="form-group" style="margin-bottom: 30px;">
+                            <label style="font-weight: 600; margin-bottom: 8px; display: block;">COVER POSTER *</label>
+                            <div class="upload-area" id="coverUploadArea" style="border: 2px dashed #ccc; border-radius: 8px; padding: 40px; text-align: center; cursor: pointer; background: #fafafa; transition: all 0.3s ease;" onclick="document.getElementById('basicEventCover').click()">
+                                <i class="fas fa-cloud-upload-alt" style="font-size: 2rem; color: #999; margin-bottom: 15px;"></i>
+                                <p style="margin: 0; font-weight: 500; color: #555;">Drag and drop an image here or click to browse</p>
+                                <p style="margin: 5px 0 0 0; font-size: 0.85rem; color: #888;">Recommended: 16:9 or 4:3</p>
+                                <input type="file" id="basicEventCover" accept="image/*" style="display: none;" onchange="handleCoverPreview(this)">
                             </div>
-
-                            <div class="form-group">
-                                <label>Slug (URL) - Optional</label>
-                                <input type="text" id="eventSlug" class="form-control" placeholder="auto-generated-if-empty">
-                            </div>
-
-                            <div class="form-group">
-                                <label>Short Description *</label>
-                                <textarea id="eventShortDesc" class="form-control" rows="3" required></textarea>
-                            </div>
-
-                            <div class="form-group" style="margin-bottom: 20px;">
-                                <label>Event Story (Rich Text)</label>
-                                <div id="editorContent" style="height: 300px;"></div>
-                            </div>
-
-                            <div class="form-group" style="margin-bottom: 20px;">
-                                <label>Event Report (Rich Text)</label>
-                                <div id="editorReport" style="height: 300px;"></div>
+                            <div id="coverPreviewContainer" style="display: none; margin-top: 15px; position: relative; max-width: 400px;">
+                                <img id="coverPreviewImg" src="" style="width: 100%; border-radius: 8px; border: 1px solid #ddd;">
+                                <button type="button" class="btn btn-sm btn-danger" style="position: absolute; top: 10px; right: 10px;" onclick="removeCover()">
+                                    <i class="fas fa-trash"></i> Remove
+                                </button>
                             </div>
                         </div>
 
-                        <!-- Right Column (Sidebar Settings) -->
-                        <div>
-                            <div class="form-group">
-                                <label>Event Date *</label>
-                                <input type="datetime-local" id="eventDate" class="form-control" required>
+                        <hr style="border: 0; border-top: 2px solid #eee; margin: 30px 0;">
+
+                        <div class="form-group" style="margin-bottom: 30px;">
+                            <label style="font-weight: 600; margin-bottom: 15px; display: block;">EVENT STATUS</label>
+                            <p style="font-size: 0.85rem; color: #666; margin-top: -10px; margin-bottom: 15px;">What is the current state of this event?</p>
+                            <div style="display: flex; flex-wrap: wrap; gap: 12px;">
+                                <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; padding: 8px 16px; border: 1px solid #e2e8f0; border-radius: 8px; transition: all 0.2s;">
+                                    <input type="radio" name="basicEventLifecycle" value="COMING_SOON"> 
+                                    <span>🔜 Coming Soon</span>
+                                </label>
+                                <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; padding: 8px 16px; border: 1px solid #e2e8f0; border-radius: 8px; transition: all 0.2s;">
+                                    <input type="radio" name="basicEventLifecycle" value="UPCOMING" checked> 
+                                    <span>📅 Upcoming</span>
+                                </label>
+                                <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; padding: 8px 16px; border: 1px solid #e2e8f0; border-radius: 8px; transition: all 0.2s;">
+                                    <input type="radio" name="basicEventLifecycle" value="ONGOING"> 
+                                    <span>🔴 Ongoing</span>
+                                </label>
+                                <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; padding: 8px 16px; border: 1px solid #e2e8f0; border-radius: 8px; transition: all 0.2s;">
+                                    <input type="radio" name="basicEventLifecycle" value="COMPLETED"> 
+                                    <span>✅ Completed</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="form-group" style="margin-bottom: 40px;">
+                            <label style="font-weight: 600; margin-bottom: 15px; display: block;">PAGE EXPERIENCE</label>
+                            <p style="font-size: 0.85rem; color: #666; margin-top: -10px; margin-bottom: 15px;">How should this event appear to visitors?</p>
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+                                <label id="pageTypeTeaser" style="cursor: pointer; padding: 20px; border: 2px solid var(--color-accent); border-radius: 12px; background: var(--color-accent-glow); transition: all 0.2s;">
+                                    <input type="radio" name="basicPageType" value="TEASER" checked style="display: none;">
+                                    <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">
+                                        <span style="font-size: 1.5rem;">📌</span>
+                                        <strong style="font-size: 1rem; color: var(--color-heading);">Event Announcement</strong>
+                                    </div>
+                                    <p style="margin: 0; font-size: 0.85rem; color: #666; line-height: 1.5;">Simple event card with poster, date and summary. Perfect for quick announcements.</p>
+                                </label>
+                                <label id="pageTypeContent" style="cursor: pointer; padding: 20px; border: 2px solid var(--color-border); border-radius: 12px; background: white; transition: all 0.2s;">
+                                    <input type="radio" name="basicPageType" value="CONTENT_PAGE" style="display: none;">
+                                    <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">
+                                        <span style="font-size: 1.5rem;">📖</span>
+                                        <strong style="font-size: 1rem; color: var(--color-heading);">Content Page</strong>
+                                    </div>
+                                    <p style="margin: 0; font-size: 0.85rem; color: #666; line-height: 1.5;">Create a full page with information, sections and media. Ideal for campaigns and initiatives.</p>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div style="display: flex; justify-content: flex-end; gap: 15px; border-top: 1px solid #eee; padding-top: 25px;">
+                            <button type="button" class="btn btn-outline" onclick="saveBasicEvent('draft')">Save Draft</button>
+                            <button type="submit" class="btn btn-primary">Save & Continue</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            
+            <!-- STAGE 3: EVENT EDITOR (CONTENT BUILDER) -->
+            <div id="eventEditorSection" style="display: none;">
+                <!-- Editor Header -->
+                <div class="header" style="background: white; padding: 20px 30px; border-radius: 12px; box-shadow: var(--shadow-sm); border: 1px solid var(--color-border); margin-bottom: 25px; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 20px; z-index: 100;">
+                    <div>
+                        <a href="javascript:void(0)" onclick="showEventsList()" style="color: #666; text-decoration: none; font-size: 0.9rem; display: inline-flex; align-items: center; gap: 5px; margin-bottom: 8px;">
+                            <i class="fas fa-arrow-left"></i> Events
+                        </a>
+                        <h2 id="editorEventTitle" style="margin: 0; font-size: 1.5rem; display: flex; align-items: center; gap: 15px;">
+                            Loading...
+                        </h2>
+                    </div>
+                    <div style="display: flex; gap: 15px; align-items: center;">
+                        <button id="editorPreviewBtn" class="btn btn-outline" onclick="previewEventContent()"><i class="fas fa-external-link-alt"></i> Preview</button>
+                        <button class="btn btn-outline" onclick="saveEventContent()"><i class="fas fa-save"></i> Save Draft</button>
+                        <button class="btn btn-primary" onclick="publishEventChanges()"><i class="fas fa-globe"></i> Publish Changes</button>
+                    </div>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 350px; gap: 30px;">
+                    <!-- Left: Content Builder -->
+                    <div>
+                        <!-- Event Overview (Basic Info) -->
+                        <div style="background: white; border-radius: 12px; padding: 25px; box-shadow: var(--shadow-sm); border: 1px solid var(--color-border); margin-bottom: 25px;">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                                <h3 style="margin: 0; font-size: 1.1rem; color: #555;">EVENT OVERVIEW</h3>
+                                <button class="btn btn-sm btn-outline" onclick="editBasicInfo()">Edit Info</button>
+                            </div>
+                            <div style="display: flex; gap: 20px;">
+                                <div style="width: 150px; height: 100px; background: #eee; border-radius: 8px; overflow: hidden; flex-shrink: 0;">
+                                    <img id="overviewCoverImg" src="" style="width: 100%; height: 100%; object-fit: cover;">
+                                </div>
+                                <div style="flex: 1;">
+                                    <p style="margin: 0 0 5px 0; font-weight: 600;" id="overviewDateLocation"><i class="far fa-calendar"></i> Date | <i class="fas fa-map-marker-alt"></i> Location</p>
+                                    <p style="margin: 0; font-size: 0.95rem; color: #666;" id="overviewShortDesc">Short description goes here...</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Content Builder Area -->
+                        <div style="background: white; border-radius: 12px; padding: 25px; box-shadow: var(--shadow-sm); border: 1px solid var(--color-border); margin-bottom: 25px;">
+                            <h3 style="margin-top: 0; margin-bottom: 20px; font-size: 1.1rem; color: #555;">PAGE CONTENT</h3>
+                            
+                            <div id="contentBlocksArea">
+                                <!-- Blocks will be injected here -->
+                                <div class="empty-state" id="emptyContentState" style="text-align: center; padding: 40px 20px; background: #f9f9f9; border-radius: 8px; border: 1px dashed #ccc;">
+                                    <i class="fas fa-file-alt" style="font-size: 2.5rem; color: #ccc; margin-bottom: 15px;"></i>
+                                    <p style="color: #666; margin: 0 0 15px 0;">No page content yet. Add content blocks to build your page.</p>
+                                </div>
                             </div>
 
-                            <div class="form-group">
-                                <label>Category</label>
-                                <select id="eventCategory" class="form-control">
-                                    <option value="">Select Category...</option>
-                                    <option value="Education">Education</option>
-                                    <option value="Health">Health</option>
-                                    <option value="Environment">Environment</option>
-                                    <option value="Community">Community</option>
-                                </select>
+                            <div style="margin-top: 25px; text-align: center; position: relative;">
+                                <button class="btn btn-outline" onclick="toggleAddBlockMenu()" id="addContentBtn" style="border-radius: 30px; padding: 10px 25px;">
+                                    <i class="fas fa-plus"></i> Add Content
+                                </button>
+                                
+                                <!-- Add Block Menu Dropdown -->
+                                <div id="addBlockMenu" style="display: none; position: absolute; left: 50%; transform: translateX(-50%); top: 100%; margin-top: 10px; background: white; border-radius: 8px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); border: 1px solid #eee; width: 250px; z-index: 10; text-align: left; padding: 10px 0;">
+                                    <a href="javascript:void(0)" onclick="addContentBlock('heading')" style="display: block; padding: 10px 20px; color: #333; text-decoration: none;"><i class="fas fa-heading" style="width: 25px; color: #666;"></i> Heading</a>
+                                    <a href="javascript:void(0)" onclick="addContentBlock('paragraph')" style="display: block; padding: 10px 20px; color: #333; text-decoration: none;"><i class="fas fa-paragraph" style="width: 25px; color: #666;"></i> Paragraph / Rich Text</a>
+                                    <a href="javascript:void(0)" onclick="addContentBlock('highlight')" style="display: block; padding: 10px 20px; color: #333; text-decoration: none;"><i class="fas fa-star" style="width: 25px; color: #666;"></i> Highlight Section</a>
+                                    <a href="javascript:void(0)" onclick="addContentBlock('people')" style="display: block; padding: 10px 20px; color: #333; text-decoration: none;"><i class="fas fa-users" style="width: 25px; color: #666;"></i> People / Roles</a>
+                                    <a href="javascript:void(0)" onclick="addContentBlock('organization')" style="display: block; padding: 10px 20px; color: #333; text-decoration: none;"><i class="fas fa-building" style="width: 25px; color: #666;"></i> Organization</a>
+                                    <a href="javascript:void(0)" onclick="addContentBlock('image')" style="display: block; padding: 10px 20px; color: #333; text-decoration: none;"><i class="far fa-image" style="width: 25px; color: #666;"></i> Single Image</a>
+                                    <a href="javascript:void(0)" onclick="addContentBlock('gallery')" style="display: block; padding: 10px 20px; color: #333; text-decoration: none;"><i class="fas fa-images" style="width: 25px; color: #666;"></i> Image Gallery</a>
+                                    <a href="javascript:void(0)" onclick="addContentBlock('quote')" style="display: block; padding: 10px 20px; color: #333; text-decoration: none;"><i class="fas fa-quote-left" style="width: 25px; color: #666;"></i> Quote</a>
+                                    <a href="javascript:void(0)" onclick="addContentBlock('video')" style="display: block; padding: 10px 20px; color: #333; text-decoration: none;"><i class="fas fa-video" style="width: 25px; color: #666;"></i> Video Embed</a>
+                                    <a href="javascript:void(0)" onclick="addContentBlock('cta')" style="display: block; padding: 10px 20px; color: #333; text-decoration: none;"><i class="fas fa-link" style="width: 25px; color: #666;"></i> Call to Action</a>
+                                    <a href="javascript:void(0)" onclick="addContentBlock('divider')" style="display: block; padding: 10px 20px; color: #333; text-decoration: none;"><i class="fas fa-minus" style="width: 25px; color: #666;"></i> Divider</a>
+                                </div>
                             </div>
+                        </div>
+                    </div>
 
-                            <div class="form-group">
-                                <label>Location</label>
-                                <input type="text" id="eventLocation" class="form-control">
+                    <!-- Right Sidebar: Settings & Publishing -->
+                    <div>
+                        <!-- Page Experience Panel -->
+                        <div id="pageExperiencePanel" style="background: white; border-radius: 12px; padding: 25px; box-shadow: var(--shadow-sm); border: 1px solid var(--color-border); margin-bottom: 25px;">
+                            <h3 style="margin-top: 0; margin-bottom: 15px; font-size: 1.1rem; color: #555;">PAGE EXPERIENCE</h3>
+                            
+                            <!-- Teaser state -->
+                            <div id="pageExpTeaser" style="display: none;">
+                                <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 12px;">
+                                    <span style="font-size: 1.3rem;">📌</span>
+                                    <strong style="color: var(--color-heading);">Event Teaser</strong>
+                                </div>
+                                <p style="font-size: 0.85rem; color: #666; margin: 0 0 15px 0; line-height: 1.5;">Visitors will see the event summary and cover image.</p>
+                                <button class="btn btn-sm btn-primary" onclick="switchPageType('CONTENT_PAGE')" style="width: 100%;">
+                                    <i class="fas fa-file-alt"></i> Build Full Page
+                                </button>
                             </div>
                             
-                            <div class="form-group">
-                                <label>Status</label>
-                                <select id="eventStatus" class="form-control">
+                            <!-- Content Page state -->
+                            <div id="pageExpContent" style="display: none;">
+                                <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 12px;">
+                                    <span style="font-size: 1.3rem;">📖</span>
+                                    <strong style="color: var(--color-heading);">Full Content Page</strong>
+                                </div>
+                                <p style="font-size: 0.85rem; color: #666; margin: 0 0 15px 0; line-height: 1.5;">This event has a dedicated information page with editorial content.</p>
+                                <button class="btn btn-sm btn-outline" onclick="switchPageType('TEASER')" style="width: 100%; font-size: 0.8rem;">
+                                    Convert to Teaser
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Status Panel -->
+                        <div style="background: white; border-radius: 12px; padding: 25px; box-shadow: var(--shadow-sm); border: 1px solid var(--color-border); margin-bottom: 25px;">
+                            <h3 style="margin-top: 0; margin-bottom: 15px; font-size: 1.1rem; color: #555;">PUBLISHING</h3>
+                            
+                            <div class="form-group" style="margin-bottom: 15px;">
+                                <label style="font-size: 0.85rem; font-weight: 600; color: #666;">EVENT STATUS</label>
+                                <select id="editorEventLifecycleStatus" class="form-control" onchange="markUnsaved()">
+                                    <option value="COMING_SOON">Coming Soon</option>
+                                    <option value="UPCOMING">Upcoming</option>
+                                    <option value="ONGOING">Ongoing</option>
+                                    <option value="COMPLETED">Completed</option>
+                                    <option value="CANCELLED">Cancelled</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Advanced Settings -->
+                        <div style="background: white; border-radius: 12px; padding: 25px; box-shadow: var(--shadow-sm); border: 1px solid var(--color-border);">
+                            <h3 style="margin-top: 0; margin-bottom: 15px; font-size: 1.1rem; color: #555;">ADVANCED SETTINGS</h3>
+                            
+                            <div class="form-group" style="margin-bottom: 15px;">
+                                <label style="font-size: 0.85rem; font-weight: 600; color: #666;">URL SLUG</label>
+                                <input type="text" id="editorEventSlug" class="form-control" placeholder="auto-generated" onchange="markUnsaved()">
+                            </div>
+                            
+                            <div class="form-group" style="margin-bottom: 15px;">
+                                <label style="font-size: 0.85rem; font-weight: 600; color: #666;">SEO TITLE</label>
+                                <input type="text" id="editorSeoTitle" class="form-control" placeholder="Defaults to Event Title" onchange="markUnsaved()">
+                            </div>
+
+                            <div class="form-group" style="margin-bottom: 15px;">
+                                <label style="font-size: 0.85rem; font-weight: 600; color: #666;">SEO DESCRIPTION</label>
+                                <textarea id="editorSeoDesc" class="form-control" rows="2" placeholder="Defaults to Short Description" onchange="markUnsaved()"></textarea>
+                            </div>
+
+                            <hr style="border: 0; border-top: 1px solid #eee; margin: 20px 0;">
+                            
+                            <h4 style="margin-top: 0; margin-bottom: 10px; font-size: 0.95rem; color: #555;">EXTERNAL LINKS</h4>
+                            <div id="externalLinksContainer">
+                                <!-- External links dynamically injected -->
+                            </div>
+                            <button class="btn btn-sm btn-outline" style="width: 100%; margin-top: 10px;" onclick="addExternalLink()">+ Add Link</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+<div id="newsView" class="view-panel" style="display: none;">
+            
+            <!-- STAGE 1: NEWS LIBRARY -->
+            <div id="newsListSection">
+                <div class="header">
+                    <div>
+                        <h1 style="font-size: 1.75rem; font-weight: 700; margin-bottom: 5px;">News</h1>
+                        <p style="color: var(--color-text-light); margin: 0;">Create, manage and publish your organization's news.</p>
+                    </div>
+                    <button class="btn btn-primary" onclick="showNewsBasicForm()">
+                        <i class="fas fa-plus"></i> Create News
+                    </button>
+                </div>
+                
+                <div class="table-container" style="background: transparent; box-shadow: none; padding: 0;">
+                    <div style="padding: 15px 0; display: flex; gap: 15px;">
+                        <input type="text" id="newsSearchInput" placeholder="Search news..." class="form-control" style="max-width: 300px;" onkeyup="filterNews()">
+                        <select id="newsStatusFilter" class="form-control" style="max-width: 200px;" onchange="filterNews()">
+                            <option value="all">All</option>
+                            <option value="draft">Draft</option>
+                            <option value="upcoming">Upcoming</option>
+                            <option value="completed">Completed</option>
+                        </select>
+                    </div>
+                    <div class="table-wrapper" style="background: white; border-radius: 12px; box-shadow: var(--shadow-sm); border: 1px solid var(--color-border);">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Cover</th>
+                                    <th>Title</th>
+                                    <th>Date</th>
+                                    <th>Status</th>
+                                    <th>Visibility</th>
+                                    <th class="sticky-actions">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="newsTableBody">
+                                <!-- Populated dynamically -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- STAGE 2: CREATE NEWS (BASIC INFO) -->
+            <div id="newsBasicFormSection" style="display: none;">
+                <div class="header" style="border-bottom: 1px solid var(--color-border); padding-bottom: 20px; margin-bottom: 30px;">
+                    <div>
+                        <h1 style="font-size: 1.75rem; font-weight: 700; margin-bottom: 5px;">Create New News</h1>
+                        <p style="color: var(--color-text-light); margin: 0;">Start with the basic information. You can add the full story after publishing.</p>
+                    </div>
+                    <button class="btn btn-outline" onclick="showNewsList()">Cancel</button>
+                </div>
+
+                <div style="background: white; padding: 40px; border-radius: 12px; box-shadow: var(--shadow-sm); border: 1px solid var(--color-border); max-width: 800px; margin: 0 auto;">
+                    <h3 style="margin-top: 0; margin-bottom: 25px; color: var(--color-heading); font-size: 1.1rem; border-bottom: 2px solid #eee; padding-bottom: 10px;">BASIC INFORMATION</h3>
+                    
+                    <form id="newsBasicForm" onsubmit="handleBasicNewsSubmit(news)">
+                        <input type="hidden" id="basicNewsId">
+                        
+                        <div class="form-group" style="margin-bottom: 25px;">
+                            <label style="font-weight: 600; margin-bottom: 8px; display: block;">NEWS TITLE *</label>
+                            <input type="text" id="basicNewsTitle" class="form-control" placeholder="e.g. Drug Free Society Awareness" required style="font-size: 1.1rem; padding: 12px;">
+                        </div>
+
+                        <div class="form-group" style="margin-bottom: 25px;">
+                            <label style="font-weight: 600; margin-bottom: 8px; display: block;">NEWS DATE *</label>
+                            <input type="datetime-local" id="basicNewsDate" class="form-control" required style="max-width: 300px;">
+                        </div>
+                        
+                        <div class="form-group" style="margin-bottom: 25px;">
+                            <label style="font-weight: 600; margin-bottom: 8px; display: block;">LOCATION</label>
+                            <input type="text" id="basicNewsLocation" class="form-control" placeholder="e.g. SRMC (Optional)" style="max-width: 400px;">
+                        </div>
+
+                        <div class="form-group" style="margin-bottom: 30px;">
+                            <label style="font-weight: 600; margin-bottom: 8px; display: block;">SHORT DESCRIPTION *</label>
+                            <p style="font-size: 0.85rem; color: #666; margin-top: -5px; margin-bottom: 10px;">This is the short text shown on news cards.</p>
+                            <textarea id="basicNewsShortDesc" class="form-control" rows="3" required placeholder="An awareness campaign focused on building a drug-free society..."></textarea>
+                        </div>
+
+                        <div class="form-group" style="margin-bottom: 30px;">
+                            <label style="font-weight: 600; margin-bottom: 8px; display: block;">COVER POSTER *</label>
+                            <div class="upload-area" id="coverUploadArea" style="border: 2px dashed #ccc; border-radius: 8px; padding: 40px; text-align: center; cursor: pointer; background: #fafafa; transition: all 0.3s ease;" onclick="document.getElementById('basicNewsCover').click()">
+                                <i class="fas fa-cloud-upload-alt" style="font-size: 2rem; color: #999; margin-bottom: 15px;"></i>
+                                <p style="margin: 0; font-weight: 500; color: #555;">Drag and drop an image here or click to browse</p>
+                                <p style="margin: 5px 0 0 0; font-size: 0.85rem; color: #888;">Recommended: 16:9 or 4:3</p>
+                                <input type="file" id="basicNewsCover" accept="image/*" style="display: none;" onchange="handleNewsCoverPreview(this)">
+                            </div>
+                            <div id="coverPreviewContainer" style="display: none; margin-top: 15px; position: relative; max-width: 400px;">
+                                <img id="coverPreviewImg" src="" style="width: 100%; border-radius: 8px; border: 1px solid #ddd;">
+                                <button type="button" class="btn btn-sm btn-danger" style="position: absolute; top: 10px; right: 10px;" onclick="removeNewsCover()">
+                                    <i class="fas fa-trash"></i> Remove
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group" style="margin-bottom: 40px;">
+                            <label style="font-weight: 600; margin-bottom: 15px; display: block;">NEWS VISIBILITY</label>
+                            <div style="display: flex; gap: 20px;">
+                                <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+                                    <input type="radio" name="basicNewsVisibility" value="draft" checked> 
+                                    <span>Draft (Private)</span>
+                                </label>
+                                <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+                                    <input type="radio" name="basicNewsVisibility" value="upcoming"> 
+                                    <span>Upcoming (Public)</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div style="display: flex; justify-content: flex-end; gap: 15px; border-top: 1px solid #eee; padding-top: 25px;">
+                            <button type="button" class="btn btn-outline" onclick="saveBasicNews('draft')">Save Draft</button>
+                            <button type="submit" class="btn btn-primary">Save & Continue</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            
+            <!-- STAGE 3: NEWS EDITOR (CONTENT BUILDER) -->
+            <div id="newsEditorSection" style="display: none;">
+                <!-- Editor Header -->
+                <div class="header" style="background: white; padding: 20px 30px; border-radius: 12px; box-shadow: var(--shadow-sm); border: 1px solid var(--color-border); margin-bottom: 25px; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 20px; z-index: 100;">
+                    <div>
+                        <a href="javascript:void(0)" onclick="showNewsList()" style="color: #666; text-decoration: none; font-size: 0.9rem; display: inline-flex; align-items: center; gap: 5px; margin-bottom: 8px;">
+                            <i class="fas fa-arrow-left"></i> News
+                        </a>
+                        <h2 id="editorNewsTitle" style="margin: 0; font-size: 1.5rem; display: flex; align-items: center; gap: 15px;">
+                            Loading...
+                        </h2>
+                    </div>
+                    <div style="display: flex; gap: 15px; align-items: center;">
+                        <a id="editorPreviewBtn" href="#" target="_blank" class="btn btn-outline"><i class="fas fa-external-link-alt"></i> Preview</a>
+                        <button class="btn btn-outline" onclick="saveNewsContent()"><i class="fas fa-save"></i> Save</button>
+                        <button class="btn btn-primary" onclick="publishNewsChanges()"><i class="fas fa-globe"></i> Publish Changes</button>
+                    </div>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 350px; gap: 30px;">
+                    <!-- Left: Content Builder -->
+                    <div>
+                        <!-- News Overview (Basic Info) -->
+                        <div style="background: white; border-radius: 12px; padding: 25px; box-shadow: var(--shadow-sm); border: 1px solid var(--color-border); margin-bottom: 25px;">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                                <h3 style="margin: 0; font-size: 1.1rem; color: #555;">NEWS OVERVIEW</h3>
+                                <button class="btn btn-sm btn-outline" onclick="editNewsBasicInfo()">Edit Info</button>
+                            </div>
+                            <div style="display: flex; gap: 20px;">
+                                <div style="width: 150px; height: 100px; background: #eee; border-radius: 8px; overflow: hidden; flex-shrink: 0;">
+                                    <img id="overviewNewsCoverImg" src="" style="width: 100%; height: 100%; object-fit: cover;">
+                                </div>
+                                <div style="flex: 1;">
+                                    <p style="margin: 0 0 5px 0; font-weight: 600;" id="overviewNewsDateLocation"><i class="far fa-calendar"></i> Date | <i class="fas fa-map-marker-alt"></i> Location</p>
+                                    <p style="margin: 0; font-size: 0.95rem; color: #666;" id="overviewNewsShortDesc">Short description goes here...</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Content Builder Area -->
+                        <div style="background: white; border-radius: 12px; padding: 25px; box-shadow: var(--shadow-sm); border: 1px solid var(--color-border); margin-bottom: 25px;">
+                            <h3 style="margin-top: 0; margin-bottom: 20px; font-size: 1.1rem; color: #555;">NEWS CONTENT</h3>
+                            
+                            <div id="newsContentBlocksArea">
+                                <!-- Blocks will be injected here -->
+                                <div class="empty-state" id="emptyNewsContentState" style="text-align: center; padding: 40px 20px; background: #f9f9f9; border-radius: 8px; border: 1px dashed #ccc;">
+                                    <i class="fas fa-file-alt" style="font-size: 2.5rem; color: #ccc; margin-bottom: 15px;"></i>
+                                    <p style="color: #666; margin: 0 0 15px 0;">This news doesn't have a full story yet.</p>
+                                </div>
+                            </div>
+
+                            <div style="margin-top: 25px; text-align: center; position: relative;">
+                                <button class="btn btn-outline" onclick="toggleNewsAddBlockMenu()" id="addNewsContentBtn" style="border-radius: 30px; padding: 10px 25px;">
+                                    <i class="fas fa-plus"></i> Add Content
+                                </button>
+                                
+                                <!-- Add Block Menu Dropdown -->
+                                <div id="addNewsBlockMenu" style="display: none; position: absolute; left: 50%; transform: translateX(-50%); top: 100%; margin-top: 10px; background: white; border-radius: 8px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); border: 1px solid #eee; width: 250px; z-index: 10; text-align: left; padding: 10px 0;">
+                                    <a href="javascript:void(0)" onclick="addNewsContentBlock('heading')" style="display: block; padding: 10px 20px; color: #333; text-decoration: none;"><i class="fas fa-heading" style="width: 25px; color: #666;"></i> Heading</a>
+                                    <a href="javascript:void(0)" onclick="addNewsContentBlock('paragraph')" style="display: block; padding: 10px 20px; color: #333; text-decoration: none;"><i class="fas fa-paragraph" style="width: 25px; color: #666;"></i> Paragraph / Rich Text</a>
+                                    <a href="javascript:void(0)" onclick="addNewsContentBlock('image')" style="display: block; padding: 10px 20px; color: #333; text-decoration: none;"><i class="far fa-image" style="width: 25px; color: #666;"></i> Single Image</a>
+                                    <a href="javascript:void(0)" onclick="addNewsContentBlock('gallery')" style="display: block; padding: 10px 20px; color: #333; text-decoration: none;"><i class="fas fa-images" style="width: 25px; color: #666;"></i> Image Gallery</a>
+                                    <a href="javascript:void(0)" onclick="addNewsContentBlock('quote')" style="display: block; padding: 10px 20px; color: #333; text-decoration: none;"><i class="fas fa-quote-left" style="width: 25px; color: #666;"></i> Quote</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right Sidebar: Settings & Publishing -->
+                    <div>
+                        <!-- Status Panel -->
+                        <div style="background: white; border-radius: 12px; padding: 25px; box-shadow: var(--shadow-sm); border: 1px solid var(--color-border); margin-bottom: 25px;">
+                            <h3 style="margin-top: 0; margin-bottom: 15px; font-size: 1.1rem; color: #555;">PUBLISHING</h3>
+                            
+                            <div class="form-group" style="margin-bottom: 15px;">
+                                <label style="font-size: 0.85rem; font-weight: 600; color: #666;">LIFECYCLE STATUS</label>
+                                <select id="editorNewsStatus" class="form-control" onchange="markNewsUnsaved()">
+                                    <option value="draft">Draft (Private)</option>
                                     <option value="upcoming">Upcoming</option>
                                     <option value="ongoing">Ongoing</option>
                                     <option value="completed">Completed</option>
                                 </select>
                             </div>
-
-                            <div class="form-group">
-                                <label>Event Images (Select Multiple) *</label>
-                                <input type="file" id="eventImages" class="form-control" accept="image/*" multiple>
-                                <small style="color: var(--color-text-light); font-size: 0.75rem;">First image will be used as the cover.</small>
-                                <div id="coverPreview" style="margin-top: 10px; display: flex; gap: 10px; flex-wrap: wrap;"></div>
-                            </div>
-
-                            <div class="form-group">
-                                <label>Instagram URL</label>
-                                <input type="url" id="eventInstagram" class="form-control" placeholder="https://instagram.com/...">
-                            </div>
-
-                            <div class="form-group">
-                                <label>SEO Title</label>
-                                <input type="text" id="eventSeoTitle" class="form-control">
-                            </div>
-
-                            <div class="form-group">
-                                <label>SEO Description</label>
-                                <textarea id="eventSeoDesc" class="form-control" rows="2"></textarea>
+                            
+                            <div id="completedPrompt" style="display: none; padding: 15px; background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 8px; margin-top: 15px;">
+                                <p style="margin: 0 0 10px 0; color: #166534; font-size: 0.9rem;"><strong>News Completed</strong></p>
+                                <p style="margin: 0; color: #15803d; font-size: 0.85rem;">Your news can now be expanded into a full news story. Use the Content Builder to add photos and highlights.</p>
                             </div>
                         </div>
-                    </div>
 
-                    <div style="margin-top: 40px; padding-top: 20px; border-top: 1px solid var(--color-border); display: flex; justify-content: flex-end; gap: 15px;">
-                        <button type="button" class="btn btn-outline" onclick="saveEvent(false)">Save as Draft</button>
-                        <button type="button" class="btn btn-primary" onclick="saveEvent(true)">Publish Event</button>
+                        <!-- Advanced Settings -->
+                        <div style="background: white; border-radius: 12px; padding: 25px; box-shadow: var(--shadow-sm); border: 1px solid var(--color-border);">
+                            <h3 style="margin-top: 0; margin-bottom: 15px; font-size: 1.1rem; color: #555;">ADVANCED SETTINGS</h3>
+                            
+                            <div class="form-group" style="margin-bottom: 15px;">
+                                <label style="font-size: 0.85rem; font-weight: 600; color: #666;">URL SLUG</label>
+                                <input type="text" id="editorNewsSlug" class="form-control" placeholder="auto-generated" onchange="markNewsUnsaved()">
+                            </div>
+                            
+                            <div class="form-group" style="margin-bottom: 15px;">
+                                <label style="font-size: 0.85rem; font-weight: 600; color: #666;">SEO TITLE</label>
+                                <input type="text" id="editorNewsSeoTitle" class="form-control" placeholder="Defaults to News Title" onchange="markNewsUnsaved()">
+                            </div>
+
+                            <div class="form-group" style="margin-bottom: 15px;">
+                                <label style="font-size: 0.85rem; font-weight: 600; color: #666;">SEO DESCRIPTION</label>
+                                <textarea id="editorNewsSeoDesc" class="form-control" rows="2" placeholder="Defaults to Short Description" onchange="markNewsUnsaved()"></textarea>
+                            </div>
+
+                            <hr style="border: 0; border-top: 1px solid #eee; margin: 20px 0;">
+                            
+                            <h4 style="margin-top: 0; margin-bottom: 10px; font-size: 0.95rem; color: #555;">EXTERNAL LINKS</h4>
+                            <div id="externalLinksContainer">
+                                <!-- External links dynamically injected -->
+                            </div>
+                            <button class="btn btn-sm btn-outline" style="width: 100%; margin-top: 10px;" onclick="addNewsExternalLink()">+ Add Link</button>
+                        </div>
                     </div>
-                </form>
+                </div>
             </div>
         </div>
     </main>
@@ -2072,5 +2496,8 @@
         window.addEventListener('DOMContentLoaded', checkAuth);
     </script>
     <script src="events.js"></script>
+    <script src="news.js"></script>
 </body>
 </html>
+
+

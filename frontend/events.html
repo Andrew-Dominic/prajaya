@@ -137,71 +137,126 @@
 
         .event-card {
             background: white;
-            border-radius: 12px;
+            border-radius: 16px;
             overflow: hidden;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
-            transition: var(--transition);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.03);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             text-decoration: none;
             color: inherit;
             display: flex;
             flex-direction: column;
-            border: 1px solid #eee;
+            border: 1px solid rgba(0,0,0,0.05);
+            height: 100%;
         }
 
         .event-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.08);
             border-color: var(--color-accent);
         }
 
-        .event-image {
+        .event-image-container {
+            position: relative;
+            overflow: hidden;
+            padding-top: 60%;
+        }
+
+        .event-image-container img {
+            position: absolute;
+            top: 0;
+            left: 0;
             width: 100%;
-            height: 220px;
+            height: 100%;
             object-fit: cover;
-            background: #f0f0f0;
+            transition: transform 0.6s ease;
+        }
+
+        .event-card:hover .event-image-container img {
+            transform: scale(1.05);
+        }
+
+        .event-details-badge {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            background: rgba(255,255,255,0.95);
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: var(--color-accent);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            backdrop-filter: blur(4px);
         }
 
         .event-content {
-            padding: 25px;
+            padding: 24px;
             flex: 1;
             display: flex;
             flex-direction: column;
         }
 
+        .event-date-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 16px;
+        }
+
         .event-date {
-            font-size: 0.85rem;
-            font-weight: 600;
+            font-size: 0.75rem;
+            font-weight: 700;
             color: var(--color-accent);
             text-transform: uppercase;
-            margin-bottom: 10px;
-            display: flex;
-            align-items: center;
-            gap: 5px;
+            letter-spacing: 0.5px;
+            background: #fff3e0;
+            padding: 6px 12px;
+            border-radius: 6px;
+        }
+        
+        .event-status {
+            font-size: 0.7rem;
+            font-weight: 600;
+            color: #64748b;
+            background: #f1f5f9;
+            padding: 6px 10px;
+            border-radius: 6px;
+            text-transform: uppercase;
         }
 
         .event-title {
-            font-size: 1.3rem;
+            font-size: 1.25rem;
             color: var(--color-heading);
-            margin-bottom: 15px;
+            margin-bottom: 12px;
             line-height: 1.4;
+            font-weight: 700;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            transition: color 0.2s ease;
         }
 
         .event-desc {
             font-size: 0.95rem;
-            color: #666;
-            margin-bottom: 20px;
+            color: #64748b;
+            margin-bottom: 24px;
             line-height: 1.6;
             flex: 1;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
         }
 
         .event-meta {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding-top: 15px;
-            border-top: 1px solid #eee;
+            padding-top: 16px;
+            border-top: 1px solid #f1f5f9;
             font-size: 0.85rem;
-            color: #888;
+            color: #64748b;
         }
 
         .loading {
@@ -231,6 +286,7 @@
     <div class="events-container">
         <div class="filters">
             <button class="filter-btn active" data-filter="all">All Events</button>
+            <button class="filter-btn" data-filter="coming_soon">Coming Soon</button>
             <button class="filter-btn" data-filter="upcoming">Upcoming</button>
             <button class="filter-btn" data-filter="completed">Completed</button>
         </div>
@@ -257,7 +313,7 @@
 
         async function fetchEvents() {
             try {
-                const res = await fetch('/api/v1/events');
+                const res = await fetch('/api/v1/events?_t=' + new Date().getTime());
                 const result = await res.json();
                 if(result.success) {
                     allEvents = result.data;
@@ -271,6 +327,17 @@
             }
         }
 
+        function formatLifecycleStatus(status) {
+            const map = {
+                'COMING_SOON': 'Coming Soon',
+                'UPCOMING': 'Upcoming',
+                'ONGOING': 'Ongoing',
+                'COMPLETED': 'Completed',
+                'CANCELLED': 'Cancelled'
+            };
+            return map[status] || status || 'Upcoming';
+        }
+
         function renderEvents(filter) {
             const grid = document.getElementById('eventsGrid');
             grid.innerHTML = '';
@@ -278,8 +345,10 @@
             let filtered = allEvents;
             if (filter !== 'all') {
                 filtered = allEvents.filter(e => {
-                    if (filter === 'upcoming') return ['upcoming', 'ongoing'].includes(e.status.toLowerCase());
-                    if (filter === 'completed') return e.status.toLowerCase() === 'completed';
+                    const ls = (e.event_lifecycle_status || '').toUpperCase();
+                    if (filter === 'coming_soon') return ls === 'COMING_SOON';
+                    if (filter === 'upcoming') return ['UPCOMING', 'ONGOING'].includes(ls);
+                    if (filter === 'completed') return ls === 'COMPLETED';
                     return true;
                 });
             }
@@ -290,30 +359,51 @@
             }
 
             filtered.forEach(ev => {
-                const dateObj = new Date(ev.event_date);
-                const dateStr = dateObj.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+                let dateStr = 'TBA';
+                if (ev.event_date) {
+                    const dateObj = new Date(ev.event_date);
+                    dateStr = dateObj.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+                }
                 
-                // Get cover image URL correctly resolving from Supabase (handled in backend via getPublicUrl if needed)
-                // For now, event_images array is joined
+                // Get cover image URL
                 let imageUrl = '/assets/images/placeholder.jpg'; // Fallback
-                if (ev.event_images && ev.event_images.length > 0) {
-                    imageUrl = ev.event_images[0].image_url || imageUrl;
+                if (ev.event_images) {
+                    if (Array.isArray(ev.event_images) && ev.event_images.length > 0) {
+                        imageUrl = ev.event_images[0].image_url || imageUrl;
+                    } else if (ev.event_images.image_url) {
+                        imageUrl = ev.event_images.image_url;
+                    }
                 }
 
-                const card = document.createElement('a');
-                card.href = `/events/${ev.slug}`;
+                // All events with a slug are now clickable
+                const isClickable = !!ev.slug;
+                const lifecycleStatus = formatLifecycleStatus(ev.event_lifecycle_status);
+                const isContentPage = ev.page_type === 'CONTENT_PAGE';
+
+                const card = document.createElement(isClickable ? 'a' : 'div');
+                if (isClickable) card.href = `/events/${ev.slug}`;
                 card.className = 'event-card';
+                if (!isClickable) card.style.cursor = 'default';
+                
                 card.innerHTML = `
-                    <img src="${imageUrl}" alt="${ev.title}" class="event-image">
+                    <div class="event-image-container">
+                        <img src="${imageUrl}" alt="${ev.title}" loading="lazy">
+                        ${isContentPage ? '<div class="event-details-badge">Full Page</div>' : ''}
+                    </div>
                     <div class="event-content">
-                        <div class="event-date">
-                            <i class="far fa-calendar"></i> ${dateStr}
+                        <div class="event-date-row">
+                            <span class="event-date">
+                                <i class="far fa-calendar-alt" style="margin-right: 4px;"></i> ${dateStr}
+                            </span>
+                            <span class="event-status">${lifecycleStatus}</span>
                         </div>
                         <h3 class="event-title">${ev.title}</h3>
                         <p class="event-desc">${ev.short_description || ''}</p>
                         <div class="event-meta">
-                            <span><i class="fas fa-map-marker-alt"></i> ${ev.location || 'Chennai'}</span>
-                            <span style="color: ${ev.status.toLowerCase() === 'completed' ? '#999' : 'var(--color-accent)'}">${ev.status}</span>
+                            <span style="display: flex; align-items: center; gap: 6px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 65%;">
+                                <i class="fas fa-map-marker-alt" style="color: #94a3b8;"></i> ${ev.location || 'TBA'}
+                            </span>
+                            ${isClickable ? `<span style="color: var(--color-accent); font-weight: 700; display: flex; align-items: center; gap: 4px; transition: transform 0.2s ease;">View <i class="fas fa-arrow-right" style="font-size: 0.75rem;"></i></span>` : ''}
                         </div>
                     </div>
                 `;

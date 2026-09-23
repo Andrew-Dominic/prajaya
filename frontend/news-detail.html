@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>News & Article | Prajaya Foundation</title>
+    <meta name="description" content="Learn more about News & Article at Prajaya Foundation, a nonprofit organization based in Chennai, India.">
+    <link rel="canonical" href="https://prajayafoundation.org/news-detail.html">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://prajayafoundation.org/news-detail.html">
+    <meta property="og:title" content="News & Article | Prajaya Foundation">
+    <meta property="og:description" content="Learn more about News & Article at Prajaya Foundation, a nonprofit organization based in Chennai, India.">
+    <meta property="og:image" content="https://prajayafoundation.org/assets/images/logo.png">
+    
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://prajayafoundation.org/news-detail.html">
+    <meta property="twitter:title" content="News & Article | Prajaya Foundation">
+    <meta property="twitter:description" content="Learn more about News & Article at Prajaya Foundation, a nonprofit organization based in Chennai, India.">
+    <meta property="twitter:image" content="https://prajayafoundation.org/assets/images/logo.png">
+
+    <link rel="icon" type="image/png" href="assets/images/logo.png">
+    
+    <!-- Structured Data (JSON-LD) -->
+    <script type="application/ld+json">
+    {
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "name": "News & Article | Prajaya Foundation",
+  "url": "https://prajayafoundation.org/news-detail.html"
+}
+    </script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Quill Snow CSS for rendering rich text -->
+    <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+
+    <style>
+        :root {
+            --color-bg: #ffffff;
+            --color-surface: #f4f3f8;
+            --color-text: #403d58;
+            --color-heading: #2C2946;
+            --color-accent: #f2bb47;
+            --transition: all 0.3s ease;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--color-bg);
+            color: var(--color-text);
+            margin: 0;
+            padding: 0;
+        }
+
+        .header-nav {
+            padding: 20px 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #eee;
+            background: white;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo-link {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--color-heading);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .event-hero {
+            position: relative;
+            height: 60vh;
+            min-height: 400px;
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            align-items: flex-end;
+            padding: 5% 10%;
+        }
+
+        .event-hero::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: linear-gradient(to bottom, rgba(0,0,0,0.1), rgba(0,0,0,0.8));
+        }
+
+        .hero-content {
+            position: relative;
+            color: white;
+            z-index: 1;
+            max-width: 800px;
+        }
+
+        .hero-content h1 {
+            font-size: 3.5rem;
+            margin-bottom: 15px;
+            line-height: 1.2;
+        }
+
+        .hero-meta {
+            display: flex;
+            gap: 20px;
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .event-body {
+            max-width: 800px;
+            margin: 60px auto;
+            padding: 0 5%;
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: var(--color-text);
+        }
+
+        /* Override quill container borders since it's read-only here */
+        .ql-container.ql-snow {
+            border: none !important;
+            font-family: 'Inter', sans-serif;
+            font-size: 1.1rem;
+        }
+        .ql-editor {
+            padding: 0;
+        }
+        .ql-editor h2 {
+            color: var(--color-heading);
+            margin-top: 40px;
+            margin-bottom: 20px;
+        }
+        .ql-editor p {
+            margin-bottom: 20px;
+        }
+
+        .gallery {
+            margin-top: 60px;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .gallery img {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            border-radius: 8px;
+            transition: var(--transition);
+        }
+
+        .gallery img:hover {
+            transform: scale(1.02);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+    </style>
+
+    <script type="application/ld+json" id="structured-data"></script>
+
+</head>
+<body>
+
+    <header class="header-nav">
+        <a href="/" class="logo-link">
+            <img src="/assets/images/logo.png" alt="Prajaya Logo" style="height: 40px; border-radius: 8px;">
+            Prajaya Foundation
+        </a>
+        <a href="/events" style="color: var(--color-heading); text-decoration: none; font-weight: 500;"><i class="fas fa-arrow-left"></i> All Events</a>
+    </header>
+
+    <div id="eventHero" class="event-hero" style="background-image: url('{{OG_IMAGE}}');">
+        <div class="hero-content">
+            <h1 id="eventTitle">Loading...</h1>
+            <div class="hero-meta">
+                <span id="eventDate"><i class="far fa-clock"></i> </span>
+                <span id="eventLocation"><i class="fas fa-map-marker-alt"></i> </span>
+            </div>
+        </div>
+    </div>
+
+    <div class="event-body">
+        <!-- Content blocks will be injected here dynamically -->
+    </div>
+
+    <!-- Inject data payload from SSR -->
+    <script id="newsData" type="application/json">
+        {{NEWS_DATA_JSON}}
+    </script>
+
+    <!-- Include Quill for rendering rich text formats safely -->
+    <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const rawData = document.getElementById('newsData').textContent;
+            try {
+                const event = JSON.parse(rawData);
+                renderEvent(event);
+            } catch (e) {
+                console.error("Error parsing event data", e);
+            }
+        });
+
+        function renderEvent(ev) {
+            document.getElementById('eventTitle').textContent = ev.title;
+            const d = new Date(ev.published_at);
+            document.getElementById('eventDate').innerHTML = `<i class="far fa-clock"></i> ${d.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}`;
+            if (ev.location) {
+                document.getElementById('eventLocation').innerHTML = `<i class="fas fa-map-marker-alt"></i> ${ev.location}`;
+            }
+
+            const bodyContainer = document.querySelector('.event-body');
+            bodyContainer.innerHTML = ''; // Clear default container
+
+            if (Array.isArray(ev.content) && ev.content.length > 0) {
+                ev.content.forEach(block => {
+                    if (block.type === 'heading') {
+                        const h2 = document.createElement('h2');
+                        h2.textContent = block.content;
+                        h2.style.marginTop = '40px';
+                        h2.style.marginBottom = '20px';
+                        h2.style.color = 'var(--color-heading)';
+                        bodyContainer.appendChild(h2);
+                    } else if (block.type === 'paragraph') {
+                        const div = document.createElement('div');
+                        div.className = 'ql-container ql-snow';
+                        div.style.marginTop = '20px';
+                        div.innerHTML = `<div class="ql-editor"></div>`;
+                        
+                        const editor = div.querySelector('.ql-editor');
+                        if (typeof block.content === 'object' && block.content.ops) {
+                            const tempQuill = new Quill(document.createElement('div'));
+                            tempQuill.setContents(block.content);
+                            editor.innerHTML = tempQuill.root.innerHTML;
+                        } else {
+                            editor.innerHTML = block.content || '';
+                        }
+                        bodyContainer.appendChild(div);
+                    } else if (block.type === 'image') {
+                        if (block.url) {
+                            const img = document.createElement('img');
+                            img.src = block.url;
+                            img.style.width = '100%';
+                            img.style.borderRadius = '8px';
+                            img.style.marginTop = '20px';
+                            bodyContainer.appendChild(img);
+                        }
+                    } else if (block.type === 'gallery') {
+                        if (block.images && block.images.length > 0) {
+                            const gal = document.createElement('div');
+                            gal.className = 'gallery';
+                            block.images.forEach(url => {
+                                const img = document.createElement('img');
+                                img.src = url;
+                                gal.appendChild(img);
+                            });
+                            bodyContainer.appendChild(gal);
+                        }
+                    } else if (block.type === 'quote') {
+                        const quote = document.createElement('blockquote');
+                        quote.style.borderLeft = '4px solid var(--color-accent)';
+                        quote.style.paddingLeft = '20px';
+                        quote.style.fontStyle = 'italic';
+                        quote.style.margin = '30px 0';
+                        quote.style.fontSize = '1.2rem';
+                        quote.style.color = '#555';
+                        quote.innerHTML = `"${block.content || ''}"<br><small style="font-style:normal;font-weight:bold;color:#888;">- ${block.author || ''}</small>`;
+                        bodyContainer.appendChild(quote);
+                    }
+                });
+            } else {
+                bodyContainer.innerHTML = `<p>${ev.short_description || ''}</p>`;
+            }
+
+            // Render External Links
+            if (ev.links && ev.links.length > 0) {
+                const linksContainer = document.createElement('div');
+                linksContainer.style.marginTop = '40px';
+                linksContainer.style.padding = '20px';
+                linksContainer.style.background = 'var(--color-surface)';
+                linksContainer.style.borderRadius = '8px';
+                linksContainer.innerHTML = '<h3 style="margin-top:0; color:var(--color-heading);">Related Links</h3>';
+                const ul = document.createElement('ul');
+                ul.style.listStyleType = 'none';
+                ul.style.padding = '0';
+                ev.links.forEach(link => {
+                    const li = document.createElement('li');
+                    li.style.marginBottom = '10px';
+                    li.innerHTML = `<a href="${link.url}" target="_blank" style="color: var(--color-heading); font-weight: 500; text-decoration: none; display: flex; align-items: center; gap: 8px;">
+                                        <i class="fas fa-external-link-alt" style="color: var(--color-accent);"></i> ${link.title}
+                                    </a>`;
+                    ul.appendChild(li);
+                });
+                linksContainer.appendChild(ul);
+                bodyContainer.appendChild(linksContainer);
+            }
+
+            // Inject Structured Data (Phase 11)
+            const sd = {
+                "@context": "https://schema.org",
+                "@type": "Event",
+                "name": ev.title,
+                "startDate": ev.published_at,
+                "endDate": ev.end_date || ev.published_at,
+                "eventStatus": "https://schema.org/EventScheduled",
+                "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode",
+                "location": {
+                    "@type": "Place",
+                    "name": ev.location || "Chennai",
+                    "address": {
+                        "@type": "PostalAddress",
+                        "addressLocality": "Chennai",
+                        "addressRegion": "TN",
+                        "addressCountry": "IN"
+                    }
+                },
+                "image": [
+                    "{{OG_IMAGE}}"
+                ],
+                "description": ev.seo_description || ev.short_description,
+                "organizer": {
+                    "@type": "Organization",
+                    "name": "Prajaya Foundation",
+                    "url": "https://prajayafoundation.org"
+                }
+            };
+
+            document.getElementById('structured-data').textContent = JSON.stringify(sd);
+        }
+    </script>
+</body>
+</html>
+
+

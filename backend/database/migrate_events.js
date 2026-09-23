@@ -17,7 +17,7 @@ CREATE TABLE IF NOT EXISTS public.events (
     short_description TEXT,
     content JSONB,
     report_content JSONB,
-    event_date TIMESTAMP WITH TIME ZONE NOT NULL,
+    event_date TIMESTAMP WITH TIME ZONE,
     end_date TIMESTAMP WITH TIME ZONE,
     location VARCHAR(255),
     category VARCHAR(100),

@@ -3,200 +3,797 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Event Detail | Prajaya Foundation</title>
-    <meta name="description" content="Learn more about Event Detail at Prajaya Foundation, a nonprofit organization based in Chennai, India.">
-    <link rel="canonical" href="https://prajayafoundation.org/event-detail.html">
+    <title>{{TITLE}}</title>
+    <meta name="description" content="{{DESC}}">
+    <link rel="canonical" href="{{URL}}">
     
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
-    <meta property="og:url" content="https://prajayafoundation.org/event-detail.html">
-    <meta property="og:title" content="Event Detail | Prajaya Foundation">
-    <meta property="og:description" content="Learn more about Event Detail at Prajaya Foundation, a nonprofit organization based in Chennai, India.">
-    <meta property="og:image" content="https://prajayafoundation.org/assets/images/logo.png">
+    <meta property="og:url" content="{{URL}}">
+    <meta property="og:title" content="{{TITLE}}">
+    <meta property="og:description" content="{{DESC}}">
+    <meta property="og:image" content="{{OG_IMAGE}}">
     
     <!-- Twitter -->
     <meta property="twitter:card" content="summary_large_image">
-    <meta property="twitter:url" content="https://prajayafoundation.org/event-detail.html">
-    <meta property="twitter:title" content="Event Detail | Prajaya Foundation">
-    <meta property="twitter:description" content="Learn more about Event Detail at Prajaya Foundation, a nonprofit organization based in Chennai, India.">
-    <meta property="twitter:image" content="https://prajayafoundation.org/assets/images/logo.png">
+    <meta property="twitter:url" content="{{URL}}">
+    <meta property="twitter:title" content="{{TITLE}}">
+    <meta property="twitter:description" content="{{DESC}}">
+    <meta property="twitter:image" content="{{OG_IMAGE}}">
 
-    <link rel="icon" type="image/png" href="assets/images/logo.png">
+    <link rel="icon" type="image/png" href="/assets/images/logo.png">
     
     <!-- Structured Data (JSON-LD) -->
-    <script type="application/ld+json">
-    {
-  "@context": "https://schema.org",
-  "@type": "WebPage",
-  "name": "Event Detail | Prajaya Foundation",
-  "url": "https://prajayafoundation.org/event-detail.html"
-}
-    </script>
+    <script type="application/ld+json" id="structured-data"></script>
+    
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Quill Snow CSS for rendering rich text -->
-    <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
-
+    
     <style>
         :root {
             --color-bg: #ffffff;
             --color-surface: #f4f3f8;
             --color-text: #403d58;
-            --color-heading: #2C2946;
-            --color-accent: #f2bb47;
+            --color-heading: #1e293b; /* Deep navy */
+            --color-accent: #f2bb47; /* Warm gold */
+            --color-badge-coming-soon: #f59e0b;
+            --color-badge-upcoming: #3b82f6;
+            --color-badge-ongoing: #8b5cf6;
+            --color-badge-completed: #475569;
+            --color-badge-cancelled: #ef4444;
             --transition: all 0.3s ease;
+            --font-heading: 'Inter', sans-serif;
+            --font-body: 'Inter', sans-serif;
         }
 
         body {
-            font-family: 'Inter', sans-serif;
+            font-family: var(--font-body);
             background-color: var(--color-bg);
             color: var(--color-text);
             margin: 0;
             padding: 0;
+            line-height: 1.7;
         }
 
-        .header-nav {
-            padding: 20px 5%;
+        h1, h2, h3, h4, h5, h6 {
+            font-family: var(--font-heading);
+            color: var(--color-heading);
+            font-weight: 600;
+        }
+
+        /* HEADER */
+        .header {
+            position: fixed;
+            top: 0; left: 0; right: 0;
+            padding: 15px 0;
+            z-index: 1000;
+            background-color: var(--color-bg);
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.03);
+        }
+
+        .nav-container {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            border-bottom: 1px solid #eee;
-            background: white;
-            position: sticky;
-            top: 0;
-            z-index: 100;
+            max-width: 100%;
+            padding: 0 6%;
         }
 
-        .logo-link {
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: var(--color-heading);
-            text-decoration: none;
+        .brand {
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 15px;
+            text-decoration: none;
         }
 
-        .event-hero {
-            position: relative;
-            height: 60vh;
-            min-height: 400px;
-            background-size: cover;
-            background-position: center;
+        .brand-logo {
+            width: 45px; height: auto;
+            object-fit: contain;
+            display: block;
+        }
+
+        .brand-text {
             display: flex;
-            align-items: flex-end;
-            padding: 5% 10%;
+            flex-direction: column;
+            align-items: flex-start;
         }
 
-        .event-hero::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background: linear-gradient(to bottom, rgba(0,0,0,0.1), rgba(0,0,0,0.8));
+        .brand-name {
+            font-family: var(--font-heading);
+            font-size: 1.4rem;
+            color: var(--color-heading);
+            line-height: 1;
+            letter-spacing: 1px;
         }
 
-        .hero-content {
-            position: relative;
-            color: white;
-            z-index: 1;
-            max-width: 800px;
+        .brand-tagline {
+            font-size: 0.65rem;
+            color: var(--color-accent);
+            letter-spacing: 4.6px;
+            text-transform: uppercase;
+            margin-top: 4px;
+            font-weight: 500;
         }
 
-        .hero-content h1 {
-            font-size: 3.5rem;
-            margin-bottom: 15px;
-            line-height: 1.2;
-        }
-
-        .hero-meta {
+        .nav-links {
             display: flex;
-            gap: 20px;
+            gap: 40px;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: var(--color-text);
+            font-size: 0.9rem;
+            font-weight: 400;
+            letter-spacing: 0.5px;
+            transition: var(--transition);
+            text-decoration: none;
+        }
+
+        .nav-links a:hover {
+            color: var(--color-accent);
+        }
+
+        .nav-volunteer-btn {
+            background-color: var(--color-heading);
+            color: var(--color-bg) !important;
+            padding: 10px 24px;
+            border-radius: 4px;
+            font-weight: 500;
+        }
+        
+        .nav-volunteer-btn:hover {
+            background-color: var(--color-accent);
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            color: var(--color-heading);
+            font-size: 1.2rem;
+            cursor: pointer;
+        }
+
+        @media (max-width: 900px) {
+            .nav-links {
+                display: none; /* Simple fallback for mobile */
+            }
+            .mobile-menu-btn {
+                display: block;
+            }
+            .brand-name { font-size: 1.15rem; }
+            .brand-tagline { font-size: 0.55rem; letter-spacing: 3.8px; }
+            .brand-logo { width: 36px; }
+        }
+
+
+        /* ============================================
+           CONTENT PAGE — Editorial layout
+           ============================================ */
+        .content-page {
+            display: none;
+            padding-top: 120px; /* Account for navbar + breathing room */
+        }
+
+        .content-page.active {
+            display: block;
+        }
+
+        .editorial-header {
+            max-width: 1000px;
+            margin: 0 auto;
+            text-align: center;
+            padding: 0 5%;
+        }
+
+        .status-wrapper {
+            margin-bottom: 24px;
+        }
+
+        .status-pill {
+            display: inline-block;
+            font-size: 0.8rem;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            padding: 6px 16px;
+            border-radius: 30px;
+        }
+        .status-pill.status-coming-soon { color: #d97706; background: #fef3c7; border: 1px solid #fcd34d; }
+        .status-pill.status-upcoming { color: #2563eb; background: #dbeafe; border: 1px solid #bfdbfe; }
+        .status-pill.status-ongoing { color: #7c3aed; background: #ede9fe; border: 1px solid #ddd6fe; }
+        .status-pill.status-completed { color: #475569; background: #f1f5f9; border: 1px solid #e2e8f0; }
+        .status-pill.status-cancelled { color: #dc2626; background: #fee2e2; border: 1px solid #fecaca; }
+
+        .editorial-header h1 {
+            font-size: clamp(36px, 5vw, 64px);
+            font-weight: 300;
+            color: var(--color-heading);
+            margin: 0 0 24px 0;
+            line-height: 1.05;
+            letter-spacing: -1.5px;
+        }
+
+        .editorial-meta {
+            display: flex;
+            justify-content: center;
+            gap: 24px;
             font-size: 1.1rem;
-            opacity: 0.9;
+            color: #475569;
+            margin-bottom: 48px;
+        }
+        
+        .editorial-meta-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .poster-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+
+        .editorial-poster {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        .editorial-divider {
+            max-width: 80px;
+            height: 2px;
+            background: var(--color-accent);
+            border: none;
+            margin: 60px auto 0 auto;
+        }
+
+        /* MAIN CONTENT AREA */
+        .page-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 80px 5%;
+        }
+
+        .event-intro {
+            max-width: 820px;
+            margin: 0 auto 80px auto;
+            font-size: 1.25rem;
+            line-height: 1.6;
+            color: var(--color-heading);
+            font-weight: 400;
+            text-align: center;
         }
 
         .event-body {
-            max-width: 800px;
-            margin: 60px auto;
-            padding: 0 5%;
+            max-width: 780px;
+            margin: 0 auto;
             font-size: 1.1rem;
-            line-height: 1.8;
+            line-height: 1.6;
             color: var(--color-text);
         }
 
-        /* Override quill container borders since it's read-only here */
-        .ql-container.ql-snow {
-            border: none !important;
-            font-family: 'Inter', sans-serif;
+        /* CONTENT BLOCKS */
+        .event-body h2 {
+            font-size: 2rem;
+            color: var(--color-heading);
+            margin: 64px 0 24px 0;
+            font-weight: 700;
+            line-height: 1.3;
+        }
+        
+        .event-body h3 {
+            font-size: 1.5rem;
+            color: var(--color-heading);
+            margin: 48px 0 20px 0;
+            font-weight: 600;
+        }
+
+        .event-body p {
+            margin-bottom: 16px;
+        }
+
+        .content-image {
+            width: 100%;
+            border-radius: 16px;
+            margin: 48px 0;
+            object-fit: cover;
+        }
+
+        .content-quote {
+            margin: 64px 0;
+            padding: 0;
+            border: none;
+            text-align: center;
+        }
+        
+        .content-quote blockquote {
+            font-size: 1.5rem;
+            font-weight: 500;
+            color: var(--color-heading);
+            line-height: 1.4;
+            margin: 0 0 24px 0;
+            padding: 0;
+            border: none;
+            position: relative;
+        }
+        
+        .content-quote blockquote::before {
+            content: '';
+            display: block;
+            width: 48px;
+            height: 3px;
+            background-color: var(--color-accent);
+            margin: 0 auto 32px auto;
+            border-radius: 2px;
+        }
+        
+        .content-quote .quote-author {
+            font-size: 1rem;
+            color: var(--color-text);
+            font-weight: 600;
+        }
+
+        /* HIGHLIGHT BLOCK */
+        .content-highlight {
+            margin: 64px 0;
+            padding: 48px 40px;
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+            border-radius: 16px;
+            text-align: center;
+        }
+
+        .content-highlight h3 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--color-heading);
+            margin: 0 0 16px 0;
+            letter-spacing: 0.5px;
+        }
+
+        .content-highlight p {
+            font-size: 1.1rem;
+            color: var(--color-text);
+            margin: 0;
+            line-height: 1.8;
+        }
+
+        /* PEOPLE BLOCK */
+        .content-people {
+            margin: 64px 0;
+            padding: 40px 0;
+            border-top: 1px solid #e2e8f0;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        .content-people h3 {
+            text-align: center;
+            font-size: 1.75rem;
+            margin-bottom: 40px;
+            color: var(--color-heading);
+        }
+        .people-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 32px;
+        }
+        .people-card {
+            text-align: center;
+            padding: 24px;
+            background: #f8fafc;
+            border-radius: 12px;
+        }
+        .people-role {
+            font-size: 0.9rem;
+            color: #64748b;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+        .people-name {
+            font-size: 1.25rem;
+            color: var(--color-heading);
+            font-weight: 600;
+        }
+
+        /* ORGANIZATION BLOCK */
+        .content-organization {
+            margin: 64px 0;
+            text-align: center;
+            padding: 48px;
+            background: #f1f5f9;
+            border-radius: 16px;
+        }
+        .org-label {
+            font-size: 0.85rem;
+            color: #64748b;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            font-weight: 700;
+            margin-bottom: 16px;
+        }
+        .org-name {
+            font-size: 2rem;
+            color: var(--color-heading);
+            font-weight: 700;
+            margin-bottom: 16px;
+        }
+        .org-details {
+            font-size: 1.1rem;
+            color: #475569;
+            max-width: 600px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        /* DIVIDER BLOCK */
+        .content-divider {
+            margin: 48px auto;
+            max-width: 200px;
+            border: 0;
+            border-top: 2px solid #e2e8f0;
+        }
+
+        /* CTA BLOCK */
+        .content-cta {
+            margin: 48px 0;
+            text-align: center;
+        }
+
+        .content-cta a.cta-button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            background: var(--color-heading);
+            color: white;
+            padding: 16px 40px;
+            border-radius: 100px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1rem;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .content-cta a.cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+
+        .content-cta a.cta-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--color-heading);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1rem;
+            transition: color 0.2s;
+        }
+
+        .content-cta a.cta-link:hover {
+            color: var(--color-accent);
+        }
+
+        /* VIDEO BLOCK */
+        .content-video {
+            margin: 48px 0;
+            position: relative;
+            padding-bottom: 56.25%;
+            height: 0;
+            overflow: hidden;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .content-video iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: 0;
+        }
+
+        /* GALLERY */
+        .gallery-wrapper {
+            margin: 80px 0;
+        }
+
+        .gallery-wrapper h2 {
+            text-align: center;
+            font-size: 2rem;
+            color: var(--color-heading);
+            margin-bottom: 48px;
+            font-weight: 700;
+        }
+
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 24px;
+        }
+
+        .gallery-item {
+            aspect-ratio: 4 / 3;
+            width: 100%;
+            border-radius: 12px;
+            object-fit: cover;
+            cursor: pointer;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .gallery-item:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 24px rgba(0,0,0,0.1);
+        }
+
+        /* EXTERNAL LINKS */
+        .external-links {
+            margin-top: 80px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            align-items: center;
+        }
+        
+        .link-card {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            background: white;
+            border: 1px solid rgba(0,0,0,0.1);
+            padding: 18px 40px;
+            border-radius: 100px;
+            color: var(--color-heading);
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.2s ease;
+        }
+        
+        .link-card:hover {
+            background: var(--color-surface);
+            border-color: rgba(0,0,0,0.2);
+            transform: translateY(-2px);
+        }
+
+        /* END SECTION */
+        .end-section {
+            text-align: center;
+            padding-top: 80px;
+            margin-top: 80px;
+            border-top: 1px solid rgba(0,0,0,0.1);
+        }
+        
+        .end-section p {
+            color: var(--color-text);
+            margin-bottom: 24px;
             font-size: 1.1rem;
         }
-        .ql-editor {
-            padding: 0;
+
+        /* LIGHTBOX */
+        .lightbox {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.95);
+            z-index: 1000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
         }
-        .ql-editor h2 {
-            color: var(--color-heading);
-            margin-top: 40px;
-            margin-bottom: 20px;
-        }
-        .ql-editor p {
-            margin-bottom: 20px;
+        
+        .lightbox.active {
+            display: flex;
         }
 
-        .gallery {
-            margin-top: 60px;
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-            gap: 20px;
-        }
-
-        .gallery img {
-            width: 100%;
-            height: 250px;
-            object-fit: cover;
+        .lightbox-img {
+            max-width: 90%;
+            max-height: 80vh;
             border-radius: 8px;
-            transition: var(--transition);
+            object-fit: contain;
+            user-select: none;
         }
 
-        .gallery img:hover {
-            transform: scale(1.02);
-            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        .lightbox-controls {
+            position: absolute;
+            top: 50%;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            padding: 0 20px;
+            box-sizing: border-box;
+            transform: translateY(-50%);
+            pointer-events: none;
+        }
+
+        .lightbox-btn {
+            background: rgba(255,255,255,0.1);
+            border: none;
+            color: white;
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            font-size: 1.5rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.2s;
+            pointer-events: auto;
+        }
+        .lightbox-btn:hover { background: rgba(255,255,255,0.2); }
+
+        .lightbox-close {
+            position: absolute;
+            top: 24px;
+            right: 24px;
+            pointer-events: auto;
+        }
+
+        .lightbox-counter {
+            color: white;
+            margin-top: 24px;
+            font-size: 1rem;
+            opacity: 0.8;
+        }
+
+        /* MOBILE RESPONSIVENESS */
+        @media (max-width: 768px) {
+            .event-hero {
+                height: 380px;
+            }
+            .page-container {
+                padding: 56px 5%;
+            }
+            .event-intro {
+                font-size: 1.1rem;
+                margin-bottom: 56px;
+            }
+            .event-body h2 {
+                margin: 48px 0 20px 0;
+                font-size: 1.75rem;
+            }
+            .content-quote blockquote {
+                font-size: 1.25rem;
+            }
+            .gallery-grid {
+                grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+                gap: 16px;
+            }
+            }
+            .teaser-hero {
+                padding: 40px 5%;
+            }
+            .content-highlight {
+                padding: 32px 24px;
+            }
+        }
+        @media (max-width: 480px) {
+            .gallery-grid {
+                grid-template-columns: 1fr;
+            }
+            .hero-meta {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 8px;
+            }
+            .hero-meta-divider {
+                display: none;
+            }
+            .teaser-meta {
+                flex-direction: column;
+                align-items: center;
+                gap: 8px;
+            }
+        }
+
+        /* ERROR STATE */
+        .error-state {
+            text-align: center;
+            padding: 120px 20px;
+        }
+        .error-state h2 {
+            font-size: 2.5rem;
+            color: var(--color-heading);
+            margin-bottom: 16px;
+        }
+        .error-state p {
+            color: var(--color-text);
+            font-size: 1.1rem;
+            margin-bottom: 32px;
         }
     </style>
-
-    <script type="application/ld+json" id="structured-data"></script>
-
 </head>
 <body>
 
-    <header class="header-nav">
-        <a href="/" class="logo-link">
-            <img src="/assets/images/logo.png" alt="Prajaya Logo" style="height: 40px; border-radius: 8px;">
-            Prajaya Foundation
-        </a>
-        <a href="/events" style="color: var(--color-heading); text-decoration: none; font-weight: 500;"><i class="fas fa-arrow-left"></i> All Events</a>
+    <header class="header">
+        <div class="nav-container">
+            <a href="/#home" class="brand">
+                <img src="/assets/images/logo.png" alt="PRAJAYA Foundation Logo" class="brand-logo">
+                <div class="brand-text">
+                    <span class="brand-name">PRAJAYA</span>
+                    <span class="brand-tagline">Foundation</span>
+                </div>
+            </a>
+            
+            <nav class="nav-links" id="nav-links">
+                <a href="/#home">Home</a>
+                <a href="/#vision">About</a>
+                <a href="/#programs">Objectives</a>
+                <a href="/#founder">Founder</a>
+                <a href="/#events">Events</a>
+                <a href="/news">News</a>
+                <a href="/contact">Contact</a>
+                <a href="/volunteer" class="nav-volunteer-btn">Join as Volunteer</a>
+            </nav>
+            
+            <div class="mobile-menu-btn" id="mobile-btn">
+                <i class="fas fa-bars"></i>
+            </div>
+        </div>
     </header>
 
-    <div id="eventHero" class="event-hero" style="background-image: url('{{OG_IMAGE}}');">
-        <div class="hero-content">
+    <!-- ============================================
+         CONTENT PAGE — Full editorial layout
+         ============================================ -->
+    <div class="content-page" id="contentPage">
+        <div class="editorial-header">
+            <div class="status-wrapper">
+                <span id="eventStatusBadge" class="status-pill">Loading</span>
+            </div>
             <h1 id="eventTitle">Loading...</h1>
-            <div class="hero-meta">
-                <span id="eventDate"><i class="far fa-calendar"></i> </span>
-                <span id="eventLocation"><i class="fas fa-map-marker-alt"></i> </span>
+            <div class="event-intro" id="eventIntro" style="display: none;"></div>
+            
+            <div class="editorial-meta" id="eventMetaContainer">
+                <div class="editorial-meta-item" id="eventDateWrapper">
+                    <i class="far fa-calendar"></i>
+                    <span id="eventDate">...</span>
+                </div>
+                <div class="editorial-meta-item" id="eventLocationWrapper">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <span id="eventLocation">...</span>
+                </div>
+            </div>
+            
+            <div class="poster-container">
+                <img id="eventPosterImg" src="" alt="Event Poster" class="editorial-poster">
+            </div>
+            <hr class="editorial-divider">
+        </div>
+
+        <div class="page-container" id="pageContainer">
+            <div class="event-body" id="eventBody">
+                <!-- Content injected here -->
+            </div>
+
+            <div id="galleryContainer"></div>
+            <div id="linksContainer"></div>
+
+            <div class="end-section" id="endSection" style="display: none;">
+                <p>More from Prajaya Foundation</p>
+                <a href="/events" class="link-card" style="display: inline-flex;">
+                    View All Events <i class="fas fa-arrow-right" style="font-size: 0.9rem;"></i>
+                </a>
             </div>
         </div>
     </div>
 
-    <div class="event-body">
-        <div class="ql-container ql-snow">
-            <div class="ql-editor" id="eventStory"></div>
+    <!-- Lightbox -->
+    <div class="lightbox" id="lightbox" onclick="closeLightbox()">
+        <div class="lightbox-controls">
+            <button class="lightbox-btn" onclick="prevImage(event)"><i class="fas fa-chevron-left"></i></button>
+            <button class="lightbox-btn" onclick="nextImage(event)"><i class="fas fa-chevron-right"></i></button>
         </div>
-        
-        <div class="ql-container ql-snow" style="margin-top: 40px;">
-            <div class="ql-editor" id="eventReport"></div>
-        </div>
-
-        <div id="eventGallery" class="gallery"></div>
+        <button class="lightbox-btn lightbox-close" onclick="closeLightbox()"><i class="fas fa-times"></i></button>
+        <img src="" alt="Gallery Image" class="lightbox-img" id="lightboxImg" onclick="event.stopPropagation()">
+        <div class="lightbox-counter" id="lightboxCounter"></div>
     </div>
 
     <!-- Inject data payload from SSR -->
@@ -204,59 +801,313 @@
         {{EVENT_DATA_JSON}}
     </script>
 
-    <!-- Include Quill for rendering rich text formats safely -->
+    <!-- Include Quill to render rich text safely -->
     <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            const rawData = document.getElementById('eventData').textContent;
-            try {
-                const event = JSON.parse(rawData);
-                renderEvent(event);
-            } catch (e) {
-                console.error("Error parsing event data", e);
+            const rawData = document.getElementById('eventData').textContent.trim();
+            if (rawData && !rawData.includes('{{EVENT_DATA_JSON}}')) {
+                try {
+                    const event = JSON.parse(rawData);
+                    renderEvent(event);
+                } catch (e) {
+                    console.error("Error parsing event data", e);
+                    renderError();
+                }
+            } else {
+                // If loaded without SSR data (e.g. static dev preview)
+                // renderError(); // Commented out for local template testing without SSR
             }
         });
 
+        function renderError() {
+            document.getElementById('teaserPage').style.display = 'none';
+            document.getElementById('contentPage').style.display = 'none';
+            const errorDiv = document.createElement('div');
+            errorDiv.innerHTML = `
+                <div class="error-state">
+                    <h2>Event not found</h2>
+                    <p>The event you're looking for may have been removed or is no longer available.</p>
+                    <a href="/events" class="link-card" style="display:inline-flex;">Back to Events</a>
+                </div>
+            `;
+            document.body.appendChild(errorDiv);
+        }
+
+        function formatStatus(status) {
+            const map = {
+                'COMING_SOON': 'Coming Soon',
+                'UPCOMING': 'Upcoming',
+                'ONGOING': 'Ongoing',
+                'COMPLETED': 'Completed',
+                'CANCELLED': 'Cancelled'
+            };
+            return map[status] || (status ? status.charAt(0).toUpperCase() + status.slice(1).toLowerCase() : '');
+        }
+
+        function getStatusClass(status) {
+            if (!status) return 'status-upcoming';
+            return 'status-' + status.toLowerCase().replace('_', '-');
+        }
+
+        function getEmbedUrl(url) {
+            if (!url) return '';
+            const ytMatch = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([a-zA-Z0-9_-]+)/);
+            if (ytMatch) return `https://www.youtube.com/embed/${ytMatch[1]}`;
+            return url;
+        }
+
+        let currentLightboxImages = [];
+        let currentLightboxIndex = 0;
+
         function renderEvent(ev) {
-            document.getElementById('eventTitle').textContent = ev.title;
-            const d = new Date(ev.event_date);
-            document.getElementById('eventDate').innerHTML = `<i class="far fa-calendar"></i> ${d.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}`;
-            if (ev.location) {
-                document.getElementById('eventLocation').innerHTML = `<i class="fas fa-map-marker-alt"></i> ${ev.location}`;
-            }
-
-            // Quill expects a container to instantiate or we can just inject HTML.
-            // Since we stored delta JSON in supabase, we need to convert it to HTML.
-            // A simple trick is to instantiate a hidden quill editor, set contents, and get HTML.
-            // Or just use the editor div directly.
+            document.title = `${ev.title} | Prajaya Foundation`;
             
-            if (ev.content) {
-                const quillStory = new Quill(document.createElement('div'));
-                quillStory.setContents(ev.content);
-                document.getElementById('eventStory').innerHTML = quillStory.root.innerHTML;
-            } else {
-                document.getElementById('eventStory').innerHTML = `<p>${ev.short_description || ''}</p>`;
-            }
+            const status = ev.event_lifecycle_status || 'UPCOMING';
 
-            if (ev.report_content) {
-                const quillRep = new Quill(document.createElement('div'));
-                quillRep.setContents(ev.report_content);
-                document.getElementById('eventReport').innerHTML = `<h2>Event Report</h2>` + quillRep.root.innerHTML;
-            }
-
-            // Render Gallery
+            // Determine cover image
+            let coverImage = '';
             if (ev.images && ev.images.length > 0) {
-                const gal = document.getElementById('eventGallery');
-                ev.images.forEach(img => {
-                    const imgEl = document.createElement('img');
-                    imgEl.src = img.image_url;
-                    imgEl.alt = ev.title;
-                    gal.appendChild(imgEl);
+                const cover = ev.images.find(img => img.is_cover);
+                coverImage = cover ? cover.image_url : ev.images[0].image_url;
+            }
+
+            renderContentPage(ev, status, coverImage);
+            setupStructuredData(ev);
+        }
+
+        function renderContentBlocksToContainer(contentArray, bodyContainer, galleryContainer) {
+            bodyContainer.innerHTML = '';
+            let hasContent = false;
+
+            if (Array.isArray(contentArray) && contentArray.length > 0) {
+                hasContent = true;
+                contentArray.forEach(block => {
+                    if (block.type === 'heading') {
+                        const h2 = document.createElement('h2');
+                        h2.textContent = block.content;
+                        bodyContainer.appendChild(h2);
+                    } else if (block.type === 'paragraph') {
+                        const div = document.createElement('div');
+                        if (typeof block.content === 'object' && block.content.ops) {
+                            const tempQuill = new Quill(document.createElement('div'));
+                            tempQuill.setContents(block.content);
+                            div.innerHTML = tempQuill.root.innerHTML;
+                        } else {
+                            div.innerHTML = `<p>${block.content || ''}</p>`;
+                        }
+                        bodyContainer.appendChild(div);
+                    } else if (block.type === 'image') {
+                        if (block.url) {
+                            const img = document.createElement('img');
+                            img.src = block.url;
+                            img.className = 'content-image';
+                            img.loading = 'lazy';
+                            bodyContainer.appendChild(img);
+                        }
+                    } else if (block.type === 'quote') {
+                        const quoteContainer = document.createElement('div');
+                        quoteContainer.className = 'content-quote';
+                        quoteContainer.innerHTML = `
+                            <blockquote>"${block.content || ''}"</blockquote>
+                            ${block.author ? `<div class="quote-author">— ${block.author}</div>` : ''}
+                        `;
+                        bodyContainer.appendChild(quoteContainer);
+                    } else if (block.type === 'highlight') {
+                        const highlightDiv = document.createElement('div');
+                        highlightDiv.className = 'content-highlight';
+                        highlightDiv.innerHTML = `
+                            ${block.title ? `<h3>${block.title}</h3>` : ''}
+                            ${block.content ? `<p>${block.content}</p>` : ''}
+                        `;
+                        bodyContainer.appendChild(highlightDiv);
+                    } else if (block.type === 'people') {
+                        const peopleDiv = document.createElement('div');
+                        peopleDiv.className = 'content-people';
+                        if (block.title) {
+                            peopleDiv.innerHTML = `<h3>${block.title}</h3>`;
+                        }
+                        const grid = document.createElement('div');
+                        grid.className = 'people-grid';
+                        if (block.roles && Array.isArray(block.roles)) {
+                            block.roles.forEach(role => {
+                                grid.innerHTML += `
+                                    <div class="people-card">
+                                        <div class="people-role">${role.title || ''}</div>
+                                        <div class="people-name">${role.name || ''}</div>
+                                    </div>
+                                `;
+                            });
+                        }
+                        peopleDiv.appendChild(grid);
+                        bodyContainer.appendChild(peopleDiv);
+                    } else if (block.type === 'organization') {
+                        const orgDiv = document.createElement('div');
+                        orgDiv.className = 'content-organization';
+                        orgDiv.innerHTML = `
+                            <div class="org-label">${block.label || 'Presented By'}</div>
+                            <div class="org-name">${block.name || ''}</div>
+                            ${block.details ? `<div class="org-details">${block.details}</div>` : ''}
+                        `;
+                        bodyContainer.appendChild(orgDiv);
+                    } else if (block.type === 'divider') {
+                        const hr = document.createElement('hr');
+                        hr.className = 'content-divider';
+                        bodyContainer.appendChild(hr);
+                    } else if (block.type === 'cta') {
+                        if (block.label && block.url) {
+                            const ctaDiv = document.createElement('div');
+                            ctaDiv.className = 'content-cta';
+                            const linkClass = block.style === 'link' ? 'cta-link' : 'cta-button';
+                            ctaDiv.innerHTML = `<a href="${block.url}" target="_blank" class="${linkClass}">${block.label} <i class="fas fa-arrow-right" style="font-size:0.8rem;"></i></a>`;
+                            bodyContainer.appendChild(ctaDiv);
+                        }
+                    } else if (block.type === 'video') {
+                        if (block.url) {
+                            const videoDiv = document.createElement('div');
+                            videoDiv.className = 'content-video';
+                            videoDiv.innerHTML = `<iframe src="${getEmbedUrl(block.url)}" allowfullscreen></iframe>`;
+                            bodyContainer.appendChild(videoDiv);
+                        }
+                    } else if (block.type === 'gallery' && galleryContainer) {
+                        if (block.images && block.images.length > 0) {
+                            const galWrapper = document.createElement('div');
+                            galWrapper.className = 'gallery-wrapper';
+                            
+                            const headingTitle = block.heading || 'Event Gallery';
+                            galWrapper.innerHTML = `<h2>${headingTitle}</h2>`;
+                            
+                            const galGrid = document.createElement('div');
+                            galGrid.className = 'gallery-grid';
+                            
+                            block.images.forEach((url) => {
+                                const img = document.createElement('img');
+                                img.src = url;
+                                img.className = 'gallery-item';
+                                img.loading = 'lazy';
+                                img.onclick = () => openLightbox(url, block.images);
+                                galGrid.appendChild(img);
+                            });
+                            galWrapper.appendChild(galGrid);
+                            galleryContainer.appendChild(galWrapper);
+                        }
+                    }
+                });
+            }
+            
+            if (!hasContent) {
+                 const p = document.createElement('p');
+                 p.style.textAlign = 'center';
+                 p.style.color = '#666';
+                 p.style.marginTop = '40px';
+                 p.textContent = 'More details about this event will be shared soon.';
+                 bodyContainer.appendChild(p);
+            }
+        }
+
+        /* ============================================
+           CONTENT PAGE RENDERER
+           ============================================ */
+        function renderContentPage(ev, status, coverImage) {
+            const contentPage = document.getElementById('contentPage');
+            contentPage.classList.add('active');
+
+            // Hero Title
+            document.getElementById('eventTitle').textContent = ev.title;
+            
+            // Poster
+            const posterImg = document.getElementById('eventPosterImg');
+            if (coverImage) {
+                posterImg.src = coverImage;
+                posterImg.style.display = 'block';
+            } else {
+                posterImg.style.display = 'none';
+            }
+
+            // Status badge
+            const badge = document.getElementById('eventStatusBadge');
+            badge.textContent = formatStatus(status);
+            badge.className = 'status-pill ' + getStatusClass(status);
+            
+            // Date
+            const dateWrapper = document.getElementById('eventDateWrapper');
+            if (ev.event_date) {
+                const dateObj = new Date(ev.event_date);
+                if (!isNaN(dateObj.getTime())) {
+                    document.getElementById('eventDate').textContent = dateObj.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+                    dateWrapper.style.display = 'flex';
+                } else {
+                    dateWrapper.style.display = 'none';
+                }
+            } else {
+                dateWrapper.style.display = 'none';
+            }
+            
+            // Location
+            const locWrapper = document.getElementById('eventLocationWrapper');
+            if (ev.location) {
+                document.getElementById('eventLocation').textContent = ev.location;
+                locWrapper.style.display = 'flex';
+            } else {
+                locWrapper.style.display = 'none';
+            }
+
+            // Hide meta container if both are empty
+            const metaContainer = document.getElementById('eventMetaContainer');
+            if (dateWrapper.style.display === 'none' && locWrapper.style.display === 'none') {
+                metaContainer.style.display = 'none';
+            } else {
+                metaContainer.style.display = 'flex';
+            }
+
+            // Intro
+            const introContainer = document.getElementById('eventIntro');
+            if (ev.short_description) {
+                introContainer.textContent = ev.short_description;
+                introContainer.style.display = 'block';
+            }
+
+            // Body Blocks
+            const bodyContainer = document.getElementById('eventBody');
+            const galleryContainer = document.getElementById('galleryContainer');
+            renderContentBlocksToContainer(ev.content, bodyContainer, galleryContainer);
+
+            // External Links
+            if (ev.links && ev.links.length > 0) {
+                const linksContainer = document.getElementById('linksContainer');
+                linksContainer.className = 'external-links';
+                
+                ev.links.forEach(link => {
+                    const a = document.createElement('a');
+                    a.href = link.url;
+                    a.target = '_blank';
+                    a.className = 'link-card';
+                    let icon = getLinkIcon(link.url);
+                    a.innerHTML = `<i class="${icon.prefix} ${icon.icon}" style="font-size:1.1rem; color:var(--color-accent);"></i> ${link.title} <i class="fas fa-arrow-right" style="font-size:0.8rem; margin-left:4px; opacity:0.5;"></i>`;
+                    linksContainer.appendChild(a);
                 });
             }
 
-            // Inject Structured Data (Phase 11)
+            document.getElementById('endSection').style.display = 'block';
+        }
+
+        /* ============================================
+           UTILITIES
+           ============================================ */
+        function getLinkIcon(url) {
+            if (!url) return { prefix: 'fas', icon: 'fa-external-link-alt' };
+            const urlLower = url.toLowerCase();
+            if (urlLower.includes('instagram.com')) return { prefix: 'fab', icon: 'fa-instagram' };
+            if (urlLower.includes('youtube.com') || urlLower.includes('youtu.be')) return { prefix: 'fab', icon: 'fa-youtube' };
+            if (urlLower.includes('facebook.com')) return { prefix: 'fab', icon: 'fa-facebook' };
+            if (urlLower.includes('twitter.com') || urlLower.includes('x.com')) return { prefix: 'fab', icon: 'fa-twitter' };
+            if (urlLower.startsWith('tel:')) return { prefix: 'fas', icon: 'fa-phone' };
+            if (urlLower.startsWith('mailto:')) return { prefix: 'fas', icon: 'fa-envelope' };
+            return { prefix: 'fas', icon: 'fa-external-link-alt' };
+        }
+
+        function setupStructuredData(ev) {
             const sd = {
                 "@context": "https://schema.org",
                 "@type": "Event",
@@ -285,9 +1136,50 @@
                     "url": "https://prajayafoundation.org"
                 }
             };
-
             document.getElementById('structured-data').textContent = JSON.stringify(sd);
         }
+
+        // Lightbox Functions
+        function openLightbox(url, images) {
+            currentLightboxImages = images;
+            currentLightboxIndex = images.indexOf(url);
+            updateLightboxContent();
+            document.getElementById('lightbox').classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+        
+        function closeLightbox() {
+            document.getElementById('lightbox').classList.remove('active');
+            document.body.style.overflow = '';
+        }
+        
+        function prevImage(e) {
+            e.stopPropagation();
+            currentLightboxIndex = (currentLightboxIndex > 0) ? currentLightboxIndex - 1 : currentLightboxImages.length - 1;
+            updateLightboxContent();
+        }
+        
+        function nextImage(e) {
+            e.stopPropagation();
+            currentLightboxIndex = (currentLightboxIndex < currentLightboxImages.length - 1) ? currentLightboxIndex + 1 : 0;
+            updateLightboxContent();
+        }
+        
+        function updateLightboxContent() {
+            document.getElementById('lightboxImg').src = currentLightboxImages[currentLightboxIndex];
+            document.getElementById('lightboxCounter').textContent = `${currentLightboxIndex + 1} / ${currentLightboxImages.length}`;
+        }
+
+        // Close lightbox on escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && document.getElementById('lightbox').classList.contains('active')) {
+                closeLightbox();
+            } else if (e.key === 'ArrowLeft' && document.getElementById('lightbox').classList.contains('active')) {
+                prevImage(e);
+            } else if (e.key === 'ArrowRight' && document.getElementById('lightbox').classList.contains('active')) {
+                nextImage(e);
+            }
+        });
     </script>
 </body>
 </html>

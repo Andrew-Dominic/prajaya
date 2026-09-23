@@ -18,5 +18,11 @@ npm-debug.log*
 
 # Uploads (production — managed outside git)
 uploads/
-.env.*  
- 
+.env.*
+
+# One-off utility / debug scripts
+check_db.js
+admin/rename_script.js
+create_suggestions_table.js
+db.js
+*.patch
