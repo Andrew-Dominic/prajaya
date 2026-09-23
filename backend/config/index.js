@@ -12,9 +12,20 @@
  */
 
 const path = require('path');
+const fs   = require('fs');
 
-// Load .env from project root
-require('dotenv').config({ path: path.resolve(__dirname, '../../.env') });
+// Load the correct .env file based on NODE_ENV
+// Priority: .env.{NODE_ENV} → .env
+const envFile = process.env.NODE_ENV === 'production'
+  ? path.resolve(__dirname, '../../.env.production')
+  : path.resolve(__dirname, '../../.env');
+
+if (fs.existsSync(envFile)) {
+  require('dotenv').config({ path: envFile });
+} else {
+  require('dotenv').config({ path: path.resolve(__dirname, '../../.env') });
+}
+
 
 const config = {
   // Server
