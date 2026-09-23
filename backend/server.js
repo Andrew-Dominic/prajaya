@@ -26,11 +26,18 @@ const { initApplicantCodeSystem, generateNextApplicantCode } = require('./servic
 // Initialize Express
 const app = express();
 
-// Security: Secure JWT Secret & Hash
-const JWT_SECRET = process.env.JWT_SECRET || 'prajaya_super_secret_fallback_key_123!@#';
-const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'prajaya123';
+// Security: Secure JWT Secret & Hash — MUST be set via environment variables
+const JWT_SECRET = process.env.JWT_SECRET;
+const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD;
+
+if (!JWT_SECRET || !ADMIN_PASSWORD) {
+  console.error('FATAL: JWT_SECRET and ADMIN_PASSWORD must be set in environment variables. Server cannot start without them.');
+  process.exit(1);
+}
+
 // Generate bcrypt hash of the password on server start to defeat timing attacks
 const adminPasswordHash = bcrypt.hashSync(ADMIN_PASSWORD, 12);
+
 
 // Initialize Supabase Client
 const supabaseUrl = process.env.SUPABASE_URL || 'https://bnmgzrskfwuuhlnxavan.supabase.co';
