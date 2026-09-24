@@ -1003,19 +1003,26 @@
         <div class="table-container" id="messages-section" style="display: none;">
             <div class="table-header">
                 <h2>Inbox / Suggestions</h2>
-                <button class="refresh-btn" onclick="fetchSuggestions()">
-                    <i class="fas fa-rotate-right"></i> Refresh
-                </button>
+                <div style="display: flex; gap: 15px; align-items: center;">
+                    <button class="refresh-btn" id="bulkDeleteMessagesBtn" onclick="deleteSelectedSuggestions()" style="display: none; background: rgba(239, 68, 68, 0.1); color: var(--color-danger); border-color: transparent;">
+                        <i class="fas fa-trash-alt"></i> Delete Selected (<span id="selectedMessagesCount">0</span>)
+                    </button>
+                    <button class="refresh-btn" onclick="fetchSuggestions()">
+                        <i class="fas fa-rotate-right"></i> Refresh
+                    </button>
+                </div>
             </div>
             <div class="table-wrapper">
                 <table>
                     <thead>
                         <tr>
+                            <th style="width: 40px; padding-left: 20px;"><input type="checkbox" id="selectAllMessagesCheckbox" onclick="toggleAllMessageCheckboxes(this)" style="cursor: pointer; width: 16px; height: 16px;"></th>
                             <th>Date</th>
                             <th>Name</th>
                             <th>Email</th>
                             <th>Subject</th>
                             <th style="width: 40%">Message</th>
+                            <th class="sticky-actions">Actions</th>
                         </tr>
                     </thead>
                     <tbody id="messages-table-body">
@@ -1984,7 +1991,7 @@
         function renderSuggestions() {
             const tbody = document.getElementById('messages-table-body');
             if (currentSuggestions.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="5" class="empty-state"><i class="fas fa-inbox"></i><br>No messages found.</td></tr>';
+                tbody.innerHTML = '<tr><td colspan="7" class="empty-state"><i class="fas fa-inbox"></i><br>No messages found.</td></tr>';
                 return;
             }
             
@@ -1995,14 +2002,101 @@
                 
                 return `
                 <tr>
+                    <td style="padding-left: 20px;"><input type="checkbox" class="message-checkbox" value="${s.id}" onclick="updateSelectedMessagesCount()" style="cursor: pointer; width: 16px; height: 16px;"></td>
                     <td style="white-space: nowrap;">${date}</td>
                     <td><strong>${escapeHtml(s.name)}</strong></td>
                     <td><a href="mailto:${escapeHtml(s.email)}" style="color: var(--color-accent); text-decoration: underline;">${escapeHtml(s.email)}</a></td>
                     <td><span class="status-badge" style="background: rgba(16, 185, 129, 0.1); color: var(--color-success); border: 1px solid var(--color-success);">${escapeHtml(s.subject) || 'N/A'}</span></td>
                     <td style="white-space: normal; line-height: 1.5;">${escapeHtml(s.suggestion)}</td>
+                    <td class="sticky-actions">
+                        <div style="display: flex; gap: 8px;">
+                            <button class="action-btn" title="Delete" onclick="deleteSuggestion('${s.id}')">
+                                <i class="fas fa-trash-alt" style="color: var(--color-danger);"></i>
+                            </button>
+                        </div>
+                    </td>
                 </tr>
                 `;
             }).join('');
+        }
+
+        function toggleAllMessageCheckboxes(source) {
+            const checkboxes = document.querySelectorAll('.message-checkbox');
+            checkboxes.forEach(cb => {
+                cb.checked = source.checked;
+            });
+            updateSelectedMessagesCount();
+        }
+
+        function updateSelectedMessagesCount() {
+            const selectedCount = document.querySelectorAll('.message-checkbox:checked').length;
+            document.getElementById('selectedMessagesCount').textContent = selectedCount;
+            const bulkBtn = document.getElementById('bulkDeleteMessagesBtn');
+            if (selectedCount > 0) {
+                bulkBtn.style.display = 'inline-flex';
+            } else {
+                bulkBtn.style.display = 'none';
+            }
+        }
+
+        async function deleteSuggestion(id) {
+            const password = prompt('SECURITY CHECK: Enter Master Password to delete this message:');
+            if (!password) return;
+
+            try {
+                const response = await fetch('/api/v1/suggestions/' + id, {
+                    method: 'DELETE',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ password })
+                });
+
+                if (handleUnauthorized(response)) return;
+                
+                const result = await response.json();
+                if (result.success) {
+                    uiAlert('Message deleted successfully', 'success');
+                    fetchSuggestions();
+                } else {
+                    uiAlert(result.message || 'Error deleting message', 'error');
+                }
+            } catch (err) {
+                uiAlert('Server error', 'error');
+            }
+        }
+
+        async function deleteSelectedSuggestions() {
+            const checkboxes = document.querySelectorAll('.message-checkbox:checked');
+            if (checkboxes.length === 0) return;
+
+            const ids = Array.from(checkboxes).map(cb => cb.value);
+            
+            const confirmDel = confirm(`Are you sure you want to delete ${ids.length} selected messages? This cannot be undone.`);
+            if (!confirmDel) return;
+
+            const password = prompt('SECURITY CHECK: Enter Master Password to confirm bulk deletion:');
+            if (!password) return;
+
+            try {
+                const response = await fetch('/api/v1/suggestions/bulk-delete', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ ids, password })
+                });
+
+                if (handleUnauthorized(response)) return;
+
+                const result = await response.json();
+                if (result.success) {
+                    uiAlert(`${ids.length} messages deleted successfully`, 'success');
+                    document.getElementById('selectAllMessagesCheckbox').checked = false;
+                    updateSelectedMessagesCount();
+                    fetchSuggestions();
+                } else {
+                    uiAlert(result.message || 'Error deleting messages', 'error');
+                }
+            } catch (err) {
+                uiAlert('Server error', 'error');
+            }
         }
 
         function renderTable() {

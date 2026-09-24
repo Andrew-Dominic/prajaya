@@ -13,6 +13,8 @@
       "use": "@vercel/static"
     }
   ],
+  "cleanUrls": true,
+  "trailingSlash": false,
   "rewrites": [
     {
       "source": "/api/:match*",

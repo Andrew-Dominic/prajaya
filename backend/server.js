@@ -711,6 +711,58 @@ app.get('/api/v1/suggestions', requireAuth, async (req, res) => {
   }
 });
 
+// Delete suggestion
+app.delete('/api/v1/suggestions/:id', requireAuth, async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { password } = req.body;
+    
+    // Constant time comparison via bcrypt for critical action
+    if (!password || !bcrypt.compareSync(password, adminPasswordHash)) {
+      return res.status(401).json({ success: false, message: 'Invalid master password. Deletion aborted.' });
+    }
+
+    const { error: deleteError } = await supabase
+      .from('suggestions')
+      .delete()
+      .eq('id', id);
+
+    if (deleteError) throw deleteError;
+
+    res.status(200).json({ success: true, message: 'Suggestion deleted successfully' });
+  } catch (error) {
+    console.error('Delete error:', error);
+    res.status(500).json({ success: false, message: 'Server error during deletion' });
+  }
+});
+
+// Bulk Delete suggestions
+app.post('/api/v1/suggestions/bulk-delete', requireAuth, async (req, res) => {
+  try {
+    const { ids, password } = req.body;
+    
+    if (!password || !bcrypt.compareSync(password, adminPasswordHash)) {
+      return res.status(401).json({ success: false, message: 'Invalid master password. Deletion aborted.' });
+    }
+
+    if (!Array.isArray(ids) || ids.length === 0) {
+      return res.status(400).json({ success: false, message: 'No suggestions selected.' });
+    }
+
+    const { error: deleteError } = await supabase
+      .from('suggestions')
+      .delete()
+      .in('id', ids);
+
+    if (deleteError) throw deleteError;
+
+    res.status(200).json({ success: true, message: `${ids.length} suggestions deleted successfully` });
+  } catch (error) {
+    console.error('Bulk delete error:', error);
+    res.status(500).json({ success: false, message: 'Server error during bulk deletion' });
+  }
+});
+
 // ──────────────────────────────────────────────
 // QUOTES API
 // ──────────────────────────────────────────────
