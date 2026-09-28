@@ -6,34 +6,9 @@
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://prajayafoundation.org/about</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.9</priority>
-  </url>
-  <url>
-    <loc>https://prajayafoundation.org/programs</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.9</priority>
-  </url>
-  <url>
-    <loc>https://prajayafoundation.org/events</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
-  </url>
-  <url>
     <loc>https://prajayafoundation.org/news</loc>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
-  </url>
-  <url>
-    <loc>https://prajayafoundation.org/impact-education</loc>
-    <changefreq>yearly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://prajayafoundation.org/impact-health</loc>
-    <changefreq>yearly</changefreq>
-    <priority>0.8</priority>
   </url>
   <url>
     <loc>https://prajayafoundation.org/contact</loc>
@@ -56,12 +31,52 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://prajayafoundation.org/volunteer-terms</loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
     <loc>https://prajayafoundation.org/privacy-policy</loc>
     <changefreq>yearly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://prajayafoundation.org/terms-of-use</loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://prajayafoundation.org/parent-consent</loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://prajayafoundation.org/media-consent</loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://prajayafoundation.org/safeguarding-policy</loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://prajayafoundation.org/anti-sexual-harassment-policy</loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://prajayafoundation.org/donation-refund-policy</loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://prajayafoundation.org/grievance</loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://prajayafoundation.org/report-concern</loc>
     <changefreq>yearly</changefreq>
     <priority>0.5</priority>
   </url>
