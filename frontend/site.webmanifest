@@ -1,0 +1,17 @@
+{
+  "name": "Prajaya Foundation",
+  "short_name": "Prajaya",
+  "description": "Prajaya Foundation is a Chennai-based public charitable trust and NGO dedicated to transforming lives through education, health, leadership, and sustainability.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#2C2946",
+  "icons": [
+    {
+      "src": "/assets/images/logo.png",
+      "sizes": "192x192 512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

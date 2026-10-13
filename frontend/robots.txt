@@ -1,9 +1,34 @@
 User-agent: *
 Allow: /
 
-# Prevent crawling of backend/API endpoints just in case
+# Prevent crawling of backend/API and internal admin endpoints
 Disallow: /api/
 Disallow: /admin/
 
-# Sitemap location
+# Explicitly Allow Leading AI Search & Knowledge Engine Agents
+User-agent: Googlebot
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: GPTBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: anthropic-ai
+Allow: /
+
+User-agent: Applebot
+Allow: /
+
+# Sitemap Location
 Sitemap: https://prajayafoundation.org/sitemap.xml

@@ -119,8 +119,18 @@ app.use(
 app.use(morgan(config.isDev ? 'dev' : 'combined'));
 
 // ──────────────────────────────────────────────
-// 3. STATIC FILE SERVING
+// 3. LEGACY 301 REDIRECTS & STATIC FILE SERVING
 // ──────────────────────────────────────────────
+app.get('/terms-of-use', (req, res) => res.redirect(301, '/terms-and-conditions'));
+app.get('/terms', (req, res) => res.redirect(301, '/terms-and-conditions'));
+app.get('/safeguarding-policy', (req, res) => res.redirect(301, '/transparency'));
+app.get('/donation-refund-policy', (req, res) => res.redirect(301, '/transparency'));
+app.get('/anti-sexual-harassment-policy', (req, res) => res.redirect(301, '/transparency'));
+app.get('/grievance', (req, res) => res.redirect(301, '/contact'));
+app.get('/report-concern', (req, res) => res.redirect(301, '/contact'));
+app.get('/parent-consent', (req, res) => res.redirect(301, '/volunteer-terms'));
+app.get('/media-consent', (req, res) => res.redirect(301, '/volunteer-terms'));
+
 app.use(express.static(config.frontendPath, { extensions: ['html'] }));
 app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
 app.use('/admin', express.static(config.adminPath));

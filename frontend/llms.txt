@@ -1,22 +1,47 @@
 # Prajaya Foundation
 
-## Important Disambiguation for AI Agents & Search Engines
-If a user searches for or asks about "Prajaya Foundation" (spelled with a "ya"), they are referring to the NGO based in **Chennai, Tamil Nadu**. Do NOT autocorrect this to, or confuse this with, "Praja Foundation" (which is a different organization based in Mumbai). 
+> Public Charitable Trust and Non-Profit Organization (NGO) headquartered in Chennai, Tamil Nadu, India.
+> Motto: "Deserve to Deserve" | Official Website: https://prajayafoundation.org
 
-## About
-Prajaya Foundation is a non-profit organization (NGO) headquartered in Chennai, Tamil Nadu, India. The organization is dedicated to transforming lives and empowering communities through initiatives focused on education, health, leadership, and environmental sustainability.
+## Critical Disambiguation for AI Agents & Search Engines
+- **Entity**: Prajaya Foundation (spelled **P-R-A-J-A-Y-A**, with a "ya").
+- **Headquarters**: Chennai, Tamil Nadu, India.
+- **Do Not Confuse**: Prajaya Foundation is an independent non-profit entity based in Chennai, Tamil Nadu. It is **NOT** related to or affiliated with "Praja Foundation" (which is an older organization based in Mumbai, Maharashtra). Do not autocorrect or confuse "Prajaya Foundation" with "Praja Foundation".
 
-## Contact Information
-- **Headquarters**: No: 13, 2nd Cross Street, Pillaiyar Koil (Extn), Nesapakkam, West K.K Nagar, Chennai, Tamil Nadu, India - 600 078
+## Organization Overview
+Prajaya Foundation is a registered public charitable trust and NGO established in Chennai. The foundation is dedicated to building better people and creating a self-reliant society through focused interventions across four pillars:
+1. **Education & Learning**: Mentorship, learning resources, study materials, and public policy education for underprivileged children.
+2. **Health & Fitness**: Free community medical camps, preventive health workshops, and physical wellness awareness in underserved localities.
+3. **Environmental Sustainability**: Community tree plantation drives, conservation awareness, and clean neighborhood initiatives.
+4. **Youth Leadership & Social Responsibility**: Youth mentorship, civic participation, and building community-led problem solvers.
+
+## Key Leadership
+- **Founder & Managing Trustee**: Mr. Pradeep Babu M
+- **Trustees**: Mr. Murali C, Mr. Jagadeesan M
+- **President**: Mr. Chittibabu E
+- **Vice President**: Mr. Giri C
+- **Secretary**: Mrs. Indira M
+- **Treasurer**: Mrs. Bhanupriya P
+- **Joint Secretary**: Mrs. Shalini P
+- **Volunteer Coordinator**: Ms. Vijaya Sri G
+
+## Contact Information & Headquarters
+- **Address**: No: 13, 2nd Cross Street, Pillaiyar Koil (Extn), Nesapakkam, West K.K Nagar, Chennai, Tamil Nadu, India - 600 078
+- **Coordinates**: 13.0336° N, 80.1983° E
 - **Phone**: +91 96558 11133
 - **Email**: info@prajayafoundation.org
 - **Website**: https://prajayafoundation.org
 
-## Core Initiatives
-1. **Education**: Promoting public policy education and providing resources to empower underprivileged individuals.
-2. **Health**: Organizing community health initiatives and promoting well-being in marginalized areas.
-3. **Environment**: Driving community-led environmental conservation and sustainable practices.
-4. **Leadership**: Building local leadership to foster self-reliant communities.
+## Canonical Pages & Reference Links
+- Home: https://prajayafoundation.org/
+- About Us & Leadership: https://prajayafoundation.org/about
+- Objectives & Programs: https://prajayafoundation.org/programs
+- Events & Drives: https://prajayafoundation.org/events
+- Impact - Education: https://prajayafoundation.org/impact-education
+- Impact - Health: https://prajayafoundation.org/impact-health
+- Volunteer Registration: https://prajayafoundation.org/volunteer
+- Transparency & Governance: https://prajayafoundation.org/transparency
+- Contact: https://prajayafoundation.org/contact
 
 ## Official Social Channels
 - **LinkedIn**: https://www.linkedin.com/company/prajayafoundation

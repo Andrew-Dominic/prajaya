@@ -15,6 +15,53 @@
   ],
   "cleanUrls": true,
   "trailingSlash": false,
+  "redirects": [
+    {
+      "source": "/terms-of-use",
+      "destination": "/terms-and-conditions",
+      "permanent": true
+    },
+    {
+      "source": "/terms",
+      "destination": "/terms-and-conditions",
+      "permanent": true
+    },
+    {
+      "source": "/safeguarding-policy",
+      "destination": "/transparency",
+      "permanent": true
+    },
+    {
+      "source": "/donation-refund-policy",
+      "destination": "/transparency",
+      "permanent": true
+    },
+    {
+      "source": "/anti-sexual-harassment-policy",
+      "destination": "/transparency",
+      "permanent": true
+    },
+    {
+      "source": "/grievance",
+      "destination": "/contact",
+      "permanent": true
+    },
+    {
+      "source": "/report-concern",
+      "destination": "/contact",
+      "permanent": true
+    },
+    {
+      "source": "/parent-consent",
+      "destination": "/volunteer-terms",
+      "permanent": true
+    },
+    {
+      "source": "/media-consent",
+      "destination": "/volunteer-terms",
+      "permanent": true
+    }
+  ],
   "rewrites": [
     {
       "source": "/api/:match*",
