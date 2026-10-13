@@ -32,8 +32,12 @@
     "jsonwebtoken": "^9.0.3",
     "morgan": "^1.11.0",
     "multer": "^2.4.0",
-    "nodemailer": "^9.0.5",
+    "nodemailer": "^10.1.0",
     "pg": "^8.23.0"
+  },
+  "overrides": {
+    "proxy-addr": "^2.0.8",
+    "chokidar": "^4.0.3"
   },
   "devDependencies": {
     "nodemon": "^3.1.14"
