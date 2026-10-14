@@ -131,9 +131,35 @@ app.get('/report-concern', (req, res) => res.redirect(301, '/contact'));
 app.get('/parent-consent', (req, res) => res.redirect(301, '/volunteer-terms'));
 app.get('/media-consent', (req, res) => res.redirect(301, '/volunteer-terms'));
 
-app.use(express.static(config.frontendPath, { extensions: ['html'] }));
-app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
-app.use('/admin', express.static(config.adminPath));
+// Static file serving with efficient cache lifetimes (1 year for static assets, no-cache for HTML)
+app.use(express.static(config.frontendPath, {
+  extensions: ['html'],
+  maxAge: '1y',
+  setHeaders: (res, filePath) => {
+    if (filePath.endsWith('.html')) {
+      res.setHeader('Cache-Control', 'public, max-age=0, must-revalidate');
+    } else if (/\.(webp|png|jpe?g|gif|svg|ico|woff2?|ttf|eot|css|js)$/i.test(filePath)) {
+      res.setHeader('Cache-Control', 'public, max-age=31536000, immutable');
+    }
+  }
+}));
+
+app.use('/uploads', express.static(path.join(__dirname, '../uploads'), {
+  maxAge: '30d',
+  setHeaders: (res) => {
+    res.setHeader('Cache-Control', 'public, max-age=2592000, immutable');
+  }
+}));
+
+app.use('/admin', express.static(config.adminPath, {
+  setHeaders: (res, filePath) => {
+    if (filePath.endsWith('.html')) {
+      res.setHeader('Cache-Control', 'public, max-age=0, must-revalidate');
+    } else {
+      res.setHeader('Cache-Control', 'public, max-age=86400');
+    }
+  }
+}));
 
 // ──────────────────────────────────────────────
 // 4. RATE LIMITING
@@ -898,6 +924,7 @@ app.use((req, res, next) => {
   if (req.originalUrl.startsWith('/api')) {
     return next(new AppError('Route not found', 404));
   }
+  res.setHeader('Cache-Control', 'public, max-age=0, must-revalidate');
   res.sendFile(path.join(config.frontendPath, 'index.html'));
 });
 

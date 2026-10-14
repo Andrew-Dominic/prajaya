@@ -25,4 +25,6 @@ check_db.js
 admin/rename_script.js
 create_suggestions_table.js
 db.js
+frontend/assets/images_backup/
+optimize_images.py
 *.patch

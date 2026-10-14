@@ -185,13 +185,19 @@
   ]
 }
     </script>
-    <!-- Google Fonts -->
+    <!-- Preload Critical Hero Image -->
+    <link rel="preload" as="image" href="assets/images/logo.webp" type="image/webp" fetchpriority="high">
+
+    <!-- Non-blocking Google Fonts with Preconnect -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"></noscript>
     
-    <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Non-blocking Font Awesome with Preconnect -->
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"></noscript>
     
     <style>
         :root {
@@ -204,9 +210,9 @@
             --color-accent: #f2bb47; /* Logo Gold */
             --color-primary: #2C2946; 
             
-            /* Typography */
-            --font-heading: 'Inter', sans-serif;
-            --font-body: 'Inter', sans-serif;
+            /* Typography with System Fallbacks */
+            --font-heading: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            --font-body: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             
             /* Spacing */
             --space-section: 100px;
@@ -1470,24 +1476,31 @@
 </head>
 <body>
 
-    <!-- Preloader -->
+    <!-- Preloader (Fast Non-blocking Dismissal) -->
     <div id="preloader" class="preloader">
-        <img src="assets/images/logo.png" alt="PRAJAYA Foundation Loading" class="preloader-logo">
+        <img src="assets/images/logo.webp" alt="PRAJAYA Foundation Loading" class="preloader-logo" width="100" height="100">
     </div>
     <script>
         const hidePreloader = () => {
             const preloader = document.getElementById('preloader');
-            if (preloader) preloader.classList.add('fade-out');
+            if (preloader) {
+                preloader.classList.add('fade-out');
+                setTimeout(() => { preloader.style.display = 'none'; }, 300);
+            }
         };
-        window.addEventListener('load', () => setTimeout(hidePreloader, 150));
-        setTimeout(hidePreloader, 2500); // Failsafe
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', hidePreloader);
+        } else {
+            hidePreloader();
+        }
+        setTimeout(hidePreloader, 800); // Fast failsafe
     </script>
 
     <!-- Header -->
         <header class="header" id="header">
         <div class="container nav-container">
             <a href="/#home" class="brand">
-                <img src="assets/images/logo.png" alt="PRAJAYA Foundation Logo" class="brand-logo">
+                <img src="assets/images/logo.webp" alt="PRAJAYA Foundation Logo" class="brand-logo" width="44" height="44">
                 <div class="brand-text">
                     <span class="brand-name">PRAJAYA</span>
                     <span class="brand-tagline">Foundation</span>
@@ -1517,7 +1530,7 @@
             <div class="hero-wrapper">
                 
                 <!-- Content (Left Side) -->
-                <div class="hero-content reveal delay-1">
+                <div class="hero-content">
                     
                     <div class="hero-label" style="margin-bottom: 20px;">A PUBLIC CHARITABLE TRUST</div>
                     
@@ -1536,11 +1549,11 @@
                     </div>
                 </div>
 
-                <!-- Hero Logo Emblem (Right Side) -->
-                <div class="hero-emblem reveal">
+                <!-- Hero Logo Emblem (Right Side - High Priority LCP) -->
+                <div class="hero-emblem">
                     <div class="hero-glow"></div>
                     <div class="hero-logo-container">
-                        <img src="assets/images/logo.png" alt="PRAJAYA Foundation Logo" class="hero-logo-img">
+                        <img src="assets/images/logo.webp" alt="PRAJAYA Foundation Logo" class="hero-logo-img" width="320" height="320" fetchpriority="high">
                     </div>
                 </div>
             
@@ -1864,7 +1877,7 @@
                     <div class="carousel-slide">
                         <div class="founder-card">
                             <div class="founder-image">
-                                <img src="assets/images/founder.jpeg" alt="Mr. Pradeep Babu M - Founder of Prajaya Foundation" loading="lazy">
+                                <img src="assets/images/founder.webp" alt="Mr. Pradeep Babu M - Founder of Prajaya Foundation" width="160" height="160" loading="lazy" decoding="async">
                             </div>
                             <h3 class="founder-name">MR. PRADEEP BABU M</h3>
                             <span class="founder-role">Founder & Managing Trustee</span>
@@ -1875,7 +1888,7 @@
                     <div class="carousel-slide">
                         <div class="founder-card">
                             <div class="founder-image">
-                                <img src="assets/images/Mr Murali C  co founder.png" alt="Trustee of Prajaya Foundation" loading="lazy">
+                                <img src="assets/images/murali_co_founder.webp" alt="Mr. Murali C - Trustee of Prajaya Foundation" width="160" height="160" loading="lazy" decoding="async">
                             </div>
                             <h3 class="founder-name">MR. MURALI C</h3>
                             <span class="founder-role">Trustee</span>
@@ -1886,7 +1899,7 @@
                     <div class="carousel-slide">
                         <div class="founder-card">
                             <div class="founder-image">
-                                <img src="assets/images/jagadeesan co founder.png" alt="Trustee of Prajaya Foundation" loading="lazy">
+                                <img src="assets/images/jagadeesan_co_founder.webp" alt="Mr. Jagadeesan M - Trustee of Prajaya Foundation" width="160" height="160" loading="lazy" decoding="async">
                             </div>
                             <h3 class="founder-name">MR. JAGADEESAN M</h3>
                             <span class="founder-role">Trustee</span>
@@ -1916,7 +1929,7 @@
                     <div class="carousel-slide">
                         <div class="founder-card">
                             <div class="founder-image">
-                                <img src="assets/images/Mr CHITTIBABU_page-0001.jpg" alt="President" loading="lazy">
+                                <img src="assets/images/chittibabu.webp" alt="Mr. Chittibabu E - President" width="160" height="160" loading="lazy" decoding="async">
                             </div>
                             <h3 class="founder-name">MR. CHITTIBABU E</h3>
                             <span class="founder-role">President</span>
@@ -1927,7 +1940,7 @@
                     <div class="carousel-slide">
                         <div class="founder-card">
                             <div class="founder-image">
-                                <img src="assets/images/vp.jpeg" alt="Vice President" loading="lazy">
+                                <img src="assets/images/vp.webp" alt="Mr. Giri C - Vice President" width="160" height="160" loading="lazy" decoding="async">
                             </div>
                             <h3 class="founder-name">MR. GIRI C</h3>
                             <span class="founder-role">Vice President</span>
@@ -1939,7 +1952,7 @@
                         <div class="founder-card">
                             <div class="founder-image">
                                 <!-- Placeholder for Indira M -->
-                                <img src="assets/images/indra.jfif" alt="Secretary" loading="lazy">
+                                <img src="assets/images/indra.webp" alt="Mrs. Indira M - Secretary" width="160" height="160" loading="lazy" decoding="async">
                             </div>
                             <h3 class="founder-name">MRS. INDIRA M</h3>
                             <span class="founder-role">Secretary</span>
@@ -1950,7 +1963,7 @@
                     <div class="carousel-slide">
                         <div class="founder-card">
                             <div class="founder-image">
-                                <img src="assets/images/tressurer.jpeg" alt="Treasurer" loading="lazy">
+                                <img src="assets/images/tressurer.webp" alt="Mrs. Bhanupriya P - Treasurer" width="160" height="160" loading="lazy" decoding="async">
                             </div>
                             <h3 class="founder-name">MRS. BHANUPRIYA P</h3>
                             <span class="founder-role">Treasurer</span>
@@ -1961,7 +1974,7 @@
                     <div class="carousel-slide">
                         <div class="founder-card">
                             <div class="founder-image">
-                                <img src="assets/images/joinsec.jpeg" alt="Joint Secretary" loading="lazy">
+                                <img src="assets/images/joinsec.webp" alt="Mrs. Shalini P - Joint Secretary" width="160" height="160" loading="lazy" decoding="async">
                             </div>
                             <h3 class="founder-name">MRS. SHALINI P</h3>
                             <span class="founder-role">Joint Secretary</span>
@@ -1972,7 +1985,7 @@
                     <div class="carousel-slide">
                         <div class="founder-card">
                             <div class="founder-image">
-                                <img src="assets/images/volunteer coordinator.jpeg" alt="Volunteer Coordinator" style="--img-scale: 1.65; --obj-pos: center 25%;" loading="lazy">
+                                <img src="assets/images/volunteer_coordinator.webp" alt="Ms. Vijaya Sri G - Volunteer Coordinator" style="--img-scale: 1.65; --obj-pos: center 25%;" width="160" height="160" loading="lazy" decoding="async">
                             </div>
                             <h3 class="founder-name">MS. VIJAYA SRI. G</h3>
                             <span class="founder-role">Volunteer Coordinator</span>
@@ -2085,7 +2098,7 @@
                 <div class="section-label">Join Us</div>
                 <h2 class="section-title">Latest Events</h2>
             </div>
-            <div class="programs-grid" id="dynamicEventsGrid" style="grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));">
+            <div class="programs-grid" id="dynamicEventsGrid" style="grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); min-height: 250px;">
                 <div style="grid-column: 1 / -1; text-align: center; color: #666;"><i class="fas fa-spinner fa-spin"></i> Loading latest events...</div>
             </div>
         </div>
@@ -2180,7 +2193,7 @@
                 
                 <div class="footer-brand">
                     <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 20px;">
-                        <img src="assets/images/logo.png" alt="PRAJAYA Foundation Logo" style="width: 50px; height: auto; object-fit: contain; display: block;">
+                        <img src="assets/images/logo.webp" alt="PRAJAYA Foundation Logo" width="50" height="50" style="width: 50px; height: 50px; object-fit: contain; display: block;" loading="lazy" decoding="async">
                         <h3 style="margin-bottom: 0;">PRAJAYA</h3>
                     </div>
                     <p style="margin-bottom: 25px;">A non-profit charitable organization dedicated to empowering individuals and transforming communities.</p>
@@ -2238,30 +2251,42 @@
 
 
 
-    <!-- GSAP & Lenis -->
-    <script src="https://unpkg.com/@studio-freight/lenis@1.0.39/dist/lenis.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <!-- GSAP & Lenis (Deferred) -->
+    <script defer src="https://unpkg.com/@studio-freight/lenis@1.0.39/dist/lenis.min.js"></script>
+    <script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
 
     <!-- Scripts -->
     <script>
-        // Header Scroll Effect
+        // Header Scroll Effect (Optimized with RAF & cached hero height to eliminate forced reflows)
         const header = document.getElementById('header');
         const heroSection = document.querySelector('.hero');
+        let heroHeight = heroSection ? heroSection.offsetHeight : 600;
+        let scrollTicking = false;
+
+        window.addEventListener('resize', () => {
+            if (heroSection) heroHeight = heroSection.offsetHeight;
+        }, { passive: true });
+
         window.addEventListener('scroll', () => {
-            const heroHeight = heroSection ? heroSection.offsetHeight : 100;
-            // Subtract approx header height (80px) to trigger just as the next section comes up
-            if (window.scrollY > heroHeight - 80) {
-                header.classList.add('scrolled');
-                header.classList.remove('hidden');
-            } else if (window.scrollY > 50) {
-                header.classList.remove('scrolled');
-                header.classList.add('hidden');
-            } else {
-                header.classList.remove('scrolled');
-                header.classList.remove('hidden');
+            if (!scrollTicking) {
+                window.requestAnimationFrame(() => {
+                    const scrollY = window.scrollY;
+                    if (scrollY > heroHeight - 80) {
+                        header.classList.add('scrolled');
+                        header.classList.remove('hidden');
+                    } else if (scrollY > 50) {
+                        header.classList.remove('scrolled');
+                        header.classList.add('hidden');
+                    } else {
+                        header.classList.remove('scrolled');
+                        header.classList.remove('hidden');
+                    }
+                    scrollTicking = false;
+                });
+                scrollTicking = true;
             }
-        });
+        }, { passive: true });
 
         // Mobile Menu
         const mobileBtn = document.getElementById('mobile-btn');
@@ -2285,46 +2310,57 @@
             });
         });
 
-        // Initialize Lenis
-        const lenis = new Lenis({
-            duration: 1.2,
-            easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-            direction: 'vertical',
-            gestureDirection: 'vertical',
-            smooth: true,
-            mouseMultiplier: 1,
-            smoothTouch: false,
-            touchMultiplier: 2,
-            infinite: false,
-        });
+        // Initialize Lenis & GSAP safely after deferred scripts load
+        window.addEventListener('DOMContentLoaded', () => {
+            if (typeof Lenis !== 'undefined') {
+                const lenis = new Lenis({
+                    duration: 1.2,
+                    easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+                    direction: 'vertical',
+                    gestureDirection: 'vertical',
+                    smooth: true,
+                    mouseMultiplier: 1,
+                    smoothTouch: false,
+                    touchMultiplier: 2,
+                    infinite: false,
+                });
 
-        // Sync GSAP ScrollTrigger with Lenis
-        lenis.on('scroll', ScrollTrigger.update);
-        gsap.ticker.add((time) => {
-            lenis.raf(time * 1000);
-        });
-        gsap.ticker.lagSmoothing(0);
-
-        // GSAP Animations
-        gsap.registerPlugin(ScrollTrigger);
-
-        // Reveal Animations
-        const revealElements = document.querySelectorAll('.reveal');
-        revealElements.forEach((el) => {
-            gsap.fromTo(el, 
-                { autoAlpha: 0, y: 50 }, 
-                {
-                    duration: 1,
-                    autoAlpha: 1,
-                    y: 0,
-                    ease: "power3.out",
-                    scrollTrigger: {
-                        trigger: el,
-                        start: "top 85%",
-                        toggleActions: "play none none none"
-                    }
+                if (typeof ScrollTrigger !== 'undefined') {
+                    lenis.on('scroll', ScrollTrigger.update);
                 }
-            );
+                if (typeof gsap !== 'undefined') {
+                    gsap.ticker.add((time) => {
+                        lenis.raf(time * 1000);
+                    });
+                    gsap.ticker.lagSmoothing(0);
+                }
+            }
+
+            if (typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined') {
+                gsap.registerPlugin(ScrollTrigger);
+                const revealElements = document.querySelectorAll('.reveal');
+                revealElements.forEach((el) => {
+                    gsap.fromTo(el, 
+                        { autoAlpha: 0, y: 50 }, 
+                        {
+                            duration: 0.8,
+                            autoAlpha: 1,
+                            y: 0,
+                            ease: "power3.out",
+                            scrollTrigger: {
+                                trigger: el,
+                                start: "top 85%",
+                                toggleActions: "play none none none"
+                            }
+                        }
+                    );
+                });
+            } else {
+                document.querySelectorAll('.reveal').forEach(el => {
+                    el.style.visibility = 'visible';
+                    el.style.opacity = '1';
+                });
+            }
         });
 
 
@@ -2402,7 +2438,7 @@
                             eventsContainer.innerHTML += `
                                 <${wrapperTag} ${hrefAttr} style="${cardStyle} ${cursorStyle}" onmouseover="${hasContent ? cardHoverStyle : ''}" onmouseout="${hasContent ? cardLeaveStyle : ''}">
                                     <div style="position: relative; overflow: hidden; padding-top: 60%;">
-                                        <img src="${imageUrl}" alt="${ev.title}" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; transition: transform 0.6s ease;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
+                                        <img src="${imageUrl}" alt="${ev.title}" width="400" height="240" loading="lazy" decoding="async" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; transition: transform 0.6s ease;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
                                         ${hasContent ? '<div style="position: absolute; top: 12px; right: 12px; background: rgba(255,255,255,0.95); padding: 5px 12px; border-radius: 20px; font-size: 0.75rem; font-weight: 700; color: var(--color-accent); box-shadow: 0 2px 10px rgba(0,0,0,0.1); backdrop-filter: blur(4px);">Details Available</div>' : ''}
                                     </div>
                                     <div style="padding: 24px; flex: 1; display: flex; flex-direction: column;">

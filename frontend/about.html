@@ -237,13 +237,16 @@
   ]
 }
     </script>
-    <!-- Google Fonts -->
+    <!-- Non-blocking Google Fonts with Preconnect -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"></noscript>
     
-    <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Non-blocking Font Awesome with Preconnect -->
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"></noscript>
     
     <style>
         :root {
@@ -1524,7 +1527,7 @@
 
     <!-- Preloader -->
     <div id="preloader" class="preloader">
-        <img src="assets/images/logo.png" alt="PRAJAYA Foundation Loading" class="preloader-logo">
+        <img src="assets/images/logo.webp" alt="PRAJAYA Foundation Loading" class="preloader-logo" width="100" height="100">
     </div>
     <script>
         const hidePreloader = () => {
@@ -1539,7 +1542,7 @@
         <header class="header" id="header">
         <div class="container nav-container">
             <a href="/#home" class="brand">
-                <img src="assets/images/logo.png" alt="PRAJAYA Foundation Logo" class="brand-logo">
+                <img src="assets/images/logo.webp" alt="PRAJAYA Foundation Logo" class="brand-logo" width="44" height="44">
                 <div class="brand-text">
                     <span class="brand-name">PRAJAYA</span>
                     <span class="brand-tagline">Foundation</span>
@@ -1818,7 +1821,7 @@
                     <div class="carousel-slide">
                         <div class="founder-card">
                             <div class="founder-image">
-                                <img src="assets/images/founder.jpeg" alt="Mr. Pradeep Babu M - Founder of Prajaya Foundation" loading="lazy">
+                                <img src="assets/images/founder.webp" alt="Mr. Pradeep Babu M - Founder of Prajaya Foundation" width="160" height="160" loading="lazy" decoding="async">
                             </div>
                             <h3 class="founder-name">MR. PRADEEP BABU M</h3>
                             <span class="founder-role">Founder & Managing Trustee</span>
@@ -1829,7 +1832,7 @@
                     <div class="carousel-slide">
                         <div class="founder-card">
                             <div class="founder-image">
-                                <img src="assets/images/Mr Murali C  co founder.png" alt="Trustee of Prajaya Foundation" loading="lazy">
+                                <img src="assets/images/murali_co_founder.webp" alt="Mr. Murali C - Trustee of Prajaya Foundation" width="160" height="160" loading="lazy" decoding="async">
                             </div>
                             <h3 class="founder-name">MR. MURALI C</h3>
                             <span class="founder-role">Trustee</span>
@@ -1840,7 +1843,7 @@
                     <div class="carousel-slide">
                         <div class="founder-card">
                             <div class="founder-image">
-                                <img src="assets/images/jagadeesan co founder.png" alt="Trustee of Prajaya Foundation" loading="lazy">
+                                <img src="assets/images/jagadeesan_co_founder.webp" alt="Mr. Jagadeesan M - Trustee of Prajaya Foundation" width="160" height="160" loading="lazy" decoding="async">
                             </div>
                             <h3 class="founder-name">MR. JAGADEESAN M</h3>
                             <span class="founder-role">Trustee</span>
@@ -1870,7 +1873,7 @@
                     <div class="carousel-slide">
                         <div class="founder-card">
                             <div class="founder-image">
-                                <img src="assets/images/Mr CHITTIBABU_page-0001.jpg" alt="President" loading="lazy">
+                                <img src="assets/images/chittibabu.webp" alt="Mr. Chittibabu E - President" width="160" height="160" loading="lazy" decoding="async">
                             </div>
                             <h3 class="founder-name">MR. CHITTIBABU E</h3>
                             <span class="founder-role">President</span>
@@ -1881,7 +1884,7 @@
                     <div class="carousel-slide">
                         <div class="founder-card">
                             <div class="founder-image">
-                                <img src="assets/images/vp.jpeg" alt="Vice President" loading="lazy">
+                                <img src="assets/images/vp.webp" alt="Mr. Giri C - Vice President" width="160" height="160" loading="lazy" decoding="async">
                             </div>
                             <h3 class="founder-name">MR. GIRI C</h3>
                             <span class="founder-role">Vice President</span>
@@ -1893,7 +1896,7 @@
                         <div class="founder-card">
                             <div class="founder-image">
                                 <!-- Placeholder for Indira M -->
-                                <img src="assets/images/indra.jfif" alt="Secretary" loading="lazy">
+                                <img src="assets/images/indra.webp" alt="Mrs. Indira M - Secretary" width="160" height="160" loading="lazy" decoding="async">
                             </div>
                             <h3 class="founder-name">MRS. INDIRA M</h3>
                             <span class="founder-role">Secretary</span>
@@ -1904,7 +1907,7 @@
                     <div class="carousel-slide">
                         <div class="founder-card">
                             <div class="founder-image">
-                                <img src="assets/images/tressurer.jpeg" alt="Treasurer" loading="lazy">
+                                <img src="assets/images/tressurer.webp" alt="Mrs. Bhanupriya P - Treasurer" width="160" height="160" loading="lazy" decoding="async">
                             </div>
                             <h3 class="founder-name">MRS. BHANUPRIYA P</h3>
                             <span class="founder-role">Treasurer</span>
@@ -1915,7 +1918,7 @@
                     <div class="carousel-slide">
                         <div class="founder-card">
                             <div class="founder-image">
-                                <img src="assets/images/joinsec.jpeg" alt="Joint Secretary" loading="lazy">
+                                <img src="assets/images/joinsec.webp" alt="Mrs. Shalini P - Joint Secretary" width="160" height="160" loading="lazy" decoding="async">
                             </div>
                             <h3 class="founder-name">MRS. SHALINI P</h3>
                             <span class="founder-role">Joint Secretary</span>
@@ -1926,7 +1929,7 @@
                     <div class="carousel-slide">
                         <div class="founder-card">
                             <div class="founder-image">
-                                <img src="assets/images/volunteer coordinator.jpeg" alt="Volunteer Coordinator" style="--img-scale: 1.65; --obj-pos: center 25%;" loading="lazy">
+                                <img src="assets/images/volunteer_coordinator.webp" alt="Ms. Vijaya Sri G - Volunteer Coordinator" style="--img-scale: 1.65; --obj-pos: center 25%;" width="160" height="160" loading="lazy" decoding="async">
                             </div>
                             <h3 class="founder-name">MS. VIJAYA SRI. G</h3>
                             <span class="founder-role">Volunteer Coordinator</span>
@@ -1954,7 +1957,7 @@
                 
                 <div class="footer-brand">
                     <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 20px;">
-                        <img src="assets/images/logo.png" alt="PRAJAYA Foundation Logo" style="width: 50px; height: auto; object-fit: contain; display: block;">
+                        <img src="assets/images/logo.webp" alt="PRAJAYA Foundation Logo" width="50" height="50" style="width: 50px; height: 50px; object-fit: contain; display: block;" loading="lazy" decoding="async">
                         <h3 style="margin-bottom: 0;">PRAJAYA</h3>
                     </div>
                     <p style="margin-bottom: 25px;">A non-profit charitable organization dedicated to empowering individuals and transforming communities.</p>
